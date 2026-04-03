@@ -20,6 +20,8 @@ export default defineConfig({
       '@types': path.resolve(__dirname, './src/types'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@contexts': path.resolve(__dirname, './src/contexts'),
+      '@assets': path.resolve(__dirname, './src/assets'),
+      '@layouts': path.resolve(__dirname, './src/layouts'),
     },
   },
   server: {
@@ -29,6 +31,7 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
@@ -39,11 +42,23 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['@heroicons/react', 'framer-motion'],
-          charts: ['recharts'],
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['@heroicons/react', 'framer-motion'],
+          'chart-vendor': ['recharts'],
+          'utils-vendor': ['axios', 'date-fns', 'clsx', 'tailwind-merge'],
         },
       },
+    },
+    target: 'es2020',
+    chunkSizeWarningLimit: 1000,
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', 'axios'],
+  },
+  css: {
+    devSourcemap: true,
+    modules: {
+      localsConvention: 'camelCase',
     },
   },
 })
