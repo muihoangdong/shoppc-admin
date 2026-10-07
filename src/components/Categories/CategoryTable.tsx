@@ -1,87 +1,80 @@
 import React, { useState } from 'react';
 import { Category } from '../../types';
+import { CategoryNode } from '../../utils/categoryTree';
 import { ChevronDownIcon, ChevronRightIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface CategoryTableProps {
-  categories: Category[];
+  categories: CategoryNode[];
   onEdit: (category: Category) => void;
-  onDelete: (id: number) => void;
+  onDelete: (category: Category) => void;
+  /** Chỉ admin được xóa danh mục. Mặc định true để giữ hành vi cũ nếu không truyền. */
+  canDelete?: boolean;
 }
 
-export const CategoryTable: React.FC<CategoryTableProps> = ({
-  categories,
-  onEdit,
-  onDelete,
-}) => {
-  const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
+const TYPE_LABEL: Record<Category['type'], string> = { pc: 'Máy tính', component: 'Linh kiện', peripheral: 'Phụ kiện' };
+const TYPE_BADGE: Record<Category['type'], string> = {
+  pc: 'bg-purple-100 text-purple-800',
+  component: 'bg-blue-100 text-blue-800',
+  peripheral: 'bg-green-100 text-green-800',
+};
 
-  const toggleExpand = (categoryId: number) => {
-    setExpandedCategories(prev =>
-      prev.includes(categoryId)
-        ? prev.filter(id => id !== categoryId)
-        : [...prev, categoryId]
-    );
-  };
+export const CategoryTable: React.FC<CategoryTableProps> = ({ categories, onEdit, onDelete, canDelete = true }) => {
+  // Mặc định mở hết cây; chỉ lưu những nhánh người dùng thu gọn
+  const [collapsed, setCollapsed] = useState<number[]>([]);
 
-  const renderCategoryRow = (category: Category, level: number = 0) => {
-    const hasChildren = category.children && category.children.length > 0;
-    const isExpanded = expandedCategories.includes(category.id);
+  const toggle = (id: number) => setCollapsed((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+
+  const renderRow = (category: CategoryNode, level: number): React.ReactNode => {
+    const hasChildren = category.children.length > 0;
+    const isOpen = !collapsed.includes(category.id);
+    const productCount = Number(category.product_count ?? 0);
+    const blocked = hasChildren || productCount > 0;
+    const blockedReason = hasChildren ? 'Danh mục còn danh mục con' : 'Danh mục còn sản phẩm';
 
     return (
       <React.Fragment key={category.id}>
         <tr className="hover:bg-gray-50">
           <td className="px-6 py-4" style={{ paddingLeft: `${level * 24 + 24}px` }}>
             <div className="flex items-center gap-2">
-              {hasChildren && (
+              {hasChildren ? (
                 <button
-                  onClick={() => toggleExpand(category.id)}
+                  onClick={() => toggle(category.id)}
+                  aria-label={isOpen ? `Thu gọn ${category.name}` : `Mở rộng ${category.name}`}
+                  aria-expanded={isOpen}
                   className="p-1 hover:bg-gray-100 rounded"
                 >
-                  {isExpanded ? (
-                    <ChevronDownIcon className="h-4 w-4" />
-                  ) : (
-                    <ChevronRightIcon className="h-4 w-4" />
-                  )}
+                  {isOpen ? <ChevronDownIcon className="h-4 w-4" /> : <ChevronRightIcon className="h-4 w-4" />}
                 </button>
+              ) : (
+                <span className="inline-block w-6" />
               )}
-              <span className="text-sm font-medium text-gray-900">
-                {level > 0 && '↳ '}{category.name}
-              </span>
+              <span className="text-sm font-medium text-gray-900">{category.name}</span>
             </div>
           </td>
           <td className="px-6 py-4">
-            <span className={`px-2 py-1 text-xs rounded-full ${
-              category.type === 'pc' ? 'bg-purple-100 text-purple-800' :
-              category.type === 'component' ? 'bg-blue-100 text-blue-800' :
-              'bg-green-100 text-green-800'
-            }`}>
-              {category.type === 'pc' ? 'Máy tính' :
-               category.type === 'component' ? 'Linh kiện' : 'Phụ kiện'}
-            </span>
+            <span className={`px-2 py-1 text-xs rounded-full ${TYPE_BADGE[category.type]}`}>{TYPE_LABEL[category.type]}</span>
           </td>
-          {/* ĐÃ XÓA CỘT DANH MỤC CHA - KHÔNG CÓ <td> NÀO Ở ĐÂY */}
+          <td className="px-6 py-4 text-sm text-gray-600">{productCount}</td>
           <td className="px-6 py-4">
             <div className="flex gap-2">
-              <button
-                onClick={() => onEdit(category)}
-                className="p-1 text-blue-600 hover:bg-blue-50 rounded"
-                title="Chỉnh sửa"
-              >
+              <button onClick={() => onEdit(category)} aria-label={`Chỉnh sửa ${category.name}`} className="p-1 text-blue-600 hover:bg-blue-50 rounded" title="Chỉnh sửa">
                 <PencilIcon className="h-5 w-5" />
               </button>
-              <button
-                onClick={() => onDelete(category.id)}
-                className="p-1 text-red-600 hover:bg-red-50 rounded"
-                title="Xóa"
-              >
-                <TrashIcon className="h-5 w-5" />
-              </button>
+              {canDelete && (
+                <button
+                  onClick={() => onDelete(category)}
+                  disabled={blocked}
+                  aria-label={`Xóa ${category.name}`}
+                  className="p-1 text-red-600 hover:bg-red-50 rounded disabled:cursor-not-allowed disabled:text-gray-300 disabled:hover:bg-transparent"
+                  title={blocked ? `Không thể xóa: ${blockedReason}` : 'Xóa'}
+                >
+                  <TrashIcon className="h-5 w-5" />
+                </button>
+              )}
             </div>
           </td>
         </tr>
-        {hasChildren && isExpanded && (
-          category.children!.map(child => renderCategoryRow(child, level + 1))
-        )}
+        {hasChildren && isOpen && category.children.map((child) => renderRow(child, level + 1))}
       </React.Fragment>
     );
   };
@@ -92,14 +85,14 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên danh mục</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Loại</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Thao tác</th>
+              {['Tên danh mục', 'Loại', 'Sản phẩm', 'Thao tác'].map((h) => (
+                <th key={h} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
-            {categories.map(category => renderCategoryRow(category))}
-          </tbody>
+          <tbody className="divide-y divide-gray-200">{categories.map((category) => renderRow(category, 0))}</tbody>
         </table>
       </div>
     </div>

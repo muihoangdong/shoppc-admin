@@ -1,14 +1,14 @@
-import api from './api';
-import { ApiResponse, DashboardStats, Order } from '../types';
+import api, { apiErrorMessage } from './api';
+import { ApiResponse, DashboardStats } from '../types';
 
 export const dashboardService = {
+  /** Một lần gọi trả về toàn bộ số liệu tổng quan (số liệu, doanh thu tháng, top bán chạy, tồn kho thấp, đơn gần đây). */
   async getStats(): Promise<DashboardStats> {
-    const response = await api.get<ApiResponse<DashboardStats>>('/orders/dashboard/stats');
-    return response.data.data;
-  },
-
-  async getRecentOrders(): Promise<Order[]> {
-    const response = await api.get<ApiResponse<Order[]>>('/orders');
-    return response.data.data.slice(0, 5);
+    try {
+      const response = await api.get<ApiResponse<DashboardStats>>('/orders/dashboard/stats');
+      return response.data.data;
+    } catch (error: any) {
+      throw new Error(apiErrorMessage(error, 'Không thể tải số liệu tổng quan'));
+    }
   },
 };

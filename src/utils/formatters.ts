@@ -1,3 +1,5 @@
+import { paymentStatusLabel, statusLabel } from './orderStatus';
+
 /**
  * Định dạng số tiền sang VND
  * @param price - Số tiền cần định dạng
@@ -206,17 +208,7 @@ export const formatRelativeTime = (date: Date | string): string => {
  * @param status - Trạng thái đơn hàng
  * @returns Tên trạng thái tiếng Việt
  */
-export const formatOrderStatus = (status: string): string => {
-  const statusMap: Record<string, string> = {
-    pending: 'Chờ xử lý',
-    processing: 'Đang xử lý',
-    completed: 'Hoàn thành',
-    cancelled: 'Đã hủy',
-    shipped: 'Đã giao hàng',
-    delivered: 'Đã nhận hàng',
-  };
-  return statusMap[status] || status;
-};
+export const formatOrderStatus = (status: string): string => statusLabel(status);
 
 /**
  * Định dạng phương thức thanh toán
@@ -239,15 +231,7 @@ export const formatPaymentMethod = (method: string): string => {
  * @param status - Trạng thái thanh toán
  * @returns Tên trạng thái tiếng Việt
  */
-export const formatPaymentStatus = (status: string): string => {
-  const statusMap: Record<string, string> = {
-    pending: 'Chưa thanh toán',
-    paid: 'Đã thanh toán',
-    failed: 'Thanh toán thất bại',
-    refunded: 'Đã hoàn tiền',
-  };
-  return statusMap[status] || status;
-};
+export const formatPaymentStatus = (status: string): string => paymentStatusLabel(status);
 
 /**
  * Định dạng loại sản phẩm

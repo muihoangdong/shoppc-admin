@@ -1,0 +1,404 @@
+/* ==== TỰ SINH bởi bộ tạo giao diện — đổi màu ở đây thay vì sửa từng component ==== */
+/* Màu chủ đạo: indigo · Trung tính: slate · Chế độ tối: navy đậm. Mỗi biến là bộ ba R G B. */
+:root {
+  color-scheme: light;
+  --app-bg: 241 245 249;
+  --surface: 255 255 255;
+  --sidebar: 15 23 42;
+  --c-slate-50: 248 250 252;
+  --c-slate-100: 241 245 249;
+  --c-slate-200: 226 232 240;
+  --c-slate-300: 203 213 225;
+  --c-slate-400: 124 138 159;
+  --c-slate-500: 100 116 139;
+  --c-slate-600: 71 85 105;
+  --c-slate-700: 51 65 85;
+  --c-slate-800: 30 41 59;
+  --c-slate-900: 15 23 42;
+  --c-slate-950: 2 6 23;
+  --c-indigo-50: 238 242 255;
+  --c-indigo-100: 224 231 255;
+  --c-indigo-200: 199 210 254;
+  --c-indigo-300: 165 180 252;
+  --c-indigo-400: 129 140 248;
+  --c-indigo-500: 99 102 241;
+  --c-indigo-600: 79 70 229;
+  --c-indigo-700: 67 56 202;
+  --c-indigo-800: 55 48 163;
+  --c-indigo-900: 49 46 129;
+  --c-indigo-950: 30 27 75;
+  --c-red-50: 254 242 242;
+  --c-red-100: 254 226 226;
+  --c-red-200: 254 202 202;
+  --c-red-300: 252 165 165;
+  --c-red-400: 248 113 113;
+  --c-red-500: 239 68 68;
+  --c-red-600: 220 38 38;
+  --c-red-700: 185 28 28;
+  --c-red-800: 153 27 27;
+  --c-red-900: 127 29 29;
+  --c-red-950: 69 10 10;
+  --c-green-50: 240 253 244;
+  --c-green-100: 220 252 231;
+  --c-green-200: 187 247 208;
+  --c-green-300: 134 239 172;
+  --c-green-400: 74 222 128;
+  --c-green-500: 34 197 94;
+  --c-green-600: 22 163 74;
+  --c-green-700: 21 128 61;
+  --c-green-800: 22 101 52;
+  --c-green-900: 20 83 45;
+  --c-green-950: 5 46 22;
+  --c-yellow-50: 254 252 232;
+  --c-yellow-100: 254 249 195;
+  --c-yellow-200: 254 240 138;
+  --c-yellow-300: 253 224 71;
+  --c-yellow-400: 250 204 21;
+  --c-yellow-500: 234 179 8;
+  --c-yellow-600: 202 138 4;
+  --c-yellow-700: 161 98 7;
+  --c-yellow-800: 133 77 14;
+  --c-yellow-900: 113 63 18;
+  --c-yellow-950: 66 32 6;
+  --c-amber-50: 255 251 235;
+  --c-amber-100: 254 243 199;
+  --c-amber-200: 253 230 138;
+  --c-amber-300: 252 211 77;
+  --c-amber-400: 251 191 36;
+  --c-amber-500: 245 158 11;
+  --c-amber-600: 217 119 6;
+  --c-amber-700: 180 83 9;
+  --c-amber-800: 146 64 14;
+  --c-amber-900: 120 53 15;
+  --c-amber-950: 69 26 3;
+  --c-orange-50: 255 247 237;
+  --c-orange-100: 255 237 213;
+  --c-orange-200: 254 215 170;
+  --c-orange-300: 253 186 116;
+  --c-orange-400: 251 146 60;
+  --c-orange-500: 249 115 22;
+  --c-orange-600: 234 88 12;
+  --c-orange-700: 194 65 12;
+  --c-orange-800: 154 52 18;
+  --c-orange-900: 124 45 18;
+  --c-orange-950: 67 20 7;
+  --c-purple-50: 250 245 255;
+  --c-purple-100: 243 232 255;
+  --c-purple-200: 233 213 255;
+  --c-purple-300: 216 180 254;
+  --c-purple-400: 192 132 252;
+  --c-purple-500: 168 85 247;
+  --c-purple-600: 147 51 234;
+  --c-purple-700: 126 34 206;
+  --c-purple-800: 107 33 168;
+  --c-purple-900: 88 28 135;
+  --c-purple-950: 59 7 100;
+  --c-teal-50: 240 253 250;
+  --c-teal-100: 204 251 241;
+  --c-teal-200: 153 246 228;
+  --c-teal-300: 94 234 212;
+  --c-teal-400: 45 212 191;
+  --c-teal-500: 20 184 166;
+  --c-teal-600: 13 148 136;
+  --c-teal-700: 15 118 110;
+  --c-teal-800: 17 94 89;
+  --c-teal-900: 19 78 74;
+  --c-teal-950: 4 47 46;
+}
+
+.dark {
+  color-scheme: dark;
+  --app-bg: 11 17 32;
+  --surface: 17 26 46;
+  --sidebar: 8 13 26;
+  --c-slate-50: 23 32 54;
+  --c-slate-100: 26 35 56;
+  --c-slate-200: 38 49 73;
+  --c-slate-300: 54 66 97;
+  --c-slate-400: 100 112 138;
+  --c-slate-500: 139 151 173;
+  --c-slate-600: 169 179 198;
+  --c-slate-700: 195 202 216;
+  --c-slate-800: 221 226 234;
+  --c-slate-900: 238 241 246;
+  --c-slate-950: 247 249 252;
+  --c-indigo-50: 22 26 61;
+  --c-indigo-100: 35 37 92;
+  --c-indigo-200: 40 39 116;
+  --c-indigo-300: 67 56 202;
+  --c-indigo-400: 99 102 241;
+  --c-indigo-500: 99 102 241;
+  --c-indigo-600: 99 102 241;
+  --c-indigo-700: 79 70 229;
+  --c-indigo-800: 55 48 163;
+  --c-indigo-900: 49 46 129;
+  --c-indigo-950: 30 27 75;
+  --c-red-50: 46 21 31;
+  --c-red-100: 78 28 37;
+  --c-red-200: 99 27 35;
+  --c-red-300: 185 28 28;
+  --c-red-400: 239 68 68;
+  --c-red-500: 239 68 68;
+  --c-red-600: 220 38 38;
+  --c-red-700: 185 28 28;
+  --c-red-800: 153 27 27;
+  --c-red-900: 127 29 29;
+  --c-red-950: 69 10 10;
+  --c-green-50: 14 37 36;
+  --c-green-100: 19 57 45;
+  --c-green-200: 20 71 50;
+  --c-green-300: 21 128 61;
+  --c-green-400: 34 197 94;
+  --c-green-500: 34 197 94;
+  --c-green-600: 22 163 74;
+  --c-green-700: 21 128 61;
+  --c-green-800: 22 101 52;
+  --c-green-900: 20 83 45;
+  --c-green-950: 5 46 22;
+  --c-yellow-50: 42 31 28;
+  --c-yellow-100: 70 46 31;
+  --c-yellow-200: 87 57 27;
+  --c-yellow-300: 161 98 7;
+  --c-yellow-400: 234 179 8;
+  --c-yellow-500: 234 179 8;
+  --c-yellow-600: 202 138 4;
+  --c-yellow-700: 161 98 7;
+  --c-yellow-800: 133 77 14;
+  --c-yellow-900: 113 63 18;
+  --c-yellow-950: 66 32 6;
+  --c-amber-50: 44 28 27;
+  --c-amber-100: 74 41 29;
+  --c-amber-200: 94 49 27;
+  --c-amber-300: 180 83 9;
+  --c-amber-400: 245 158 11;
+  --c-amber-500: 245 158 11;
+  --c-amber-600: 217 119 6;
+  --c-amber-700: 180 83 9;
+  --c-amber-800: 146 64 14;
+  --c-amber-900: 120 53 15;
+  --c-amber-950: 69 26 3;
+  --c-orange-50: 45 25 28;
+  --c-orange-100: 76 36 31;
+  --c-orange-200: 99 42 29;
+  --c-orange-300: 194 65 12;
+  --c-orange-400: 249 115 22;
+  --c-orange-500: 249 115 22;
+  --c-orange-600: 234 88 12;
+  --c-orange-700: 194 65 12;
+  --c-orange-800: 154 52 18;
+  --c-orange-900: 124 45 18;
+  --c-orange-950: 67 20 7;
+  --c-purple-50: 34 20 63;
+  --c-purple-100: 56 27 95;
+  --c-purple-200: 71 30 119;
+  --c-purple-300: 126 34 206;
+  --c-purple-400: 168 85 247;
+  --c-purple-500: 168 85 247;
+  --c-purple-600: 147 51 234;
+  --c-purple-700: 126 34 206;
+  --c-purple-800: 107 33 168;
+  --c-purple-900: 88 28 135;
+  --c-purple-950: 59 7 100;
+  --c-teal-50: 13 35 45;
+  --c-teal-100: 18 55 61;
+  --c-teal-200: 17 67 72;
+  --c-teal-300: 15 118 110;
+  --c-teal-400: 20 184 166;
+  --c-teal-500: 20 184 166;
+  --c-teal-600: 13 148 136;
+  --c-teal-700: 15 118 110;
+  --c-teal-800: 17 94 89;
+  --c-teal-900: 19 78 74;
+  --c-teal-950: 4 47 46;
+}
+
+:root {
+  --c-indigo-50-light: 238 242 255;
+  --c-indigo-100-light: 224 231 255;
+  --c-indigo-200-light: 199 210 254;
+  --c-indigo-300-light: 165 180 252;
+  --c-indigo-400-light: 129 140 248;
+  --c-indigo-500-light: 99 102 241;
+  --c-indigo-600-light: 79 70 229;
+  --c-indigo-700-light: 67 56 202;
+  --c-indigo-800-light: 55 48 163;
+  --c-indigo-900-light: 49 46 129;
+  --c-indigo-950-light: 30 27 75;
+  --c-red-50-light: 254 242 242;
+  --c-red-100-light: 254 226 226;
+  --c-red-200-light: 254 202 202;
+  --c-red-300-light: 252 165 165;
+  --c-red-400-light: 248 113 113;
+  --c-red-500-light: 239 68 68;
+  --c-red-600-light: 220 38 38;
+  --c-red-700-light: 185 28 28;
+  --c-red-800-light: 153 27 27;
+  --c-red-900-light: 127 29 29;
+  --c-red-950-light: 69 10 10;
+  --c-green-50-light: 240 253 244;
+  --c-green-100-light: 220 252 231;
+  --c-green-200-light: 187 247 208;
+  --c-green-300-light: 134 239 172;
+  --c-green-400-light: 74 222 128;
+  --c-green-500-light: 34 197 94;
+  --c-green-600-light: 22 163 74;
+  --c-green-700-light: 21 128 61;
+  --c-green-800-light: 22 101 52;
+  --c-green-900-light: 20 83 45;
+  --c-green-950-light: 5 46 22;
+  --c-yellow-50-light: 254 252 232;
+  --c-yellow-100-light: 254 249 195;
+  --c-yellow-200-light: 254 240 138;
+  --c-yellow-300-light: 253 224 71;
+  --c-yellow-400-light: 250 204 21;
+  --c-yellow-500-light: 234 179 8;
+  --c-yellow-600-light: 202 138 4;
+  --c-yellow-700-light: 161 98 7;
+  --c-yellow-800-light: 133 77 14;
+  --c-yellow-900-light: 113 63 18;
+  --c-yellow-950-light: 66 32 6;
+  --c-amber-50-light: 255 251 235;
+  --c-amber-100-light: 254 243 199;
+  --c-amber-200-light: 253 230 138;
+  --c-amber-300-light: 252 211 77;
+  --c-amber-400-light: 251 191 36;
+  --c-amber-500-light: 245 158 11;
+  --c-amber-600-light: 217 119 6;
+  --c-amber-700-light: 180 83 9;
+  --c-amber-800-light: 146 64 14;
+  --c-amber-900-light: 120 53 15;
+  --c-amber-950-light: 69 26 3;
+  --c-orange-50-light: 255 247 237;
+  --c-orange-100-light: 255 237 213;
+  --c-orange-200-light: 254 215 170;
+  --c-orange-300-light: 253 186 116;
+  --c-orange-400-light: 251 146 60;
+  --c-orange-500-light: 249 115 22;
+  --c-orange-600-light: 234 88 12;
+  --c-orange-700-light: 194 65 12;
+  --c-orange-800-light: 154 52 18;
+  --c-orange-900-light: 124 45 18;
+  --c-orange-950-light: 67 20 7;
+  --c-purple-50-light: 250 245 255;
+  --c-purple-100-light: 243 232 255;
+  --c-purple-200-light: 233 213 255;
+  --c-purple-300-light: 216 180 254;
+  --c-purple-400-light: 192 132 252;
+  --c-purple-500-light: 168 85 247;
+  --c-purple-600-light: 147 51 234;
+  --c-purple-700-light: 126 34 206;
+  --c-purple-800-light: 107 33 168;
+  --c-purple-900-light: 88 28 135;
+  --c-purple-950-light: 59 7 100;
+  --c-teal-50-light: 240 253 250;
+  --c-teal-100-light: 204 251 241;
+  --c-teal-200-light: 153 246 228;
+  --c-teal-300-light: 94 234 212;
+  --c-teal-400-light: 45 212 191;
+  --c-teal-500-light: 20 184 166;
+  --c-teal-600-light: 13 148 136;
+  --c-teal-700-light: 15 118 110;
+  --c-teal-800-light: 17 94 89;
+  --c-teal-900-light: 19 78 74;
+  --c-teal-950-light: 4 47 46;
+}
+
+/* Nền thẻ: bg-white trở thành màu "surface" ở chế độ tối (chữ trắng text-white vẫn là trắng) */
+.dark .bg-white { background-color: rgb(var(--surface) / var(--tw-bg-opacity, 1)); }
+.dark .hover\:bg-white:hover { background-color: rgb(var(--surface) / var(--tw-bg-opacity, 1)); }
+.dark .bg-white\/70 { background-color: rgb(var(--surface) / 0.7); }
+.dark .to-white { --tw-gradient-to: rgb(var(--surface)) var(--tw-gradient-to-position); }
+.dark .from-white { --tw-gradient-from: rgb(var(--surface)) var(--tw-gradient-from-position); --tw-gradient-to: rgb(var(--surface) / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.dark .shadow, .dark .shadow-sm, .dark .shadow-md, .dark .shadow-lg, .dark .shadow-xl, .dark .shadow-2xl { --tw-shadow-color: rgb(0 0 0 / 0.45); --tw-shadow: var(--tw-shadow-colored); }
+
+.dark .text-blue-600, .dark .hover\:text-blue-600:hover { color: rgb(var(--c-indigo-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-blue-700, .dark .hover\:text-blue-700:hover { color: rgb(var(--c-indigo-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-blue-800, .dark .hover\:text-blue-800:hover { color: rgb(var(--c-indigo-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-blue-900, .dark .hover\:text-blue-900:hover { color: rgb(var(--c-indigo-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-indigo-600, .dark .hover\:text-indigo-600:hover { color: rgb(var(--c-indigo-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-indigo-700, .dark .hover\:text-indigo-700:hover { color: rgb(var(--c-indigo-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-indigo-800, .dark .hover\:text-indigo-800:hover { color: rgb(var(--c-indigo-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-indigo-900, .dark .hover\:text-indigo-900:hover { color: rgb(var(--c-indigo-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-primary-600, .dark .hover\:text-primary-600:hover { color: rgb(var(--c-indigo-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-primary-700, .dark .hover\:text-primary-700:hover { color: rgb(var(--c-indigo-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-primary-800, .dark .hover\:text-primary-800:hover { color: rgb(var(--c-indigo-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-primary-900, .dark .hover\:text-primary-900:hover { color: rgb(var(--c-indigo-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-red-600, .dark .hover\:text-red-600:hover { color: rgb(var(--c-red-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-red-700, .dark .hover\:text-red-700:hover { color: rgb(var(--c-red-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-red-800, .dark .hover\:text-red-800:hover { color: rgb(var(--c-red-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-red-900, .dark .hover\:text-red-900:hover { color: rgb(var(--c-red-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-green-600, .dark .hover\:text-green-600:hover { color: rgb(var(--c-green-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-green-700, .dark .hover\:text-green-700:hover { color: rgb(var(--c-green-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-green-800, .dark .hover\:text-green-800:hover { color: rgb(var(--c-green-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-green-900, .dark .hover\:text-green-900:hover { color: rgb(var(--c-green-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-yellow-600, .dark .hover\:text-yellow-600:hover { color: rgb(var(--c-yellow-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-yellow-700, .dark .hover\:text-yellow-700:hover { color: rgb(var(--c-yellow-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-yellow-800, .dark .hover\:text-yellow-800:hover { color: rgb(var(--c-yellow-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-yellow-900, .dark .hover\:text-yellow-900:hover { color: rgb(var(--c-yellow-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-amber-600, .dark .hover\:text-amber-600:hover { color: rgb(var(--c-amber-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-amber-700, .dark .hover\:text-amber-700:hover { color: rgb(var(--c-amber-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-amber-800, .dark .hover\:text-amber-800:hover { color: rgb(var(--c-amber-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-amber-900, .dark .hover\:text-amber-900:hover { color: rgb(var(--c-amber-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-orange-600, .dark .hover\:text-orange-600:hover { color: rgb(var(--c-orange-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-orange-700, .dark .hover\:text-orange-700:hover { color: rgb(var(--c-orange-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-orange-800, .dark .hover\:text-orange-800:hover { color: rgb(var(--c-orange-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-orange-900, .dark .hover\:text-orange-900:hover { color: rgb(var(--c-orange-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-purple-600, .dark .hover\:text-purple-600:hover { color: rgb(var(--c-purple-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-purple-700, .dark .hover\:text-purple-700:hover { color: rgb(var(--c-purple-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-purple-800, .dark .hover\:text-purple-800:hover { color: rgb(var(--c-purple-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-purple-900, .dark .hover\:text-purple-900:hover { color: rgb(var(--c-purple-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-teal-600, .dark .hover\:text-teal-600:hover { color: rgb(var(--c-teal-400-light) / var(--tw-text-opacity, 1)); }
+.dark .text-teal-700, .dark .hover\:text-teal-700:hover { color: rgb(var(--c-teal-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-teal-800, .dark .hover\:text-teal-800:hover { color: rgb(var(--c-teal-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-teal-900, .dark .hover\:text-teal-900:hover { color: rgb(var(--c-teal-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-blue-50, .dark .hover\:text-blue-50:hover { color: rgb(var(--c-indigo-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-blue-100, .dark .hover\:text-blue-100:hover { color: rgb(var(--c-indigo-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-blue-200, .dark .hover\:text-blue-200:hover { color: rgb(var(--c-indigo-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-blue-300, .dark .hover\:text-blue-300:hover { color: rgb(var(--c-indigo-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-indigo-50, .dark .hover\:text-indigo-50:hover { color: rgb(var(--c-indigo-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-indigo-100, .dark .hover\:text-indigo-100:hover { color: rgb(var(--c-indigo-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-indigo-200, .dark .hover\:text-indigo-200:hover { color: rgb(var(--c-indigo-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-indigo-300, .dark .hover\:text-indigo-300:hover { color: rgb(var(--c-indigo-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-primary-50, .dark .hover\:text-primary-50:hover { color: rgb(var(--c-indigo-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-primary-100, .dark .hover\:text-primary-100:hover { color: rgb(var(--c-indigo-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-primary-200, .dark .hover\:text-primary-200:hover { color: rgb(var(--c-indigo-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-primary-300, .dark .hover\:text-primary-300:hover { color: rgb(var(--c-indigo-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-red-50, .dark .hover\:text-red-50:hover { color: rgb(var(--c-red-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-red-100, .dark .hover\:text-red-100:hover { color: rgb(var(--c-red-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-red-200, .dark .hover\:text-red-200:hover { color: rgb(var(--c-red-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-red-300, .dark .hover\:text-red-300:hover { color: rgb(var(--c-red-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-green-50, .dark .hover\:text-green-50:hover { color: rgb(var(--c-green-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-green-100, .dark .hover\:text-green-100:hover { color: rgb(var(--c-green-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-green-200, .dark .hover\:text-green-200:hover { color: rgb(var(--c-green-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-green-300, .dark .hover\:text-green-300:hover { color: rgb(var(--c-green-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-yellow-50, .dark .hover\:text-yellow-50:hover { color: rgb(var(--c-yellow-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-yellow-100, .dark .hover\:text-yellow-100:hover { color: rgb(var(--c-yellow-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-yellow-200, .dark .hover\:text-yellow-200:hover { color: rgb(var(--c-yellow-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-yellow-300, .dark .hover\:text-yellow-300:hover { color: rgb(var(--c-yellow-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-amber-50, .dark .hover\:text-amber-50:hover { color: rgb(var(--c-amber-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-amber-100, .dark .hover\:text-amber-100:hover { color: rgb(var(--c-amber-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-amber-200, .dark .hover\:text-amber-200:hover { color: rgb(var(--c-amber-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-amber-300, .dark .hover\:text-amber-300:hover { color: rgb(var(--c-amber-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-orange-50, .dark .hover\:text-orange-50:hover { color: rgb(var(--c-orange-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-orange-100, .dark .hover\:text-orange-100:hover { color: rgb(var(--c-orange-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-orange-200, .dark .hover\:text-orange-200:hover { color: rgb(var(--c-orange-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-orange-300, .dark .hover\:text-orange-300:hover { color: rgb(var(--c-orange-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-purple-50, .dark .hover\:text-purple-50:hover { color: rgb(var(--c-purple-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-purple-100, .dark .hover\:text-purple-100:hover { color: rgb(var(--c-purple-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-purple-200, .dark .hover\:text-purple-200:hover { color: rgb(var(--c-purple-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-purple-300, .dark .hover\:text-purple-300:hover { color: rgb(var(--c-purple-300-light) / var(--tw-text-opacity, 1)); }
+.dark .text-teal-50, .dark .hover\:text-teal-50:hover { color: rgb(var(--c-teal-50-light) / var(--tw-text-opacity, 1)); }
+.dark .text-teal-100, .dark .hover\:text-teal-100:hover { color: rgb(var(--c-teal-100-light) / var(--tw-text-opacity, 1)); }
+.dark .text-teal-200, .dark .hover\:text-teal-200:hover { color: rgb(var(--c-teal-200-light) / var(--tw-text-opacity, 1)); }
+.dark .text-teal-300, .dark .hover\:text-teal-300:hover { color: rgb(var(--c-teal-300-light) / var(--tw-text-opacity, 1)); }
+
+/* Chuyển sáng/tối mượt */
+body { background-color: rgb(var(--app-bg)); color: rgb(var(--c-slate-900)); transition: background-color .2s ease, color .2s ease; }
+::selection { background: rgb(var(--c-indigo-200)); }
+
+/* Biểu đồ (recharts) theo giao diện */
+.recharts-cartesian-grid line { stroke: rgb(var(--c-slate-200)); }
+.recharts-cartesian-axis-tick text, .recharts-legend-item-text { fill: rgb(var(--c-slate-500)) !important; color: rgb(var(--c-slate-600)) !important; }
+.recharts-cartesian-axis-line, .recharts-cartesian-axis-tick-line { stroke: rgb(var(--c-slate-300)); }
+.recharts-default-tooltip { background-color: rgb(var(--surface)) !important; border: 1px solid rgb(var(--c-slate-200)) !important; border-radius: .5rem; color: rgb(var(--c-slate-800)); }
+.recharts-tooltip-cursor { fill: rgb(var(--c-slate-100)); }
