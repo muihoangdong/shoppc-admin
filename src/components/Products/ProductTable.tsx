@@ -76,7 +76,17 @@ export const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, on
                     <div className="flex items-center gap-3">
                       <ProductImage src={product.image_url} alt={product.name} />
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate max-w-[18rem]">{product.name}</p>
+                        <p className="flex items-center gap-1.5 text-sm font-medium text-gray-900">
+                          <span className="truncate max-w-[18rem]">{product.name}</span>
+                          {product.model_3d?.glb_url && (
+                            <span
+                              title={product.model_3d.enabled === false ? 'Có mô hình 3D (đang ẩn)' : 'Có mô hình 3D / AR'}
+                              className={`shrink-0 rounded px-1 font-mono text-[10px] font-bold ${product.model_3d.enabled === false ? 'bg-slate-100 text-slate-400' : 'bg-blue-100 text-blue-700'}`}
+                            >
+                              3D
+                            </span>
+                          )}
+                        </p>
                         <p className="text-xs text-gray-400">#{product.id}</p>
                       </div>
                     </div>

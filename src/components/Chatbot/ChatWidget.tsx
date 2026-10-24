@@ -196,19 +196,23 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
           aria-label="Trợ lý AI"
           className="fixed bottom-24 right-6 z-50 flex h-[34rem] max-h-[calc(100vh-8rem)] w-[26rem] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
         >
-          <div className="flex items-center justify-between bg-blue-600 px-4 py-3 text-white">
+          <div className="flex items-center justify-between bg-gradient-to-r from-blue-700 to-blue-500 px-4 py-3 text-white">
             <div className="flex items-center gap-2">
-              <SparklesIcon className="h-5 w-5" />
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/15">
+                <SparklesIcon className="h-5 w-5" />
+              </span>
               <div>
-                <p className="text-sm font-semibold leading-tight">Trợ lý AI Shoppc</p>
-                <p className="text-xs text-blue-100">Biết bạn đang xem trang nào để trả lời đúng ngữ cảnh</p>
+                <p className="flex items-center gap-1.5 text-sm font-semibold leading-tight">
+                  Admin AI Copilot <span className="rounded bg-white/20 px-1 font-mono text-[9px] font-bold tracking-wider">PRO</span>
+                </p>
+                <p className="font-mono text-[10px] text-blue-100">Hiểu ngữ cảnh trang bạn đang xem</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <button onClick={clearChat} title="Xóa cuộc trò chuyện" className="rounded-lg p-1.5 hover:bg-blue-500">
+              <button onClick={clearChat} title="Xóa cuộc trò chuyện" className="rounded-lg p-1.5 hover:bg-white/15">
                 <TrashIcon className="h-4 w-4" />
               </button>
-              <button onClick={() => setOpen(false)} title="Đóng" className="rounded-lg p-1.5 hover:bg-blue-500">
+              <button onClick={() => setOpen(false)} title="Đóng" className="rounded-lg p-1.5 hover:bg-white/15">
                 <XMarkIcon className="h-5 w-5" />
               </button>
             </div>
@@ -225,7 +229,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
                   <button
                     key={s}
                     onClick={() => void send(s)}
-                    className="rounded-full border border-blue-200 bg-white px-3 py-1.5 text-xs text-blue-700 transition hover:bg-blue-50"
+                    className="rounded-md border border-blue-200 bg-white px-2.5 py-1 font-mono text-[11px] text-blue-700 transition hover:bg-blue-50"
                   >
                     {s}
                   </button>
@@ -298,7 +302,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
         onClick={() => setOpen((v) => !v)}
         title={open ? 'Đóng trợ lý AI' : 'Mở trợ lý AI'}
         aria-label={open ? 'Đóng trợ lý AI' : 'Mở trợ lý AI'}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition hover:bg-blue-700 hover:shadow-xl"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-lg shadow-blue-600/30 transition hover:scale-105"
       >
         {open ? <XMarkIcon className="h-6 w-6" /> : <ChatBubbleLeftRightIcon className="h-6 w-6" />}
       </button>

@@ -7,6 +7,7 @@ import { formatPrice } from '../../utils/formatters';
 import { buildTree, flattenForSelect } from '../../utils/categoryTree';
 import { ProductFormErrors, ProductPayload, SpecRow, validateProductForm } from '../../utils/productValidation';
 import BuildSpecsFields, { BuildSpecsValue, missingBuildFields, usePartTypes } from './BuildSpecsFields';
+import Model3dFields, { EMPTY_MODEL3D, Model3dValue, toPayload, validateModel3d } from './Model3dFields';
 
 interface ProductFormProps {
   initialData?: Product | null;
@@ -40,6 +41,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [categoryId, setCategoryId] = useState(initialData?.category_id ? String(initialData.category_id) : '');
   const [price, setPrice] = useState(initialData ? String(Math.round(Number(initialData.price))) : '');
   const [stock, setStock] = useState(initialData ? String(initialData.stock) : '0');
+  const [originalPrice, setOriginalPrice] = useState(initialData?.original_price ? String(Math.round(Number(initialData.original_price))) : '');
+  const [originalError, setOriginalError] = useState('');
+  const [model3d, setModel3d] = useState<Model3dValue>(() =>
+    initialData?.model_3d?.glb_url
+      ? {
+          glb: initialData.model_3d.glb_url,
+          usdz: initialData.model_3d.usdz_url ?? '',
+          poster: initialData.model_3d.poster_url ?? '',
+          enabled: initialData.model_3d.enabled !== false,
+        }
+      : EMPTY_MODEL3D
+  );
+  const [model3dError, setModel3dError] = useState('');
   const [imageUrl, setImageUrl] = useState(initialData?.image_url ?? '');
   const [description, setDescription] = useState(initialData?.description ?? '');
   const [specs, setSpecs] = useState<SpecRow[]>(() => {
@@ -102,10 +116,21 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     setErrors(result.errors);
     const missing = partType ? missingBuildFields(partDefs, partType, buildSpecs) : [];
     setBuildError(missing.length ? `Thiếu thông số Build PC: ${missing.join(', ')}` : '');
-    if (!result.payload || missing.length) return;
+    // Giá gốc (tùy chọn): phải lớn hơn giá bán thì cửa hàng mới hiện % giảm
+    const orig = originalPrice.trim();
+    const origError = !orig ? '' : !/^\d+$/.test(orig) ? 'Giá gốc phải là số nguyên' : result.payload && Number(orig) <= result.payload.price ? 'Giá gốc phải lớn hơn giá bán' : '';
+    setOriginalError(origError);
+    const m3dError = validateModel3d(model3d);
+    setModel3dError(m3dError);
+    if (!result.payload || missing.length || origError || m3dError) return;
     // Sản phẩm cũ chưa từng là linh kiện mà vẫn để trống: không gửi gì để khỏi đụng tới (backend cũ/chưa nâng cấp vẫn chạy)
     const touchBuild = !!partType || !!initialData?.part_type;
-    onSubmit({ ...result.payload, ...(touchBuild ? { part_type: partType || null, build_specs: partType ? buildSpecs : null } : {}) });
+    onSubmit({
+      ...result.payload,
+      original_price: orig ? Number(orig) : null,
+      model_3d: toPayload(model3d),
+      ...(touchBuild ? { part_type: partType || null, build_specs: partType ? buildSpecs : null } : {}),
+    });
   };
 
   const priceNumber = /^\d+$/.test(price.trim()) ? Number(price) : null;
@@ -199,6 +224,29 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             aria-describedby="pf-stock-err"
           />
           <FieldError id="pf-stock-err" message={errors.stock} />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="pf-original" className="block text-sm font-medium text-gray-700 mb-1">
+            Giá gốc / giá niêm yết <span className="text-gray-400">(tùy chọn — để hiện giá gạch ngang và % giảm)</span>
+          </label>
+          <input
+            id="pf-original"
+            type="text"
+            inputMode="numeric"
+            value={originalPrice}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setOriginalPrice(e.target.value); setOriginalError(''); }}
+            className={`${inputClass} ${originalError ? 'border-red-400' : 'border-gray-300'}`}
+            placeholder="Để trống nếu không giảm giá"
+            aria-invalid={!!originalError}
+            aria-describedby="pf-original-err"
+          />
+          {!originalError && priceNumber && /^\d+$/.test(originalPrice.trim()) && Number(originalPrice) > priceNumber && (
+            <p className="mt-1 text-xs text-green-600">
+              Giảm {Math.round(((Number(originalPrice) - priceNumber) / Number(originalPrice)) * 100)}% (= {formatPrice(Number(originalPrice))})
+            </p>
+          )}
+          <FieldError id="pf-original-err" message={originalError} />
         </div>
       </div>
 
@@ -309,6 +357,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         </div>
         <FieldError id="pf-specs-err" message={errors.specs} />
       </div>
+
+      <Model3dFields value={model3d} onChange={(next) => { setModel3d(next); setModel3dError(''); }} error={model3dError} imageUrl={imageUrl.trim() || undefined} />
 
       <BuildSpecsFields
         partType={partType}

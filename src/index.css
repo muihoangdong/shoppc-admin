@@ -8,5 +8,53 @@
   body {
     /* Nền trang lấy từ biến --app-bg (đổi theo sáng/tối) — xem theme.css */
     background-color: rgb(var(--app-bg));
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  /* ── Giao diện "Arctic Frost": thẻ, nhãn dùng chung ── */
+  .frost-card {
+    @apply rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgb(15_40_80/0.04),0_8px_24px_-16px_rgb(15_40_80/0.2)];
+  }
+  .frost-label {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-slate-500;
+  }
+  .frost-chip {
+    @apply inline-flex items-center gap-1 rounded-md border px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider;
+  }
+}
+
+/* Nền trắng bán trong suốt cũng đổi theo chế độ tối */
+.dark .bg-white\/80 { background-color: rgb(var(--surface) / 0.8); }
+.dark .bg-white\/90 { background-color: rgb(var(--surface) / 0.9); }
+
+model-viewer {
+  --poster-color: transparent;
+  width: 100%;
+  height: 100%;
+}
+
+/* In / Lưu PDF trang tổng quan: bỏ menu, thanh trên, nút bấm */
+@media print {
+  aside[aria-label='Menu chính'],
+  header,
+  footer,
+  [data-print-hide] {
+    display: none !important;
+  }
+  .lg\:ml-64,
+  .lg\:ml-20 {
+    margin-left: 0 !important;
+  }
+  body {
+    background: #fff !important;
+  }
+  .frost-card {
+    break-inside: avoid;
+    box-shadow: none !important;
   }
 }

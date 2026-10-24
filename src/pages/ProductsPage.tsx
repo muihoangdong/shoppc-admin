@@ -75,7 +75,12 @@ const ProductsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const [searchInput, setSearchInput] = useState('');
+  // ?q= từ ô tìm kiếm chung ở thanh trên cùng
+  const [searchInput, setSearchInput] = useState(() => params.get('q') || '');
+  const urlQuery = params.get('q');
+  useEffect(() => {
+    if (urlQuery !== null) setSearchInput(urlQuery);
+  }, [urlQuery]);
   const search = useDebounce(searchInput, 250);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [sort, setSort] = useState<SortKey>('newest');

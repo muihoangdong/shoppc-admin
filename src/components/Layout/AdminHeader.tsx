@@ -1,11 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Bars3Icon, BellIcon, SpeakerWaveIcon, SpeakerXMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  ArrowTopRightOnSquareIcon,
+  Bars3Icon,
+  BellIcon,
+  MagnifyingGlassIcon,
+  SpeakerWaveIcon,
+  SpeakerXMarkIcon,
+  UserIcon,
+} from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
 import { roleLabel } from '../../utils/roles';
 import { useRealtimeStatus } from '../../contexts/RealtimeContext';
 import { isSoundEnabled, playBeep, setSoundEnabled } from '../../utils/sound';
 import ThemeToggle from '../Common/ThemeToggle';
+import { STOREFRONT_URL } from '../../utils/storefront';
 
 interface AdminHeaderProps {
   onMenuClick: () => void;
@@ -17,6 +26,12 @@ interface AdminHeaderProps {
 
 type MenuName = 'bell' | 'user' | null;
 
+
+const SEARCH_TARGETS = [
+  { value: 'orders', label: 'Đơn hàng', path: '/admin/orders' },
+  { value: 'products', label: 'Sản phẩm', path: '/admin/products' },
+] as const;
+
 const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, lowStock, unreadChats = 0, paymentClaims = 0 }) => {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState<MenuName>(null);
@@ -24,6 +39,32 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
   const total = pendingOrders + lowStock + unreadChats + paymentClaims;
   const status = useRealtimeStatus();
   const [sound, setSound] = useState(isSoundEnabled());
+  const navigate = useNavigate();
+  const searchRef = useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useState('');
+  const [target, setTarget] = useState<(typeof SEARCH_TARGETS)[number]['value']>('orders');
+
+  // Ctrl/⌘ + K: tìm nhanh từ mọi trang
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        searchRef.current?.focus();
+        searchRef.current?.select();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    const path = SEARCH_TARGETS.find((t) => t.value === target)!.path;
+    navigate(`${path}?q=${encodeURIComponent(q)}`);
+    searchRef.current?.blur();
+  };
 
   // Bấm ra ngoài hoặc nhấn Esc thì đóng menu
   useEffect(() => {
@@ -43,29 +84,68 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
   }, [open]);
 
   const toggle = (name: Exclude<MenuName, null>) => setOpen((current) => (current === name ? null : name));
-  const itemClass = 'flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-50';
+  const itemClass = 'flex items-center justify-between px-4 py-3 text-sm text-slate-700 hover:bg-slate-50';
+  const iconBtn = 'relative rounded-xl border border-slate-200 bg-white p-2 text-slate-600 transition hover:border-blue-300 hover:text-blue-600';
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-30">
-      <div className="flex items-center justify-between px-4 sm:px-6 py-3">
-        <button onClick={onMenuClick} aria-label="Mở/đóng menu" className="p-2 rounded-lg hover:bg-gray-100 transition">
-          <Bars3Icon className="h-6 w-6 text-gray-600" />
+    <header className="sticky top-0 z-30 border-b border-slate-200 bg-app/90 backdrop-blur">
+      <div className="flex items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
+        <button onClick={onMenuClick} aria-label="Mở/đóng menu" className="rounded-xl p-2 text-slate-600 transition hover:bg-slate-200/60">
+          <Bars3Icon className="h-6 w-6" />
         </button>
 
-        <div ref={wrapRef} className="flex items-center space-x-2 sm:space-x-4">
+        {/* Tìm kiếm chung */}
+        <form onSubmit={submitSearch} role="search" className="hidden min-w-0 max-w-xl flex-1 md:flex">
+          <div className="flex w-full items-center rounded-xl border border-slate-200 bg-white pl-3 transition focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-500/10">
+            <MagnifyingGlassIcon className="h-4 w-4 shrink-0 text-slate-400" />
+            <input
+              ref={searchRef}
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Tìm mã đơn hàng, tên khách, sản phẩm…"
+              aria-label="Tìm kiếm"
+              className="min-w-0 flex-1 bg-transparent px-2 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+            />
+            <select
+              value={target}
+              onChange={(e) => setTarget(e.target.value as typeof target)}
+              aria-label="Tìm trong"
+              className="border-l border-slate-200 bg-transparent px-2 py-2 font-mono text-[11px] text-slate-600 outline-none"
+            >
+              {SEARCH_TARGETS.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+            <kbd className="mr-2 hidden rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 font-mono text-[10px] text-slate-500 lg:block">Ctrl K</kbd>
+          </div>
+        </form>
+
+        <div ref={wrapRef} className="ml-auto flex items-center gap-2">
           {/* Trạng thái kết nối realtime */}
           <span
             data-testid="realtime-status"
             data-status={status}
             title={status === 'live' ? 'Đang nhận dữ liệu trực tiếp' : status === 'offline' ? 'Mất kết nối, đang thử lại…' : 'Đang kết nối…'}
-            className="hidden items-center gap-1.5 text-xs text-gray-500 sm:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 font-mono text-[11px] text-slate-600 xl:flex"
           >
-            <span className={`h-2 w-2 rounded-full ${status === 'live' ? 'bg-green-500' : status === 'offline' ? 'bg-amber-500' : 'bg-gray-300'}`} />
-            {status === 'live' ? 'Trực tiếp' : status === 'offline' ? 'Đang kết nối lại…' : status === 'connecting' ? 'Đang kết nối…' : ''}
+            <span className={`h-2 w-2 rounded-full ${status === 'live' ? 'bg-green-500' : status === 'offline' ? 'bg-amber-500' : 'bg-slate-300'}`} />
+            Hệ thống: {status === 'live' ? 'Trực tuyến' : status === 'offline' ? 'Đang kết nối lại…' : 'Đang kết nối…'}
           </span>
 
+          <a
+            href={STOREFRONT_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="hidden items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 font-mono text-[11px] font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600 lg:flex"
+          >
+            Xem Storefront <ArrowTopRightOnSquareIcon className="h-3.5 w-3.5" />
+          </a>
+
           {/* Giao diện sáng/tối */}
-          <ThemeToggle />
+          <ThemeToggle className={iconBtn} />
 
           {/* Bật/tắt âm báo */}
           <button
@@ -78,9 +158,9 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
             aria-label={sound ? 'Tắt âm báo' : 'Bật âm báo'}
             aria-pressed={sound}
             title={sound ? 'Âm báo đơn/tin nhắn mới: đang bật' : 'Âm báo đơn/tin nhắn mới: đang tắt'}
-            className="p-2 rounded-lg hover:bg-gray-100 transition"
+            className={iconBtn}
           >
-            {sound ? <SpeakerWaveIcon className="h-5 w-5 text-gray-600" /> : <SpeakerXMarkIcon className="h-5 w-5 text-gray-400" />}
+            {sound ? <SpeakerWaveIcon className="h-5 w-5" /> : <SpeakerXMarkIcon className="h-5 w-5 text-slate-400" />}
           </button>
 
           {/* Chuông thông báo */}
@@ -89,9 +169,9 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
               onClick={() => toggle('bell')}
               aria-label={total ? `Có ${total} việc cần chú ý` : 'Thông báo'}
               aria-expanded={open === 'bell'}
-              className="p-2 rounded-lg hover:bg-gray-100 transition relative"
+              className={iconBtn}
             >
-              <BellIcon className="h-6 w-6 text-gray-600" />
+              <BellIcon className="h-5 w-5" />
               {total > 0 && (
                 <span
                   data-testid="bell-badge"
@@ -102,8 +182,8 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
               )}
             </button>
             {open === 'bell' && (
-              <div className="absolute right-0 mt-2 w-72 rounded-lg border bg-white shadow-lg overflow-hidden">
-                <p className="px-4 py-2 text-xs font-semibold uppercase text-gray-500 bg-gray-50">Cần chú ý</p>
+              <div className="absolute right-0 mt-2 w-72 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+                <p className="frost-label bg-slate-50 px-4 py-2">Cần chú ý</p>
                 {total === 0 && <p className="px-4 py-6 text-center text-sm text-gray-500">Không có việc nào cần xử lý 🎉</p>}
                 {paymentClaims > 0 && (
                   <Link to="/admin/orders?claimed=1" onClick={() => setOpen(null)} className={itemClass}>
@@ -138,17 +218,15 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
             <button
               onClick={() => toggle('user')}
               aria-expanded={open === 'user'}
-              className="flex items-center space-x-3 rounded-lg p-1 hover:bg-gray-100 transition"
+              aria-label="Menu tài khoản"
+              title={`${user?.full_name || ''} · ${roleLabel(user?.role)}`}
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition hover:bg-blue-700"
             >
-              <UserCircleIcon className="h-8 w-8 text-gray-600" />
-              <div className="hidden md:block text-left">
-                <p className="text-sm font-medium text-gray-700">{user?.full_name}</p>
-                <p className="text-xs text-gray-500">{roleLabel(user?.role)}</p>
-              </div>
+              <UserIcon className="h-5 w-5" />
             </button>
             {open === 'user' && (
-              <div className="absolute right-0 mt-2 w-56 rounded-lg border bg-white shadow-lg overflow-hidden">
-                <div className="px-4 py-3 border-b">
+              <div className="absolute right-0 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+                <div className="border-b border-slate-200 px-4 py-3">
                   <p className="text-sm font-medium text-gray-800 truncate">{user?.full_name}</p>
                   <p className="text-xs text-gray-500 truncate">{user?.email}</p>
                 </div>

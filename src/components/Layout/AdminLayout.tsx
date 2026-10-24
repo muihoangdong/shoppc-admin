@@ -41,13 +41,13 @@ const AdminLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-app">
-      <AdminSidebar collapsed={collapsed} mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} unreadChats={unreadChats} />
+      <AdminSidebar collapsed={collapsed} mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} unreadChats={unreadChats} pendingOrders={pendingOrders} />
       <RealtimeNotifier onStatsDirty={refreshSoon} />
 
       {mobileOpen && (
         <div
           data-testid="drawer-overlay"
-          className="fixed inset-0 bg-black bg-opacity-40 z-30 lg:hidden"
+          className="fixed inset-0 z-30 bg-slate-950/50 lg:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -55,7 +55,7 @@ const AdminLayout: React.FC = () => {
       <div className={`min-h-screen flex flex-col transition-all duration-300 ${collapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
         <AdminHeader onMenuClick={handleMenuClick} pendingOrders={pendingOrders} lowStock={lowStock} unreadChats={unreadChats} paymentClaims={paymentClaims} />
 
-        <main className="flex-1 p-4 sm:p-6 min-w-0">
+        <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
           <Outlet key={dataVersion} />
         </main>
 

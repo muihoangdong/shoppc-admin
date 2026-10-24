@@ -27,6 +27,8 @@ export interface ProductPayload {
   specs: Record<string, string>;
   part_type?: string | null;
   build_specs?: Record<string, unknown> | null;
+  original_price?: number | null;
+  model_3d?: { glb_url: string; usdz_url?: string; poster_url?: string; enabled?: boolean } | null;
 }
 
 export const validateProductForm = (v: ProductFormValues): { errors: ProductFormErrors; payload: ProductPayload | null } => {

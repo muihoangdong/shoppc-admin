@@ -43,7 +43,12 @@ const OrdersPage: React.FC = () => {
   const claimed = params.get('claimed') === '1';
 
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus | ''>('');
-  const [searchInput, setSearchInput] = useState('');
+  // ?q= từ ô tìm kiếm chung ở thanh trên cùng
+  const [searchInput, setSearchInput] = useState(() => params.get('q') || '');
+  const urlQuery = params.get('q');
+  useEffect(() => {
+    if (urlQuery !== null) setSearchInput(urlQuery);
+  }, [urlQuery]);
   const search = useDebounce(searchInput.trim(), 400);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');

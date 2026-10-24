@@ -21,8 +21,20 @@ export interface Product {
   /** Build PC: loại linh kiện (cpu, mainboard, ram...) và thông số kiểm tra tương thích */
   part_type?: string | null;
   build_specs?: Record<string, unknown> | null;
+  /** Giá niêm yết trước giảm (cửa hàng hiện gạch ngang + % giảm) */
+  original_price?: number | string | null;
+  /** Mô hình 3D / AR (file GLB) — null: sản phẩm chưa có mô hình */
+  model_3d?: Model3dConfig | null;
   created_at: string;
   updated_at: string;
+}
+
+/** Mô hình 3D của sản phẩm, cửa hàng hiển thị bằng Google <model-viewer> (xoay 360°, AR) */
+export interface Model3dConfig {
+  glb_url?: string;
+  usdz_url?: string;
+  poster_url?: string;
+  enabled?: boolean;
 }
 
 export interface Category {
