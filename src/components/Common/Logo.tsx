@@ -37,7 +37,7 @@ const Logo: React.FC<LogoProps> = ({ variant = 'default', markOnly = false, mark
     {!markOnly && (
       <span className="flex flex-col leading-none">
         <span className={`text-lg font-bold tracking-tight ${variant === 'light' ? 'text-white' : 'text-slate-900'}`}>ShopPC</span>
-        <span className={`mt-1 font-mono text-[9px] font-semibold tracking-[0.2em] ${variant === 'light' ? 'text-white/70' : 'text-blue-600'}`}>ADMIN HUB</span>
+        <span className={`mt-1 text-[9px] font-semibold tracking-[0.2em] ${variant === 'light' ? 'text-white/70' : 'text-blue-600'}`}>ADMIN HUB</span>
       </span>
     )}
   </span>

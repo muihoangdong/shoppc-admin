@@ -81,7 +81,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, on
                           {product.model_3d?.glb_url && (
                             <span
                               title={product.model_3d.enabled === false ? 'Có mô hình 3D (đang ẩn)' : 'Có mô hình 3D / AR'}
-                              className={`shrink-0 rounded px-1 font-mono text-[10px] font-bold ${product.model_3d.enabled === false ? 'bg-slate-100 text-slate-400' : 'bg-blue-100 text-blue-700'}`}
+                              className={`shrink-0 rounded px-1 text-[10px] font-bold ${product.model_3d.enabled === false ? 'bg-slate-100 text-slate-400' : 'bg-blue-100 text-blue-700'}`}
                             >
                               3D
                             </span>

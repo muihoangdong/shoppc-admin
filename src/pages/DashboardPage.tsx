@@ -206,7 +206,7 @@ const DashboardPage: React.FC = () => {
                 type="button"
                 onClick={() => setPeriod(p.key)}
                 aria-pressed={period === p.key}
-                className={`flex items-center gap-1 rounded-lg px-3 py-1.5 font-mono text-xs transition ${
+                className={`flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs transition ${
                   period === p.key ? 'bg-blue-600 font-semibold text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -228,7 +228,7 @@ const DashboardPage: React.FC = () => {
               onClick={() => setExportOpen((v) => !v)}
               disabled={!analytics}
               aria-expanded={exportOpen}
-              className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 font-mono text-xs font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-600 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-600 disabled:opacity-50"
             >
               <ArrowDownTrayIcon className="h-4 w-4" /> Xuất Excel / PDF
             </button>
@@ -288,7 +288,7 @@ const DashboardPage: React.FC = () => {
           tone="purple"
           to="/admin/orders?status=pending"
           footer={
-            <span className="rounded-md bg-blue-50 px-1.5 py-0.5 font-mono text-[11px] text-blue-700">
+            <span className="rounded-md bg-blue-50 px-1.5 py-0.5 text-[11px] text-blue-700">
               {stats.pendingOrders > 0 ? 'Cần xử lý ngay' : 'Không có đơn tồn đọng'}
               {stats.paymentClaims > 0 ? ` · ${stats.paymentClaims} báo đã CK` : ''}
             </span>
@@ -305,7 +305,7 @@ const DashboardPage: React.FC = () => {
             lowNames.length ? (
               <span className="flex flex-wrap gap-1">
                 {lowNames.map((p) => (
-                  <span key={p.id} className="max-w-[9rem] truncate rounded-md bg-red-50 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-red-600">
+                  <span key={p.id} className="max-w-[9rem] truncate rounded-md bg-red-50 px-1.5 py-0.5 text-[10px] font-semibold text-red-600">
                     {p.name}: {p.stock}
                   </span>
                 ))}
@@ -347,7 +347,7 @@ const DashboardPage: React.FC = () => {
         />
       </div>
 
-      <p className="text-center font-mono text-[11px] text-slate-400">
+      <p className="text-center text-[11px] text-slate-400">
         Tổng {formatNumber(stats.totalProducts)} sản phẩm đang bán · Doanh thu tính trên đơn đã giao / hoàn tất, không gồm đơn hủy.
       </p>
     </div>

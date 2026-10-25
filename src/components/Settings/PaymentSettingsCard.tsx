@@ -142,7 +142,7 @@ const PaymentSettingsCard: React.FC = () => {
                 <p className="font-semibold text-slate-900">Đang dùng</p>
                 {data.sample_qr && <img src={data.sample_qr} alt="Mã QR thử 10.000đ" className="mx-auto mt-2 w-48 rounded-xl border bg-white p-1" />}
                 <p className="mt-2 font-medium text-slate-800">{data.active.bank_name}</p>
-                <p className="font-mono text-slate-800">{data.active.account_no}</p>
+                <p className="text-slate-800">{data.active.account_no}</p>
                 <p className="text-slate-800">{data.active.account_name}</p>
                 <p className="mt-2 text-xs text-slate-500">
                   {data.active.source === 'settings' ? 'Lấy từ trang này.' : 'Lấy từ file shoppc-be/.env (BANK_...).'} Quét thử bằng app ngân hàng (10.000đ, nội dung SHOPPC TEST) để kiểm tra đúng tên.

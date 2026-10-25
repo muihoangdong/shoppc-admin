@@ -182,7 +182,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onC
                   </p>
                   <p className="mt-1 text-sm text-green-900">
                     Mở app ngân hàng kiểm tra có giao dịch <b>{formatPrice(Number(order.total_amount))}</b> với nội dung{' '}
-                    <b className="font-mono">{order.order_code.replace(/-/g, '')}</b>.
+                    <b>{order.order_code.replace(/-/g, '')}</b>.
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <button

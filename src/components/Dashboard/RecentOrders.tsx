@@ -30,12 +30,12 @@ export const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, pending, onV
         <div>
           <h3 className="flex items-center gap-2 text-lg font-semibold text-slate-900">
             Đơn hàng mới cần xử lý
-            {pending > 0 && <span className="rounded-md bg-red-600 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-white">{pending} chờ xử lý</span>}
+            {pending > 0 && <span className="rounded-md bg-red-600 px-1.5 py-0.5 text-[10px] font-semibold text-white">{pending} chờ xử lý</span>}
           </h3>
           <p className="text-sm text-slate-500">Ưu tiên xác nhận, đóng gói & giao hàng sớm</p>
         </div>
       </div>
-      <button onClick={onViewAll} className="flex items-center gap-1 font-mono text-xs font-semibold text-blue-600 hover:underline">
+      <button onClick={onViewAll} className="flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline">
         Xem tất cả <ChevronRightIcon className="h-3.5 w-3.5" />
       </button>
     </div>
@@ -57,23 +57,23 @@ export const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, pending, onV
             {orders.map((order) => (
               <tr key={order.id} onClick={() => onViewOrder(order.id)} className="cursor-pointer transition hover:bg-slate-50">
                 <td className="px-5 py-3">
-                  <p className="font-mono text-xs font-semibold text-blue-600">#{order.order_code}</p>
+                  <p className="text-xs font-semibold text-blue-600">#{order.order_code}</p>
                   <p className="text-[11px] text-slate-400">{formatRelativeTime(order.created_at)}</p>
                 </td>
                 <td className="px-5 py-3">
                   <span className="flex items-center gap-2">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 font-mono text-[11px] font-semibold text-blue-700">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[11px] font-semibold text-blue-700">
                       {initials(order.customer_name)}
                     </span>
                     <span className="truncate font-medium text-slate-800">{order.customer_name}</span>
                   </span>
                 </td>
-                <td className="whitespace-nowrap px-5 py-3 font-mono text-sm font-semibold text-slate-900">{formatPrice(order.total_amount)}</td>
+                <td className="whitespace-nowrap px-5 py-3 text-sm font-semibold text-slate-900">{formatPrice(order.total_amount)}</td>
                 <td className="px-5 py-3">
                   <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadge(order.status)}`}>{statusLabel(order.status)}</span>
                 </td>
                 <td className="px-5 py-3 text-right">
-                  <span className="rounded-lg border border-slate-200 px-2 py-1 font-mono text-[11px] text-slate-600">Chi tiết</span>
+                  <span className="rounded-lg border border-slate-200 px-2 py-1 text-[11px] text-slate-600">Chi tiết</span>
                 </td>
               </tr>
             ))}

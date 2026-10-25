@@ -138,7 +138,7 @@ export const CouponModal: React.FC<CouponModalProps> = ({ isOpen, coupon, loadin
                 id="cp-code"
                 value={f.code}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => set('code', e.target.value.toUpperCase())}
-                className={`${inputClass} font-mono uppercase`}
+                className={`${inputClass} uppercase`}
                 maxLength={30}
                 placeholder="VD: TET2027"
                 autoComplete="off"

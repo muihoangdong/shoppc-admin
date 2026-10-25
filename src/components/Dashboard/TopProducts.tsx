@@ -36,11 +36,11 @@ export const TopProducts: React.FC<TopProductsProps> = ({ products, catalog, per
               <li key={`${p.product_id}-${i}`} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                 <div className="flex items-center gap-3">
                   <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white">
-                    {info?.image_url ? <img src={info.image_url} alt="" className="h-full w-full object-contain p-1" /> : <span className="font-mono text-xs text-slate-400">#{i + 1}</span>}
+                    {info?.image_url ? <img src={info.image_url} alt="" className="h-full w-full object-contain p-1" /> : <span className="text-xs text-slate-400">#{i + 1}</span>}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-slate-900">{p.name}</p>
-                    <p className="flex justify-between gap-2 font-mono text-[11px]">
+                    <p className="flex justify-between gap-2 text-[11px]">
                       <span className="text-slate-500">Đã bán: {formatNumber(p.quantity_sold)}</span>
                       <span className="font-semibold text-blue-600">{formatShortNumber(p.revenue)}</span>
                     </p>
@@ -50,7 +50,7 @@ export const TopProducts: React.FC<TopProductsProps> = ({ products, catalog, per
                   <div className="h-1.5 rounded-full bg-blue-600" style={{ width: `${Math.max((p.quantity_sold / max) * 100, 4)}%` }} />
                 </div>
                 {stock !== undefined && (
-                  <p className={`mt-1.5 font-mono text-[11px] ${low ? 'font-semibold text-red-600' : 'text-slate-500'}`}>
+                  <p className={`mt-1.5 text-[11px] ${low ? 'font-semibold text-red-600' : 'text-slate-500'}`}>
                     Tồn kho: {stock === 0 ? 'Hết hàng' : `còn ${formatNumber(stock)}`}
                   </p>
                 )}
@@ -61,7 +61,7 @@ export const TopProducts: React.FC<TopProductsProps> = ({ products, catalog, per
       )}
       <Link
         to="/admin/analytics"
-        className="mt-auto flex items-center justify-center gap-1 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 pt-2 font-mono text-xs font-semibold text-blue-700 hover:bg-blue-100"
+        className="mt-auto flex items-center justify-center gap-1 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 pt-2 text-xs font-semibold text-blue-700 hover:bg-blue-100"
         style={{ marginTop: '1rem' }}
       >
         Xem báo cáo hiệu suất sản phẩm <ArrowRightIcon className="h-3.5 w-3.5" />

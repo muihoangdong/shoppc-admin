@@ -22,7 +22,7 @@ export const RevenueMix: React.FC<{ data: Analytics }> = ({ data }) => {
           <h3 className="text-lg font-semibold text-slate-900">Cơ cấu Doanh thu</h3>
           <p className="text-sm text-slate-500">Theo danh mục sản phẩm</p>
         </div>
-        <span className="rounded-lg border border-slate-200 px-2 py-1 font-mono text-[11px] text-slate-600">{data.range.label}</span>
+        <span className="rounded-lg border border-slate-200 px-2 py-1 text-[11px] text-slate-600">{data.range.label}</span>
       </div>
 
       {total === 0 ? (
@@ -52,7 +52,7 @@ export const RevenueMix: React.FC<{ data: Analytics }> = ({ data }) => {
                   <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: c.series[i % c.series.length] }} />
                   <span className="truncate text-slate-700">{s.name}</span>
                 </span>
-                <span className="shrink-0 font-mono text-xs">
+                <span className="shrink-0 text-xs">
                   <strong className="text-slate-900">{((s.value / total) * 100).toFixed(0)}%</strong>
                   <span className="ml-1 text-slate-500">({formatShortNumber(s.value)})</span>
                 </span>

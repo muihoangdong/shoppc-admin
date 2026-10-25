@@ -37,10 +37,10 @@ export const AiInsights: React.FC = () => {
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-md border border-blue-200 bg-white px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-blue-700">
+            <span className="inline-flex items-center gap-1 rounded-md border border-blue-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-blue-700">
               <SparklesIcon className="h-3 w-3" /> AI Hardware Insights & Forecasting
             </span>
-            <span className="font-mono text-[10px] text-slate-400">Phân tích 7 & 30 ngày gần nhất</span>
+            <span className="text-[10px] text-slate-400">Phân tích 7 & 30 ngày gần nhất</span>
           </div>
           {!text && !error && !loading && (
             <p className="mt-2 text-sm text-slate-600">

@@ -39,7 +39,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({ label, value, unit, icon: Icon
       <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
         {delta !== undefined && delta !== null && Number.isFinite(delta) && (
           <span
-            className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 font-mono text-[11px] font-semibold ${
+            className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-semibold ${
               delta >= 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'
             }`}
           >

@@ -111,7 +111,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
               value={target}
               onChange={(e) => setTarget(e.target.value as typeof target)}
               aria-label="Tìm trong"
-              className="border-l border-slate-200 bg-transparent px-2 py-2 font-mono text-[11px] text-slate-600 outline-none"
+              className="border-l border-slate-200 bg-transparent px-2 py-2 text-[11px] text-slate-600 outline-none"
             >
               {SEARCH_TARGETS.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -119,7 +119,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
                 </option>
               ))}
             </select>
-            <kbd className="mr-2 hidden rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 font-mono text-[10px] text-slate-500 lg:block">Ctrl K</kbd>
+            <kbd className="mr-2 hidden rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] text-slate-500 lg:block">Ctrl K</kbd>
           </div>
         </form>
 
@@ -129,7 +129,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
             data-testid="realtime-status"
             data-status={status}
             title={status === 'live' ? 'Đang nhận dữ liệu trực tiếp' : status === 'offline' ? 'Mất kết nối, đang thử lại…' : 'Đang kết nối…'}
-            className="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 font-mono text-[11px] text-slate-600 xl:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] text-slate-600 xl:flex"
           >
             <span className={`h-2 w-2 rounded-full ${status === 'live' ? 'bg-green-500' : status === 'offline' ? 'bg-amber-500' : 'bg-slate-300'}`} />
             Hệ thống: {status === 'live' ? 'Trực tuyến' : status === 'offline' ? 'Đang kết nối lại…' : 'Đang kết nối…'}
@@ -139,7 +139,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
             href={STOREFRONT_URL}
             target="_blank"
             rel="noreferrer"
-            className="hidden items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 font-mono text-[11px] font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600 lg:flex"
+            className="hidden items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-[11px] font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600 lg:flex"
           >
             Xem Storefront <ArrowTopRightOnSquareIcon className="h-3.5 w-3.5" />
           </a>

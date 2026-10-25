@@ -25,9 +25,10 @@ export default {
         app: 'rgb(var(--app-bg) / <alpha-value>)',
         sidebar: 'rgb(var(--sidebar) / <alpha-value>)',
       },
+      // Font hệ thống quen thuộc (Segoe UI / San Francisco / Roboto); nhãn "mono" cũng dùng chữ thường cho dễ đọc
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+        sans: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+        mono: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-in-out',

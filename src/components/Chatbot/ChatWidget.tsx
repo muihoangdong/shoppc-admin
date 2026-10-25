@@ -203,9 +203,9 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
               </span>
               <div>
                 <p className="flex items-center gap-1.5 text-sm font-semibold leading-tight">
-                  Admin AI Copilot <span className="rounded bg-white/20 px-1 font-mono text-[9px] font-bold tracking-wider">PRO</span>
+                  Admin AI Copilot <span className="rounded bg-white/20 px-1 text-[9px] font-bold tracking-wider">PRO</span>
                 </p>
-                <p className="font-mono text-[10px] text-blue-100">Hiểu ngữ cảnh trang bạn đang xem</p>
+                <p className="text-[10px] text-blue-100">Hiểu ngữ cảnh trang bạn đang xem</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -229,7 +229,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
                   <button
                     key={s}
                     onClick={() => void send(s)}
-                    className="rounded-md border border-blue-200 bg-white px-2.5 py-1 font-mono text-[11px] text-blue-700 transition hover:bg-blue-50"
+                    className="rounded-md border border-blue-200 bg-white px-2.5 py-1 text-[11px] text-blue-700 transition hover:bg-blue-50"
                   >
                     {s}
                   </button>

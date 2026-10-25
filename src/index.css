@@ -8,7 +8,12 @@
   body {
     /* Nền trang lấy từ biến --app-bg (đổi theo sáng/tối) — xem theme.css */
     background-color: rgb(var(--app-bg));
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
+  }
+  /* Nút, ô nhập, menu chọn dùng cùng font với chữ thường */
+  button, input, select, textarea, optgroup {
+    font-family: inherit;
   }
   h1, h2, h3, h4 {
     letter-spacing: -0.02em;
@@ -21,10 +26,10 @@
     @apply rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgb(15_40_80/0.04),0_8px_24px_-16px_rgb(15_40_80/0.2)];
   }
   .frost-label {
-    @apply font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-slate-500;
+    @apply text-[11px] font-medium uppercase tracking-wide text-slate-500;
   }
   .frost-chip {
-    @apply inline-flex items-center gap-1 rounded-md border px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider;
+    @apply inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider;
   }
 }
 

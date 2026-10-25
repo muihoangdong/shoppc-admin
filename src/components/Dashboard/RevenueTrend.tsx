@@ -28,7 +28,7 @@ export const RevenueTrend: React.FC<{ data: Analytics }> = ({ data }) => {
             {data.range.label} ({data.range.from} → {data.range.to}) · theo {data.granularity === 'day' ? 'ngày' : 'tháng'}
           </p>
         </div>
-        <div className="flex items-center gap-4 font-mono text-[11px] text-slate-600">
+        <div className="flex items-center gap-4 text-[11px] text-slate-600">
           <span className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-sm" style={{ background: c.primary }} /> Doanh thu (đ)
           </span>
@@ -77,7 +77,7 @@ export const RevenueTrend: React.FC<{ data: Analytics }> = ({ data }) => {
 const Stat: React.FC<{ label: string; value: string; hint?: string }> = ({ label, value, hint }) => (
   <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
     <p className="text-[11px] text-slate-500">{label}</p>
-    <p className="font-mono text-sm font-semibold text-blue-600">
+    <p className="text-sm font-semibold text-blue-600">
       {value} {hint && <span className="text-[11px] font-normal text-slate-400">· {hint}</span>}
     </p>
   </div>

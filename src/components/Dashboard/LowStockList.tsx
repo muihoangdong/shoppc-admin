@@ -10,7 +10,7 @@ export const LowStockList: React.FC<{ items: DashboardStats['lowStockList']; tot
         <ExclamationTriangleIcon className="h-5 w-5 text-red-500" /> Sắp hết hàng
       </h3>
       {total > 0 && (
-        <Link to="/admin/products?stock=low" className="font-mono text-xs font-semibold text-blue-600 hover:underline">
+        <Link to="/admin/products?stock=low" className="text-xs font-semibold text-blue-600 hover:underline">
           Xem tất cả ({total})
         </Link>
       )}
@@ -22,7 +22,7 @@ export const LowStockList: React.FC<{ items: DashboardStats['lowStockList']; tot
         {items.map((p) => (
           <li key={p.id} className="flex items-center justify-between gap-3 py-2.5">
             <span className="truncate text-sm text-slate-800">{p.name}</span>
-            <span className={`shrink-0 rounded-md px-2 py-0.5 font-mono text-[11px] font-semibold ${p.stock === 0 ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'}`}>
+            <span className={`shrink-0 rounded-md px-2 py-0.5 text-[11px] font-semibold ${p.stock === 0 ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'}`}>
               {p.stock === 0 ? 'Hết hàng' : `Còn ${p.stock}`}
             </span>
           </li>

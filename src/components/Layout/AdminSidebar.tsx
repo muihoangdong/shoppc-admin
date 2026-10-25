@@ -66,7 +66,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, mobileOpen, onCl
         <div className={`flex min-w-0 items-center gap-2 ${collapsed ? 'lg:w-full lg:justify-center' : ''}`} aria-label="Shoppc Admin">
           <Logo className={collapsed ? 'lg:hidden' : ''} />
           {collapsed && <Logo markOnly className="hidden lg:inline-flex" />}
-          <span className={`rounded-md border border-blue-200 bg-blue-50 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-blue-700 ${hideWhenCollapsed}`}>
+          <span className={`rounded-md border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700 ${hideWhenCollapsed}`}>
             v{import.meta.env.VITE_APP_VERSION || '2.4'}
           </span>
         </div>
@@ -105,7 +105,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, mobileOpen, onCl
                   {count > 0 && (
                     <span
                       data-testid={item.badge === 'chats' ? 'support-badge' : undefined}
-                      className={`rounded-md bg-blue-600 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-white ${hideWhenCollapsed}`}
+                      className={`rounded-md bg-blue-600 px-1.5 py-0.5 text-[10px] font-semibold text-white ${hideWhenCollapsed}`}
                     >
                       {count > 99 ? '99+' : count}
                     </span>
@@ -124,7 +124,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, mobileOpen, onCl
           </span>
           <span className={`min-w-0 ${hideWhenCollapsed}`}>
             <span className="block truncate text-sm font-semibold text-slate-900">{user?.full_name || user?.username}</span>
-            <span className="block font-mono text-[10px] uppercase tracking-wider text-blue-600">{roleLabel(user?.role)}</span>
+            <span className="block text-[10px] uppercase tracking-wider text-blue-600">{roleLabel(user?.role)}</span>
           </span>
         </div>
         <button

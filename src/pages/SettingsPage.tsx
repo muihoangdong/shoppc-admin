@@ -133,11 +133,6 @@ const SettingsPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-[28px] bg-gradient-to-r from-sidebar via-sidebar to-blue-900 p-6 text-white shadow-lg">
-        <h1 className="text-3xl font-bold tracking-tight">Cài đặt tài khoản</h1>
-        <p className="mt-2 max-w-2xl text-sm text-white/80">Xem thông tin đăng nhập, cập nhật hồ sơ, đổi mật khẩu và (admin) tài khoản ngân hàng nhận tiền.</p>
-      </div>
-
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.92fr_1.08fr]">
         <Card title="Thông tin phiên đăng nhập" description="Tài khoản bạn đang sử dụng để quản trị cửa hàng." icon={UserCircleIcon}>
           <div className="space-y-4">

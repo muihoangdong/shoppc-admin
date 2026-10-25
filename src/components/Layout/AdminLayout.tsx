@@ -9,6 +9,7 @@ import useNotifications from '../../hooks/useNotifications';
 import useSupportUnread from '../../hooks/useSupportUnread';
 import useDebouncedCallback from '../../hooks/useDebouncedCallback';
 import RealtimeNotifier from './RealtimeNotifier';
+import PageTransition from '../Common/PageTransition';
 
 const isDesktop = () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
 
@@ -56,7 +57,9 @@ const AdminLayout: React.FC = () => {
         <AdminHeader onMenuClick={handleMenuClick} pendingOrders={pendingOrders} lowStock={lowStock} unreadChats={unreadChats} paymentClaims={paymentClaims} />
 
         <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
-          <Outlet key={dataVersion} />
+          <PageTransition>
+            <Outlet key={dataVersion} />
+          </PageTransition>
         </main>
 
         <AdminFooter />

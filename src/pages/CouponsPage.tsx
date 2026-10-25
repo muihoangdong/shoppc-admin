@@ -186,7 +186,7 @@ const CouponsPage: React.FC = () => {
                   return (
                     <tr key={c.id} className="hover:bg-gray-50">
                       <td className="px-4 py-3">
-                        <div className="font-mono font-semibold text-gray-900">{c.code}</div>
+                        <div className="font-semibold text-gray-900">{c.code}</div>
                         {c.description && <div className="max-w-xs truncate text-xs text-gray-500" title={c.description}>{c.description}</div>}
                         {c.once_per_customer && <div className="text-xs text-gray-500">Mỗi khách 1 lần</div>}
                       </td>
