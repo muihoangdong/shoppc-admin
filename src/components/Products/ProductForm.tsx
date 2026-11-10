@@ -8,6 +8,7 @@ import { buildTree, flattenForSelect } from '../../utils/categoryTree';
 import { ProductFormErrors, ProductPayload, SpecRow, validateProductForm } from '../../utils/productValidation';
 import BuildSpecsFields, { BuildSpecsValue, missingBuildFields, usePartTypes } from './BuildSpecsFields';
 import Model3dFields, { EMPTY_MODEL3D, Model3dValue, toPayload, validateModel3d } from './Model3dFields';
+import FileUploadButton from './FileUploadButton';
 
 interface ProductFormProps {
   initialData?: Product | null;
@@ -66,6 +67,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [buildError, setBuildError] = useState('');
   const { defs: partDefs } = usePartTypes();
   const [imageFailed, setImageFailed] = useState(false);
+  const [uploadBusy, setUploadBusy] = useState(false);
   const aiEnabled = useAiStatus();
   const [aiBusy, setAiBusy] = useState(false);
   const [aiError, setAiError] = useState('');
@@ -111,7 +113,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (loading) return;
+    if (loading || uploadBusy) return;
     const result = validateProductForm({ name, categoryId, price, stock, imageUrl, description, specs });
     setErrors(result.errors);
     const missing = partType ? missingBuildFields(partDefs, partType, buildSpecs) : [];
@@ -138,6 +140,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+      <fieldset disabled={loading || uploadBusy} className="min-w-0 space-y-6">
       <div>
         <label htmlFor="pf-name" className="block text-sm font-medium text-gray-700 mb-1">
           Tên sản phẩm <span className="text-red-500">*</span>
@@ -265,6 +268,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           aria-describedby="pf-image-err"
         />
         <FieldError id="pf-image-err" message={errors.imageUrl} />
+        <FileUploadButton kind="image" disabled={loading || uploadBusy} onBusyChange={setUploadBusy} onUploaded={(files) => {
+          setImageUrl(files[0].url);
+          setImageFailed(false);
+          clear('imageUrl');
+        }} />
         {imageUrl.trim() && !errors.imageUrl && (
           <div className="mt-2">
             {imageFailed ? (
@@ -358,7 +366,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         <FieldError id="pf-specs-err" message={errors.specs} />
       </div>
 
-      <Model3dFields value={model3d} onChange={(next) => { setModel3d(next); setModel3dError(''); }} error={model3dError} imageUrl={imageUrl.trim() || undefined} />
+      <Model3dFields value={model3d} onChange={(next) => { setModel3d(next); setModel3dError(''); }} error={model3dError} imageUrl={imageUrl.trim() || undefined} disabled={loading || uploadBusy} onBusyChange={setUploadBusy} />
 
       <BuildSpecsFields
         partType={partType}
@@ -379,6 +387,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           {loading ? 'Đang lưu...' : initialData ? 'Cập nhật' : 'Thêm mới'}
         </button>
       </div>
+      </fieldset>
     </form>
   );
 };

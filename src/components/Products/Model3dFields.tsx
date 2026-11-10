@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CubeIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { storefrontAsset } from '../../utils/storefront';
+import FileUploadButton from './FileUploadButton';
 
 export interface Model3dValue {
   glb: string;
@@ -19,7 +20,7 @@ export const validateModel3d = (v: Model3dValue): string => {
   const glb = v.glb.trim();
   const usdz = v.usdz.trim();
   const poster = v.poster.trim();
-  if (!glb) return usdz || poster ? 'Cần nhập link file GLB trước' : '';
+  if (!glb) return usdz || poster ? 'Cần tải lên hoặc nhập link GLB/GLTF để bật xem 3D' : '';
   if (!URL_RE.test(glb)) return 'Link GLB phải bắt đầu bằng http://, https:// hoặc /';
   if (!/\.(glb|gltf)$/.test(ext(glb))) return 'Link GLB phải là file .glb hoặc .gltf';
   if (usdz && (!URL_RE.test(usdz) || !ext(usdz).endsWith('.usdz'))) return 'Link USDZ phải là file .usdz bắt đầu bằng http(s):// hoặc /';
@@ -43,6 +44,8 @@ interface Props {
   error?: string;
   /** Ảnh sản phẩm: dùng làm ảnh chờ khi xem thử */
   imageUrl?: string;
+  disabled?: boolean;
+  onBusyChange: (busy: boolean) => void;
 }
 
 const inputClass = 'w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500';
@@ -51,7 +54,7 @@ const inputClass = 'w-full rounded-lg border border-slate-300 px-3 py-2 text-sm 
  * Mô hình 3D / AR của sản phẩm: link file GLB (bắt buộc để bật 3D), USDZ cho iPhone (tùy chọn), ảnh chờ.
  * Có nút "Xem thử" dùng chính <model-viewer> như trang cửa hàng để kiểm tra file tải được và hiển thị đúng.
  */
-const Model3dFields: React.FC<Props> = ({ value, onChange, error, imageUrl }) => {
+const Model3dFields: React.FC<Props> = ({ value, onChange, error, imageUrl, disabled, onBusyChange }) => {
   const [preview, setPreview] = useState(false);
   const set = (patch: Partial<Model3dValue>) => onChange({ ...value, ...patch });
   const hasGlb = !!value.glb.trim() && !validateModel3d(value);
@@ -66,12 +69,19 @@ const Model3dFields: React.FC<Props> = ({ value, onChange, error, imageUrl }) =>
         <CubeIcon className="h-4 w-4 text-blue-600" /> Mô hình 3D / AR
       </legend>
       <p className="mb-3 text-xs text-slate-500">
-        Sản phẩm có file GLB sẽ hiện nút <strong>Xem 3D · AR</strong> ở cửa hàng (xoay 360°, đặt vào không gian thật trên điện thoại). Bỏ trống nếu sản phẩm chưa có mô hình — trang
-        sản phẩm vẫn hiện ảnh như bình thường. File đặt trong thư mục <code className="rounded bg-slate-100 px-1">public/models</code> của cửa hàng thì nhập dạng{' '}
-        <code className="rounded bg-slate-100 px-1">/models/ten-file.glb</code>; file ở máy chủ khác cần cho phép CORS.
+        Tải mô hình từ máy tính hoặc nhập link bên dưới. Có file GLB/GLTF để bật xem 3D; thêm USDZ nếu có cho iPhone/iPad. Sản phẩm chưa có mô hình vẫn hiển thị ảnh như thường.
       </p>
+      <FileUploadButton kind="model" disabled={disabled} onBusyChange={onBusyChange} onUploaded={(files) => {
+        const patch: Partial<Model3dValue> = {};
+        for (const file of files) {
+          if (file.type === 'usdz') patch.usdz = file.url;
+          else { patch.glb = file.url; patch.enabled = true; }
+        }
+        set(patch);
+        if (patch.glb) setPreview(true);
+      }} />
 
-      <div className="space-y-3">
+      <div className="mt-3 space-y-3">
         <div>
           <label htmlFor="pf-glb" className="mb-1 block text-xs font-medium text-slate-600">
             Link file GLB / GLTF
