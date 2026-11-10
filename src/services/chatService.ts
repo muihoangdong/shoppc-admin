@@ -29,7 +29,9 @@ export interface ActionResult {
   id: string;
   ok: boolean;
   message: string;
+  preview?: BackgroundPreview;
 }
+export interface BackgroundPreview { result_id: string; product_id: number; image_url: string; original_url: string }
 
 // AI có thể cần vài vòng gọi tool nên cho timeout dài hơn mặc định (10s)
 const CHAT_TIMEOUT_MS = 60000;
@@ -61,7 +63,7 @@ export const chatService = {
       const res = await api.post<ApiResponse<{ results: ActionResult[] }>>(
         '/chat/confirm',
         { action_ids: actionIds },
-        { timeout: CHAT_TIMEOUT_MS }
+        { timeout: 180000 }
       );
       return res.data.data.results;
     } catch (error: any) {

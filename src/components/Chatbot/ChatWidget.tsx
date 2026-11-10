@@ -9,7 +9,8 @@ import {
   TrashIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { chatService, ChatMessage, PendingAction } from '../../services/chatService';
+import { chatService, ChatMessage, PendingAction, BackgroundPreview } from '../../services/chatService';
+import { API_BASE_URL } from '../../services/api';
 import RichText from './RichText';
 
 type CardState = 'waiting' | 'running' | 'done' | 'cancelled';
@@ -21,6 +22,7 @@ interface UIMessage {
   isError?: boolean;
   actions?: PendingAction[];
   cardState?: CardState;
+  previews?: BackgroundPreview[];
 }
 
 interface ChatWidgetProps {
@@ -43,7 +45,7 @@ const suggestionsFor = (pathname: string, search: string): string[] => {
       ? ['Tóm tắt đơn này', 'Đơn này đang ở trạng thái nào?', 'Có bao nhiêu đơn đang chờ xử lý?']
       : ['Đơn nào đang chờ xử lý?', 'Đơn hôm nay có bao nhiêu?', 'Có đơn chuyển khoản nào chưa thanh toán không?'];
   }
-  if (pathname === '/admin/products') return ['Sản phẩm nào sắp hết hàng?', 'Tìm ảnh trên Internet cho sản phẩm chưa có ảnh', 'Sản phẩm nào đắt nhất?'];
+  if (pathname === '/admin/products') return ['Sản phẩm nào sắp hết hàng?', 'Tìm ảnh trên Internet cho sản phẩm chưa có ảnh', 'Tách nền ảnh chính của sản phẩm'];
   if (pathname === '/admin/categories') return ['Danh mục nào đang trống?', 'Mỗi danh mục có bao nhiêu sản phẩm?'];
   if (pathname === '/admin/analytics') return ['Doanh thu tháng này so với tháng trước?', 'Sản phẩm bán chạy nhất 30 ngày qua?', 'Tỷ lệ hủy đơn tháng này?'];
   if (pathname === '/admin/support') {
@@ -155,6 +157,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
       addMessage({
         role: 'assistant',
         content: results.map((r) => `${r.ok ? '✅' : '❌'} ${r.message}`).join('\n'),
+        previews: results.flatMap((r) => r.ok && r.preview && safePreview(r.preview.image_url) ? [r.preview] : []),
       });
       if (results.some((r) => r.ok)) onDataChanged?.();
     } catch (error: any) {
@@ -259,6 +262,12 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
                     onCancel={() => cancel(m)}
                   />
                 )}
+                {m.previews?.map((p) => <div key={p.result_id} className="w-full max-w-72 rounded-xl border border-slate-200 bg-white p-3">
+                  <p className="mb-2 text-sm font-semibold text-slate-800">Ảnh đã tách nền · #{p.product_id}</p>
+                  <a href={p.image_url} target="_blank" rel="noopener noreferrer"><img src={p.image_url} alt="Xem trước PNG đã tách nền" className="max-h-56 w-full rounded-lg object-contain" style={{ backgroundColor: '#eee', backgroundImage: 'conic-gradient(#ccc 25%,transparent 0 50%,#ccc 0 75%,transparent 0)', backgroundSize: '20px 20px' }} /></a>
+                  <p className="my-2 text-xs text-slate-500">Chưa thay đổi sản phẩm. Kiểm tra các cạnh và chi tiết trước khi dùng ảnh.</p>
+                  <button type="button" disabled={loading} onClick={() => void send(`Dùng ảnh đã tách nền có result_id ${p.result_id} cho sản phẩm #${p.product_id}. Chuẩn bị xác nhận cập nhật và giữ các ảnh cũ.`)} className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50">Dùng ảnh này</button>
+                </div>)}
               </div>
             ))}
 
@@ -369,3 +378,8 @@ const ActionCard: React.FC<ActionCardProps> = ({ actions, state, onConfirm, onCa
 };
 
 export default ChatWidget;
+
+function safePreview(value: string): boolean {
+  try { const url = new URL(value); return url.origin === new URL(API_BASE_URL, window.location.origin).origin && /^\/api\/uploads\/files\/[0-9a-f-]+\.png$/.test(url.pathname); }
+  catch { return false; }
+}
