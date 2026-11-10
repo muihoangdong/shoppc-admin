@@ -43,7 +43,7 @@ const suggestionsFor = (pathname: string, search: string): string[] => {
       ? ['Tóm tắt đơn này', 'Đơn này đang ở trạng thái nào?', 'Có bao nhiêu đơn đang chờ xử lý?']
       : ['Đơn nào đang chờ xử lý?', 'Đơn hôm nay có bao nhiêu?', 'Có đơn chuyển khoản nào chưa thanh toán không?'];
   }
-  if (pathname === '/admin/products') return ['Sản phẩm nào sắp hết hàng?', 'Sản phẩm nào đã hết hàng?', 'Sản phẩm nào đắt nhất?'];
+  if (pathname === '/admin/products') return ['Sản phẩm nào sắp hết hàng?', 'Tìm ảnh trên Internet cho sản phẩm chưa có ảnh', 'Sản phẩm nào đắt nhất?'];
   if (pathname === '/admin/categories') return ['Danh mục nào đang trống?', 'Mỗi danh mục có bao nhiêu sản phẩm?'];
   if (pathname === '/admin/analytics') return ['Doanh thu tháng này so với tháng trước?', 'Sản phẩm bán chạy nhất 30 ngày qua?', 'Tỷ lệ hủy đơn tháng này?'];
   if (pathname === '/admin/support') {

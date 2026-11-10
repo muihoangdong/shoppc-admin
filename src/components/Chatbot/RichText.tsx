@@ -6,7 +6,9 @@ import React from 'react';
  */
 
 const renderInline = (text: string): React.ReactNode[] =>
-  text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, i) => {
+  text.split(/(\[[^\]\n]+\]\(https:\/\/[^\s)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g).map((part, i) => {
+    const link = /^\[([^\]]+)\]\((https:\/\/[^\s)]+)\)$/.exec(part);
+    if (link) return <a key={i} href={link[2]} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className="break-all text-blue-500 underline">{link[1]}</a>;
     if (part.length > 4 && part.startsWith('**') && part.endsWith('**')) {
       return <strong key={i}>{part.slice(2, -2)}</strong>;
     }
