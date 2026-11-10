@@ -68,9 +68,6 @@ const Model3dFields: React.FC<Props> = ({ value, onChange, error, imageUrl, disa
       <legend className="flex items-center gap-1.5 px-1 text-sm font-medium text-slate-700">
         <CubeIcon className="h-4 w-4 text-blue-600" /> Mô hình 3D / AR
       </legend>
-      <p className="mb-3 text-xs text-slate-500">
-        Tải mô hình từ máy tính hoặc nhập link bên dưới. Có file GLB/GLTF để bật xem 3D; thêm USDZ nếu có cho iPhone/iPad. Sản phẩm chưa có mô hình vẫn hiển thị ảnh như thường.
-      </p>
       <FileUploadButton kind="model" disabled={disabled} onBusyChange={onBusyChange} onUploaded={(files) => {
         const patch: Partial<Model3dValue> = {};
         for (const file of files) {

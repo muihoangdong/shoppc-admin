@@ -37,62 +37,50 @@ export type OperationKind =
   | 'brands'
   | 'templates'
   | 'audit';
-const meta: Record<OperationKind, { title: string; description: string; add?: string; statuses?: string[] }> = {
+const meta: Record<OperationKind, { title: string; add?: string; statuses?: string[] }> = {
   suppliers: {
     title: 'Nhà cung cấp',
-    description: 'Thông tin liên hệ, mã đối tác và trạng thái hợp tác.',
     add: 'Thêm nhà cung cấp',
   },
   receipts: {
     title: 'Nhập kho',
-    description: 'Lập phiếu nháp, kiểm tra serial và xác nhận nhập kho một lần.',
     add: 'Lập phiếu nhập',
     statuses: ['draft', 'received', 'cancelled'],
   },
   movements: {
     title: 'Lịch sử xuất / nhập kho',
-    description:
-      'Theo dõi từng thay đổi tồn kho từ khi kích hoạt tính năng; số âm là xuất/giữ hàng, số dương là nhập/hoàn hàng.',
     add: 'Điều chỉnh tồn',
   },
   serials: {
     title: 'Serial sản phẩm',
-    description: 'Đăng ký serial cho hàng sẵn có, gán vào đơn bán và theo dõi hạn bảo hành.',
     add: 'Đăng ký serial',
     statuses: ['in_stock', 'sold', 'returned', 'repair', 'retired'],
   },
   warranties: {
     title: 'Phiếu bảo hành',
-    description: 'Tiếp nhận → kiểm tra → sửa chữa → trả khách; hạn bảo hành tính từ lúc gán serial.',
     add: 'Tiếp nhận bảo hành',
     statuses: ['active', 'received', 'diagnosing', 'repairing', 'resolved', 'rejected'],
   },
   returns: {
     title: 'Đổi trả & hoàn tiền',
-    description: 'Duyệt yêu cầu, nhận hàng trả, quyết định nhập lại kho và ghi nhận giao dịch hoàn tiền đã thực hiện.',
     add: 'Tạo yêu cầu đổi trả',
     statuses: ['requested', 'approved', 'received', 'refunded', 'closed', 'rejected', 'cancelled'],
   },
   shipments: {
     title: 'Vận chuyển',
-    description: 'Quản lý vận đơn thủ công, bàn giao và ghi nhận giao hàng. Chưa kết nối tài khoản hãng vận chuyển.',
     add: 'Tạo vận đơn',
     statuses: ['created', 'picked_up', 'in_transit', 'delivered', 'failed', 'returned', 'cancelled'],
   },
   brands: {
     title: 'Thương hiệu',
-    description: 'Danh sách hãng dùng chung trong form sản phẩm.',
     add: 'Thêm thương hiệu',
   },
   templates: {
     title: 'Thông số chuẩn',
-    description: 'Tạo mẫu thông số theo danh mục: bắt buộc, số, văn bản hoặc danh sách chọn.',
     add: 'Thêm mẫu thông số',
   },
   audit: {
     title: 'Nhật ký thao tác',
-    description:
-      'Nhật ký chỉ đọc: người thao tác, thời gian, đối tượng và thay đổi. Không lưu mật khẩu, token hay nội dung chat.',
   },
 };
 const emptyLookups: OperationLookups = {
@@ -647,7 +635,6 @@ const OperationsPage: React.FC<{ kind: OperationKind }> = ({ kind }) => {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">{info.title}</h1>
-          <p className="mt-1 max-w-3xl text-sm text-slate-500">{info.description}</p>
         </div>
         <div className="flex gap-2">
           <button type="button" className={buttonClass} onClick={() => setReload((n) => n + 1)} aria-label="Làm mới">

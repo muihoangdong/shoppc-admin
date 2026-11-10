@@ -229,7 +229,6 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
                   Admin AI Copilot{' '}
                   <span className="rounded bg-white/20 px-1 text-[9px] font-bold tracking-wider">PRO</span>
                 </p>
-                <p className="text-[10px] text-blue-100">Hiểu ngữ cảnh trang bạn đang xem</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -243,7 +242,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
           </div>
 
           <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-4 text-sm">
-            <div className="max-w-[90%] rounded-2xl rounded-tl-sm bg-white px-3 py-2 text-slate-800 shadow-sm">
+            <div className="max-w-[90%] rounded-2xl rounded-tl-sm bg-white px-3 py-2 text-justify text-slate-800 shadow-sm">
               <RichText text={WELCOME} />
             </div>
 

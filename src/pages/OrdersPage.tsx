@@ -163,7 +163,6 @@ const OrdersPage: React.FC = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Quản lý đơn hàng</h1>
-        <p className="text-sm text-gray-500">Xử lý đơn theo đúng thứ tự: chờ xử lý → đang xử lý → đang giao → đã giao → hoàn tất.</p>
       </div>
 
       <div className="mb-4 flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Lọc theo trạng thái">

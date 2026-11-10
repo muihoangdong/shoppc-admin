@@ -33,11 +33,10 @@ const ProductImagesField: React.FC<Props> = ({ value, onChange, disabled, onBusy
   };
   return (
     <section aria-label="Thư viện ảnh sản phẩm" className="rounded-xl border border-slate-200 p-4">
-      <div className="mb-1 flex items-center justify-between gap-2">
+      <div className="mb-3 flex items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-slate-800">Hình ảnh sản phẩm</h3>
         <span className="text-xs text-slate-500">{value.length}/20 ảnh</span>
       </div>
-      <p className="text-xs text-slate-500">Ảnh đầu tiên là ảnh chính. Dùng nút ngôi sao để chọn ảnh chính; mũi tên để sắp xếp thứ tự.</p>
       <FileUploadButton kind="image" maxFiles={Math.max(1, 20 - value.length)} disabled={disabled || value.length >= 20}
         onBusyChange={onBusyChange} onUploaded={(files) => onChange([...new Set([...value, ...files.map((f) => f.url)])])} />
       <div className="mt-3 flex flex-col gap-2 sm:flex-row">

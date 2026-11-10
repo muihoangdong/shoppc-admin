@@ -44,7 +44,7 @@ export default function WorkQueue({
         <h2 id="work-queue-title" className="text-lg font-semibold text-slate-900">
           Việc cần xử lý
         </h2>
-        <p className="text-xs text-slate-500">Toàn bộ thời gian · bấm để mở danh sách</p>
+        <p className="text-xs text-slate-500">Toàn bộ thời gian</p>
       </div>
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         {[

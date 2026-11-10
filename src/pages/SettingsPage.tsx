@@ -15,10 +15,9 @@ const inputClass =
 
 const Card: React.FC<{
   title: string;
-  description: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   children: React.ReactNode;
-}> = ({ title, description, icon: Icon, children }) => (
+}> = ({ title, icon: Icon, children }) => (
   <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
     <div className="mb-5 flex items-start gap-4">
       <div className="rounded-2xl bg-slate-100 p-3 text-slate-700">
@@ -26,7 +25,6 @@ const Card: React.FC<{
       </div>
       <div>
         <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-        <p className="mt-1 text-sm text-slate-500">{description}</p>
       </div>
     </div>
     {children}
@@ -134,7 +132,7 @@ const SettingsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.92fr_1.08fr]">
-        <Card title="Thông tin phiên đăng nhập" description="Tài khoản bạn đang sử dụng để quản trị cửa hàng." icon={UserCircleIcon}>
+        <Card title="Thông tin phiên đăng nhập" icon={UserCircleIcon}>
           <div className="space-y-4">
             {[
               ['Tên hiển thị', user?.full_name],
@@ -151,7 +149,7 @@ const SettingsPage: React.FC = () => {
         </Card>
 
         <div className="space-y-6">
-          <Card title="Cập nhật hồ sơ" description="Chỉnh sửa họ tên và email của bạn." icon={Cog6ToothIcon}>
+          <Card title="Cập nhật hồ sơ" icon={Cog6ToothIcon}>
             <form onSubmit={handleSaveProfile} noValidate>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <Field id="st-name" label="Họ và tên" error={profileErrors.full_name}>
@@ -186,7 +184,7 @@ const SettingsPage: React.FC = () => {
             </form>
           </Card>
 
-          <Card title="Bảo mật tài khoản" description="Đổi mật khẩu đăng nhập." icon={ShieldCheckIcon}>
+          <Card title="Bảo mật tài khoản" icon={ShieldCheckIcon}>
             <form onSubmit={handleChangePassword} noValidate>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <Field id="st-current" label="Mật khẩu hiện tại" error={passwordErrors.current_password}>

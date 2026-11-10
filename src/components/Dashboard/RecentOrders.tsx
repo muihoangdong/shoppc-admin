@@ -32,7 +32,6 @@ export const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, pending, onV
             Đơn hàng mới cần xử lý
             {pending > 0 && <span className="rounded-md bg-red-600 px-1.5 py-0.5 text-[10px] font-semibold text-white">{pending} chờ xử lý</span>}
           </h3>
-          <p className="text-sm text-slate-500">Ưu tiên xác nhận, đóng gói & giao hàng sớm</p>
         </div>
       </div>
       <button onClick={onViewAll} className="flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline">

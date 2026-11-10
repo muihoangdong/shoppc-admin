@@ -234,7 +234,6 @@ const SupportPage: React.FC = () => {
     <div>
       <div className="mb-4">
         <h1 className="text-2xl font-bold text-gray-800">Hỗ trợ khách hàng</h1>
-        <p className="text-sm text-gray-500">Trò chuyện trực tiếp với khách đang xem cửa hàng. Tin nhắn mới hiện ngay, không cần tải lại trang.</p>
       </div>
 
       <div className="grid h-[calc(100vh-11rem)] min-h-[30rem] grid-cols-1 overflow-hidden rounded-lg border bg-white shadow lg:grid-cols-[22rem_1fr]">

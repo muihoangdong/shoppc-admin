@@ -193,8 +193,7 @@ const DashboardPage: React.FC = () => {
           </div>
           <p className="mt-1 flex items-center gap-1.5 text-sm text-slate-500">
             <ArrowPathIcon className={`h-4 w-4 ${refreshing ? 'animate-spin text-blue-600' : ''}`} />
-            {updatedAt ? `Cập nhật lúc ${updatedAt.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}` : 'Đang cập nhật'} · Tự đồng bộ khi có đơn
-            mới
+            {updatedAt ? `Cập nhật lúc ${updatedAt.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}` : 'Đang cập nhật'}
           </p>
         </div>
 
@@ -349,7 +348,7 @@ const DashboardPage: React.FC = () => {
       </div>
 
       <p className="text-center text-[11px] text-slate-400">
-        Tổng {formatNumber(stats.totalProducts)} sản phẩm đang bán · Doanh thu tính trên đơn đã giao / hoàn tất, không gồm đơn hủy.
+        Tổng {formatNumber(stats.totalProducts)} sản phẩm đang bán.
       </p>
     </div>
   );

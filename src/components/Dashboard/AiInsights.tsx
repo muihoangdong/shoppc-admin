@@ -42,11 +42,6 @@ export const AiInsights: React.FC = () => {
             </span>
             <span className="text-[10px] text-slate-400">Phân tích 7 & 30 ngày gần nhất</span>
           </div>
-          {!text && !error && !loading && (
-            <p className="mt-2 text-sm text-slate-600">
-              AI đọc số liệu bán hàng, tồn kho gần đây rồi nêu điểm đáng chú ý (sản phẩm tăng nhu cầu, nguy cơ hết hàng…) kèm đề xuất việc nên làm.
-            </p>
-          )}
           {loading && <p className="mt-2 animate-pulse text-sm text-slate-500">AI đang đọc số liệu và soạn nhận xét…</p>}
           {error && (
             <p role="alert" className="mt-2 text-sm text-red-600">
@@ -56,7 +51,6 @@ export const AiInsights: React.FC = () => {
           {text && (
             <div className="mt-3 text-sm text-slate-800">
               <RichText text={text} />
-              <p className="mt-3 text-xs text-slate-400">Nhận xét do AI tạo từ số liệu hiện có, chỉ mang tính tham khảo.</p>
             </div>
           )}
         </div>

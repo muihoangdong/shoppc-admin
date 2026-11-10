@@ -126,7 +126,6 @@ const ReviewsPage: React.FC = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Đánh giá sản phẩm</h1>
-        <p className="text-sm text-gray-500">Chỉ khách đã nhận hàng mới viết được đánh giá. Ẩn đánh giá không phù hợp hoặc trả lời để khách khác thấy.</p>
       </div>
 
       {error && (
