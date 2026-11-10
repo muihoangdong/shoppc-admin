@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Product, Category } from '../../types';
 import { PlusIcon, SparklesIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { aiService } from '../../services/aiService';
@@ -8,7 +8,8 @@ import { buildTree, flattenForSelect } from '../../utils/categoryTree';
 import { ProductFormErrors, ProductPayload, SpecRow, validateProductForm } from '../../utils/productValidation';
 import BuildSpecsFields, { BuildSpecsValue, missingBuildFields, usePartTypes } from './BuildSpecsFields';
 import Model3dFields, { EMPTY_MODEL3D, Model3dValue, toPayload, validateModel3d } from './Model3dFields';
-import FileUploadButton from './FileUploadButton';
+import ProductImagesField from './ProductImagesField';
+import { operationsService, OperationLookups } from '../../services/operationsService';
 
 interface ProductFormProps {
   initialData?: Product | null;
@@ -39,6 +40,20 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   loading = false,
 }) => {
   const [name, setName] = useState(initialData?.name ?? '');
+  const [sku, setSku] = useState(initialData?.sku || '');
+  const [brandId, setBrandId] = useState(initialData?.brand_id ? String(initialData.brand_id) : '');
+  const [templateId, setTemplateId] = useState(initialData?.spec_template_id ? String(initialData.spec_template_id) : '');
+  const [warrantyMonths, setWarrantyMonths] = useState(String(initialData?.warranty_months ?? 12));
+  const [serialRequired, setSerialRequired] = useState(!!initialData?.serial_required);
+  const [standards, setStandards] = useState<OperationLookups | null>(null);
+  const [standardError, setStandardError] = useState('');
+  const [standardsLoadError, setStandardsLoadError] = useState('');
+  useEffect(() => {
+    let alive = true;
+    operationsService.get<OperationLookups>('lookups').then((value) => alive && setStandards(value)).catch((err) => alive && setStandardsLoadError(err.message));
+    return () => { alive = false; };
+  }, []);
+
   const [categoryId, setCategoryId] = useState(initialData?.category_id ? String(initialData.category_id) : '');
   const [price, setPrice] = useState(initialData ? String(Math.round(Number(initialData.price))) : '');
   const [stock, setStock] = useState(initialData ? String(initialData.stock) : '0');
@@ -55,7 +70,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       : EMPTY_MODEL3D
   );
   const [model3dError, setModel3dError] = useState('');
-  const [imageUrl, setImageUrl] = useState(initialData?.image_url ?? '');
+  const [imageUrls, setImageUrls] = useState<string[]>(() => [...new Set([initialData?.image_url, ...(initialData?.image_urls || [])].filter((url): url is string => !!url))]);
+  const imageUrl = imageUrls[0] || '';
   const [description, setDescription] = useState(initialData?.description ?? '');
   const [specs, setSpecs] = useState<SpecRow[]>(() => {
     const rows = Object.entries(initialData?.specs ?? {}).map(([key, value]) => ({ key, value: String(value) }));
@@ -66,7 +82,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [buildSpecs, setBuildSpecs] = useState<BuildSpecsValue>(initialData?.build_specs ?? {});
   const [buildError, setBuildError] = useState('');
   const { defs: partDefs } = usePartTypes();
-  const [imageFailed, setImageFailed] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
   const aiEnabled = useAiStatus();
   const [aiBusy, setAiBusy] = useState(false);
@@ -124,11 +139,29 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     setOriginalError(origError);
     const m3dError = validateModel3d(model3d);
     setModel3dError(m3dError);
-    if (!result.payload || missing.length || origError || m3dError) return;
+    let metadataError = '';
+    if (sku && !/^[A-Z0-9._-]+$/i.test(sku)) metadataError = 'SKU chỉ gồm chữ, số, dấu chấm, gạch ngang và gạch dưới';
+    if (!/^\d+$/.test(warrantyMonths) || Number(warrantyMonths) > 120) metadataError = 'Bảo hành từ 0 đến 120 tháng';
+    const fields = standards?.templates.find((t) => String(t.id) === templateId)?.fields || [];
+    const values = result.payload?.specs || {};
+    for (const field of fields) {
+      const value = values[field.key];
+      if (field.required && !String(value ?? '').trim()) metadataError = `Thiếu thông số: ${field.key}`;
+      if (value && field.type === 'number' && (!Number.isFinite(Number(value)) || Number(value) < 0)) metadataError = `${field.key} phải là số không âm`;
+      if (value && field.type === 'select' && !field.options.includes(String(value))) metadataError = `${field.key} không thuộc danh sách cho phép`;
+    }
+    setStandardError(metadataError);
+    if (!result.payload || missing.length || origError || m3dError || metadataError) return;
     // Sản phẩm cũ chưa từng là linh kiện mà vẫn để trống: không gửi gì để khỏi đụng tới (backend cũ/chưa nâng cấp vẫn chạy)
     const touchBuild = !!partType || !!initialData?.part_type;
     onSubmit({
       ...result.payload,
+      image_urls: imageUrls,
+      sku: sku.trim().toUpperCase() || null,
+      brand_id: brandId ? Number(brandId) : null,
+      spec_template_id: templateId ? Number(templateId) : null,
+      warranty_months: Number(warrantyMonths),
+      serial_required: serialRequired,
       original_price: orig ? Number(orig) : null,
       model_3d: toPayload(model3d),
       ...(touchBuild ? { part_type: partType || null, build_specs: partType ? buildSpecs : null } : {}),
@@ -166,7 +199,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         <select
           id="pf-category"
           value={categoryId}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { setCategoryId(e.target.value); clear('categoryId'); }}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { setCategoryId(e.target.value); setTemplateId(''); clear('categoryId'); }}
           className={`${inputClass} ${border('categoryId')}`}
           aria-invalid={!!errors.categoryId}
           aria-describedby="pf-category-err"
@@ -190,6 +223,26 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </p>
         )}
       </div>
+
+      <fieldset className="space-y-3 rounded-xl border border-slate-200 p-4">
+        <legend className="px-1 text-sm font-medium text-slate-700">Mã hàng, thương hiệu & bảo hành</legend>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="block text-xs text-slate-600">SKU (duy nhất)<input className={inputClass} value={sku} maxLength={100} onChange={(e) => setSku(e.target.value)} placeholder="CPU-AMD-9800X3D" /></label>
+          <label className="block text-xs text-slate-600">Thương hiệu<select className={inputClass} value={brandId} onChange={(e) => setBrandId(e.target.value)}><option value="">Chưa chọn</option>{standards?.brands.filter((b) => Number(b.is_active) || String(b.id) === brandId).map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}</select></label>
+          <label className="block text-xs text-slate-600">Bảo hành (tháng)<input className={inputClass} type="number" min={0} max={120} value={warrantyMonths} onChange={(e) => setWarrantyMonths(e.target.value)} /></label>
+          <label className="block text-xs text-slate-600">Mẫu thông số<select className={inputClass} value={templateId} onChange={(e) => {
+            setTemplateId(e.target.value);
+            const fields = standards?.templates.find((t) => String(t.id) === e.target.value)?.fields || [];
+            setSpecs((current) => {
+              const filled = current.filter((r) => r.key.trim());
+              return [...filled, ...fields.filter((f: { key: string }) => !filled.some((r) => r.key === f.key)).map((f: { key: string }) => ({ key: f.key, value: '' }))];
+            });
+          }}><option value="">Không dùng mẫu</option>{standards?.templates.filter((t) => String(t.category_id) === categoryId).map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}</select></label>
+        </div>
+        <label className="flex items-center gap-2 text-sm text-slate-700"><input type="checkbox" checked={serialRequired} onChange={(e) => setSerialRequired(e.target.checked)} />Quản lý từng sản phẩm bằng serial</label>
+        <p className="text-xs text-slate-500">Hàng theo serial phải tạo với tồn 0 rồi nhập kho kèm serial. Không đổi chế độ sau khi đã đăng ký serial.</p>
+        {(standardError || standardsLoadError) && <p role="alert" className="text-xs text-red-600">{standardError || standardsLoadError}</p>}
+      </fieldset>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
@@ -253,36 +306,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         </div>
       </div>
 
-      <div>
-        <label htmlFor="pf-image" className="block text-sm font-medium text-gray-700 mb-1">
-          Link hình ảnh
-        </label>
-        <input
-          id="pf-image"
-          type="text"
-          value={imageUrl}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setImageUrl(e.target.value); setImageFailed(false); clear('imageUrl'); }}
-          className={`${inputClass} ${border('imageUrl')}`}
-          placeholder="https://example.com/image.jpg"
-          aria-invalid={!!errors.imageUrl}
-          aria-describedby="pf-image-err"
-        />
-        <FieldError id="pf-image-err" message={errors.imageUrl} />
-        <FileUploadButton kind="image" disabled={loading || uploadBusy} onBusyChange={setUploadBusy} onUploaded={(files) => {
-          setImageUrl(files[0].url);
-          setImageFailed(false);
-          clear('imageUrl');
-        }} />
-        {imageUrl.trim() && !errors.imageUrl && (
-          <div className="mt-2">
-            {imageFailed ? (
-              <p className="text-xs text-orange-600">Không tải được ảnh từ link này — hãy kiểm tra lại link.</p>
-            ) : (
-              <img src={imageUrl.trim()} alt="Xem trước" className="h-20 w-20 object-cover rounded border" onError={() => setImageFailed(true)} />
-            )}
-          </div>
-        )}
-      </div>
+      <ProductImagesField value={imageUrls} onChange={(images) => { setImageUrls(images); clear('imageUrl'); }}
+        disabled={loading || uploadBusy} onBusyChange={setUploadBusy} error={errors.imageUrl} />
 
       <div>
         <div className="mb-1 flex items-center justify-between">
@@ -344,14 +369,22 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSpec(index, 'key', e.target.value)}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
               />
-              <input
-                type="text"
-                aria-label={`Giá trị thông số ${index + 1}`}
-                placeholder="Giá trị (VD: Intel i7)"
-                value={row.value}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSpec(index, 'value', e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-              />
+              {standards?.templates.find((t) => String(t.id) === templateId)?.fields.find((f: { key: string }) => f.key === row.key)?.type === 'select' ? (
+                <select aria-label={`Giá trị thông số ${index + 1}`} value={row.value} onChange={(e) => updateSpec(index, 'value', e.target.value)} className="min-w-0 flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                  <option value="">Chọn {row.key}</option>
+                  {standards.templates.find((t) => String(t.id) === templateId)?.fields.find((f: { key: string }) => f.key === row.key)?.options.map((v: string) => <option key={v} value={v}>{v}</option>)}
+                </select>
+              ) : (
+                <input
+                  type={standards?.templates.find((t) => String(t.id) === templateId)?.fields.find((f: { key: string }) => f.key === row.key)?.type === 'number' ? 'number' : 'text'}
+                  min={0} step="any"
+                  aria-label={`Giá trị thông số ${index + 1}`}
+                  placeholder={`Giá trị ${row.key || 'thông số'}`}
+                  value={row.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSpec(index, 'value', e.target.value)}
+                  className="min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+              )}
               <button
                 type="button"
                 onClick={() => setSpecs((rows) => (rows.length > 1 ? rows.filter((_, i) => i !== index) : [{ key: '', value: '' }]))}

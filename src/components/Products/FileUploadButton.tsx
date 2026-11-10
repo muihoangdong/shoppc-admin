@@ -7,10 +7,11 @@ interface Props {
   disabled?: boolean;
   onUploaded: (files: UploadedFile[]) => void;
   onBusyChange: (busy: boolean) => void;
+  maxFiles?: number;
 }
 
 /** Upload first, then fill the existing product fields with persistent API URLs. */
-const FileUploadButton: React.FC<Props> = ({ kind, disabled, onUploaded, onBusyChange }) => {
+const FileUploadButton: React.FC<Props> = ({ kind, disabled, onUploaded, onBusyChange, maxFiles = kind === 'model' ? 2 : 1 }) => {
   const input = useRef<HTMLInputElement>(null);
   const controller = useRef<AbortController | null>(null);
   const [busy, setBusy] = useState(false);
@@ -26,7 +27,11 @@ const FileUploadButton: React.FC<Props> = ({ kind, disabled, onUploaded, onBusyC
     setError('');
     setMessage('');
     // One GLB/GLTF plus one optional USDZ per product.
-    if (files.length > 2 || files.filter((f) => /\.(glb|gltf)$/i.test(f.name)).length > 1 || files.filter((f) => /\.usdz$/i.test(f.name)).length > 1) {
+    if (files.length > maxFiles) {
+      setError(`Chỉ có thể chọn thêm tối đa ${maxFiles} file`);
+      return;
+    }
+    if (kind === 'model' && (files.filter((f) => /\.(glb|gltf)$/i.test(f.name)).length > 1 || files.filter((f) => /\.usdz$/i.test(f.name)).length > 1)) {
       setError('Chọn một file GLB/GLTF và tối đa một file USDZ');
       return;
     }
@@ -64,7 +69,7 @@ const FileUploadButton: React.FC<Props> = ({ kind, disabled, onUploaded, onBusyC
         className="hidden"
         aria-label={kind === 'image' ? 'Chọn ảnh từ máy tính' : 'Chọn mô hình 3D từ máy tính'}
         accept={kind === 'image' ? '.png,.jpg,.jpeg,.webp' : '.glb,.gltf,.usdz'}
-        multiple={kind === 'model'}
+        multiple={maxFiles > 1}
         disabled={disabled || busy}
         onChange={(e) => void select(e)}
       />
@@ -78,7 +83,7 @@ const FileUploadButton: React.FC<Props> = ({ kind, disabled, onUploaded, onBusyC
         {busy ? `Đang tải… ${progress}%` : kind === 'image' ? 'Tải ảnh từ máy tính' : 'Tải mô hình 3D từ máy tính'}
       </button>
       {busy && <progress value={progress} max={100} aria-label="Tiến độ tải file" className="block h-1.5 w-full accent-blue-600" />}
-      <p className="text-xs text-slate-500">{kind === 'image' ? 'PNG, JPG, WEBP · tối đa 10 MB' : 'GLB, GLTF tự chứa texture, USDZ · tối đa 50 MB/file. Có thể chọn GLB và USDZ cùng lúc.'}</p>
+      <p className="text-xs text-slate-500">{kind === 'image' ? `PNG, JPG, WEBP · tối đa 10 MB/ảnh${maxFiles > 1 ? ' · chọn được nhiều ảnh cùng lúc' : ''}` : 'GLB, GLTF tự chứa texture, USDZ · tối đa 50 MB/file. Có thể chọn GLB và USDZ cùng lúc.'}</p>
       {error && <p role="alert" className="text-xs text-red-600">{error}</p>}
       {message && <p role="status" className="text-xs text-green-600">{message}</p>}
     </div>

@@ -121,7 +121,6 @@ const DashboardPage: React.FC = () => {
         }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- queryKey đại diện cho kỳ đang chọn
     [queryKey, period]
   );
 

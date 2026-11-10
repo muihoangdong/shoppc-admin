@@ -21,6 +21,10 @@ const UsersPage = lazy(() => import('./pages/UsersPage'));
 const SupportPage = lazy(() => import('./pages/SupportPage'));
 const CouponsPage = lazy(() => import('./pages/CouponsPage'));
 const ReviewsPage = lazy(() => import('./pages/ReviewsPage'));
+const OperationsPage = lazy(() => import('./pages/OperationsPage'));
+const CatalogStandardsPage = lazy(() => import('./pages/OperationsPage').then((m) => ({ default: m.CatalogStandardsPage })));
+const WarrantyManagementPage = lazy(() => import('./pages/OperationsPage').then((m) => ({ default: m.WarrantyManagementPage })));
+const BulkDataPage = lazy(() => import('./pages/BulkDataPage'));
 
 const PageFallback = () => (
   <div className="py-20">
@@ -44,6 +48,15 @@ function AppRoutes() {
         <Route path="products" element={<ProductsPage />} />
         <Route path="categories" element={<CategoriesPage />} />
         <Route path="orders" element={<OrdersPage />} />
+        <Route path="suppliers" element={<Suspense fallback={<PageFallback />}><OperationsPage key="suppliers" kind="suppliers" /></Suspense>} />
+        <Route path="purchases" element={<Suspense fallback={<PageFallback />}><OperationsPage key="receipts" kind="receipts" /></Suspense>} />
+        <Route path="inventory" element={<Suspense fallback={<PageFallback />}><OperationsPage key="movements" kind="movements" /></Suspense>} />
+        <Route path="warranty" element={<Suspense fallback={<PageFallback />}><WarrantyManagementPage /></Suspense>} />
+        <Route path="returns" element={<Suspense fallback={<PageFallback />}><OperationsPage key="returns" kind="returns" /></Suspense>} />
+        <Route path="shipping" element={<Suspense fallback={<PageFallback />}><OperationsPage key="shipments" kind="shipments" /></Suspense>} />
+        <Route path="catalog-standards" element={<Suspense fallback={<PageFallback />}><CatalogStandardsPage /></Suspense>} />
+        <Route path="bulk" element={<ProtectedRoute requireRole="admin"><Suspense fallback={<PageFallback />}><BulkDataPage /></Suspense></ProtectedRoute>} />
+        <Route path="audit" element={<ProtectedRoute requireRole="admin"><Suspense fallback={<PageFallback />}><OperationsPage key="audit" kind="audit" /></Suspense></ProtectedRoute>} />
         <Route
           path="reviews"
           element={

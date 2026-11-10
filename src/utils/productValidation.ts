@@ -23,6 +23,12 @@ export interface ProductPayload {
   price: number;
   stock: number;
   image_url: string;
+  image_urls?: string[];
+  sku?: string | null;
+  brand_id?: number | null;
+  spec_template_id?: number | null;
+  warranty_months?: number;
+  serial_required?: boolean;
   description: string;
   specs: Record<string, string>;
   part_type?: string | null;

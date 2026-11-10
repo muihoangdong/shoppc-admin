@@ -17,6 +17,12 @@ export interface Product {
   category_id: number;
   category_name?: string;
   image_url?: string;
+  image_urls?: string[];
+  sku?: string | null;
+  brand_id?: number | null;
+  spec_template_id?: number | null;
+  warranty_months?: number;
+  serial_required?: boolean | number;
   specs: Record<string, any>;
   /** Build PC: loại linh kiện (cpu, mainboard, ram...) và thông số kiểm tra tương thích */
   part_type?: string | null;

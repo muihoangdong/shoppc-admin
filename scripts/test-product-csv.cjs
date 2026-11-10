@@ -1,0 +1,15 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const ts = require('typescript');
+const compiled = ts.transpileModule(fs.readFileSync('src/utils/productCsv.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
+const exported = {};
+new Function('exports', compiled)(exported);
+const { parseProductCsv, PRODUCT_CSV_TEMPLATE } = exported;
+assert.equal(parseProductCsv(PRODUCT_CSV_TEMPLATE)[0].sku, 'CPU-DEMO');
+const header = 'sku,name,category_id,price,stock\r\n';
+assert.equal(parseProductCsv(header + 'A,"Tên, chứa ""ngoặc""\n dòng",1,100,2')[0].name, 'Tên, chứa "ngoặc"\n dòng');
+assert.throws(() => parseProductCsv(header + 'A,"chưa đóng,1,100,2'), /ngoặc/);
+assert.throws(() => parseProductCsv(header + 'A,Test,1,100'), /đúng/);
+assert.throws(() => parseProductCsv('sku,sku\nA,A'), /trùng/);
+assert.throws(() => parseProductCsv(header + Array(501).fill('A,Test,1,100,2').join('\n')), /500/);
+console.log('✓ CSV: BOM, dấu phẩy, ngoặc kép, nhiều dòng, cột lỗi và giới hạn 500');
