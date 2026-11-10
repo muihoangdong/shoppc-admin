@@ -84,7 +84,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
   }, [open]);
 
   const toggle = (name: Exclude<MenuName, null>) => setOpen((current) => (current === name ? null : name));
-  const itemClass = 'flex items-center justify-between px-4 py-3 text-sm text-slate-700 hover:bg-slate-50';
+  const itemClass = 'flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50';
   const iconBtn = 'relative rounded-xl border border-slate-200 bg-white p-2 text-slate-600 transition hover:border-blue-300 hover:text-blue-600';
 
   return (
@@ -111,7 +111,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
               value={target}
               onChange={(e) => setTarget(e.target.value as typeof target)}
               aria-label="Tìm trong"
-              className="border-l border-slate-200 bg-transparent px-2 py-2 text-[11px] text-slate-600 outline-none"
+              className="border-l border-slate-200 bg-transparent px-2 py-2 text-[11px] font-semibold text-slate-600 outline-none"
             >
               {SEARCH_TARGETS.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -183,7 +183,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
             </button>
             {open === 'bell' && (
               <div className="absolute right-0 mt-2 w-72 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
-                <p className="frost-label bg-slate-50 px-4 py-2">Cần chú ý</p>
+                <p className="frost-label bg-slate-50 px-4 py-2 font-semibold">Cần chú ý</p>
                 {total === 0 && <p className="px-4 py-6 text-center text-sm text-gray-500">Không có việc nào cần xử lý 🎉</p>}
                 {paymentClaims > 0 && (
                   <Link to="/admin/orders?claimed=1" onClick={() => setOpen(null)} className={itemClass}>
@@ -227,7 +227,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
             {open === 'user' && (
               <div className="absolute right-0 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
                 <div className="border-b border-slate-200 px-4 py-3">
-                  <p className="text-sm font-medium text-gray-800 truncate">{user?.full_name}</p>
+                  <p className="text-sm font-semibold text-gray-800 truncate">{user?.full_name}</p>
                   <p className="text-xs text-gray-500 truncate">{user?.email}</p>
                 </div>
                 <Link to="/admin/settings" onClick={() => setOpen(null)} className={itemClass}>
