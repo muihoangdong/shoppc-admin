@@ -1,3 +1,5 @@
+import { createPortal } from 'react-dom';
+import useDialogFocus from '../../hooks/useDialogFocus';
 import React, { useEffect } from 'react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
@@ -32,6 +34,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   type = 'warning',
   loading = false,
 }) => {
+  const dialog = useDialogFocus(isOpen);
   // Nhấn Esc để hủy
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -46,14 +49,21 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   const style = STYLES[type];
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4"
       onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget && !loading) onCancel();
       }}
     >
-      <div role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" className="bg-white rounded-lg w-full max-w-md">
+      <div
+        ref={dialog}
+        tabIndex={-1}
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="confirm-title"
+        className="bg-white rounded-lg w-full max-w-md"
+      >
         <div className="p-6">
           <div className="flex items-center justify-center mb-4">
             <div className={`p-3 rounded-full ${style.ring}`}>
@@ -82,6 +92,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };

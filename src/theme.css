@@ -1,32 +1,32 @@
-/* ==== TỰ SINH bởi bộ tạo giao diện — đổi màu ở đây thay vì sửa từng component ==== */
-/* Màu chủ đạo: indigo · Trung tính: slate · Chế độ tối: navy đậm. Mỗi biến là bộ ba R G B. */
+/* Bảng màu dùng chung: nền trung tính, xanh dịu cho thao tác chính. */
+/* Light: sky blue. Dark: blue gray surfaces by elevation. Values are RGB channels. */
 :root {
   color-scheme: light;
-  --app-bg: 240 244 252;
-  --surface: 255 255 255;
-  --sidebar: 236 241 253;
-  --c-slate-50: 246 249 254;
-  --c-slate-100: 238 243 251;
-  --c-slate-200: 222 231 244;
-  --c-slate-300: 199 212 232;
-  --c-slate-400: 128 145 170;
-  --c-slate-500: 95 112 138;
-  --c-slate-600: 69 85 110;
-  --c-slate-700: 49 63 87;
-  --c-slate-800: 30 41 62;
-  --c-slate-900: 15 23 42;
-  --c-slate-950: 5 10 25;
-  --c-indigo-50: 240 243 255;
-  --c-indigo-100: 226 231 255;
-  --c-indigo-200: 199 208 254;
-  --c-indigo-300: 160 172 250;
-  --c-indigo-400: 111 125 242;
-  --c-indigo-500: 72 84 230;
-  --c-indigo-600: 49 58 205;
-  --c-indigo-700: 38 44 170;
-  --c-indigo-800: 32 37 138;
-  --c-indigo-900: 29 33 110;
-  --c-indigo-950: 18 20 66;
+  --app-bg: 239 246 252;
+  --surface: 251 253 255;
+  --sidebar: 245 249 253;
+  --c-slate-50: 245 248 252;
+  --c-slate-100: 234 241 248;
+  --c-slate-200: 213 226 238;
+  --c-slate-300: 184 203 220;
+  --c-slate-400: 127 153 175;
+  --c-slate-500: 92 118 141;
+  --c-slate-600: 77 102 125;
+  --c-slate-700: 63 88 111;
+  --c-slate-800: 51 75 99;
+  --c-slate-900: 41 63 84;
+  --c-slate-950: 32 51 72;
+  --c-indigo-50: 237 245 252;
+  --c-indigo-100: 220 236 251;
+  --c-indigo-200: 190 216 237;
+  --c-indigo-300: 159 197 226;
+  --c-indigo-400: 125 168 203;
+  --c-indigo-500: 82 134 178;
+  --c-indigo-600: 55 111 159;
+  --c-indigo-700: 47 96 139;
+  --c-indigo-800: 44 84 119;
+  --c-indigo-900: 41 73 99;
+  --c-indigo-950: 32 57 79;
   --c-red-50: 254 242 242;
   --c-red-100: 254 226 226;
   --c-red-200: 254 202 202;
@@ -108,31 +108,31 @@
 
 .dark {
   color-scheme: dark;
-  --app-bg: 9 16 33;
-  --surface: 15 26 48;
-  --sidebar: 11 20 40;
-  --c-slate-50: 16 29 52;
-  --c-slate-100: 20 35 61;
-  --c-slate-200: 31 50 82;
-  --c-slate-300: 45 66 104;
-  --c-slate-400: 98 116 148;
-  --c-slate-500: 137 154 182;
-  --c-slate-600: 168 182 205;
-  --c-slate-700: 196 206 222;
-  --c-slate-800: 222 229 240;
-  --c-slate-900: 238 243 250;
-  --c-slate-950: 247 250 255;
-  --c-indigo-50: 8 32 52;
-  --c-indigo-100: 10 44 70;
-  --c-indigo-200: 12 60 96;
-  --c-indigo-300: 14 110 160;
-  --c-indigo-400: 56 189 248;
-  --c-indigo-500: 14 165 233;
-  --c-indigo-600: 14 165 233;
-  --c-indigo-700: 2 132 199;
-  --c-indigo-800: 7 89 133;
-  --c-indigo-900: 12 74 110;
-  --c-indigo-950: 8 47 73;
+  --app-bg: 35 54 73;
+  --surface: 46 70 92;
+  --sidebar: 41 63 84;
+  --c-slate-50: 48 73 95;
+  --c-slate-100: 56 84 108;
+  --c-slate-200: 73 99 123;
+  --c-slate-300: 96 123 147;
+  --c-slate-400: 153 179 201;
+  --c-slate-500: 178 201 220;
+  --c-slate-600: 194 214 231;
+  --c-slate-700: 209 226 239;
+  --c-slate-800: 220 234 245;
+  --c-slate-900: 226 237 247;
+  --c-slate-950: 239 246 252;
+  --c-indigo-50: 48 76 101;
+  --c-indigo-100: 58 91 119;
+  --c-indigo-200: 82 117 148;
+  --c-indigo-300: 125 166 199;
+  --c-indigo-400: 162 206 240;
+  --c-indigo-500: 98 143 181;
+  --c-indigo-600: 63 112 153;
+  --c-indigo-700: 55 101 139;
+  --c-indigo-800: 48 92 126;
+  --c-indigo-900: 46 82 112;
+  --c-indigo-950: 41 70 94;
   --c-red-50: 46 21 31;
   --c-red-100: 78 28 37;
   --c-red-200: 99 27 35;
@@ -213,17 +213,17 @@
 }
 
 :root {
-  --c-indigo-50-light: 236 254 255;
-  --c-indigo-100-light: 207 250 254;
-  --c-indigo-200-light: 165 243 252;
-  --c-indigo-300-light: 103 232 249;
-  --c-indigo-400-light: 56 200 245;
-  --c-indigo-500-light: 14 165 233;
-  --c-indigo-600-light: 2 132 199;
-  --c-indigo-700-light: 3 105 161;
-  --c-indigo-800-light: 7 89 133;
-  --c-indigo-900-light: 12 74 110;
-  --c-indigo-950-light: 8 47 73;
+  --c-indigo-50-light: 237 245 252;
+  --c-indigo-100-light: 220 236 251;
+  --c-indigo-200-light: 82 117 148;
+  --c-indigo-300-light: 125 166 199;
+  --c-indigo-400-light: 162 206 240;
+  --c-indigo-500-light: 82 134 178;
+  --c-indigo-600-light: 55 111 159;
+  --c-indigo-700-light: 47 96 139;
+  --c-indigo-800-light: 44 84 119;
+  --c-indigo-900-light: 41 73 99;
+  --c-indigo-950-light: 32 57 79;
   --c-red-50-light: 254 242 242;
   --c-red-100-light: 254 226 226;
   --c-red-200-light: 254 202 202;
@@ -402,3 +402,13 @@ body { background-color: rgb(var(--app-bg)); color: rgb(var(--c-slate-900)); tra
 .recharts-cartesian-axis-line, .recharts-cartesian-axis-tick-line { stroke: rgb(var(--c-slate-300)); }
 .recharts-default-tooltip { background-color: rgb(var(--surface)) !important; border: 1px solid rgb(var(--c-slate-200)) !important; border-radius: .5rem; color: rgb(var(--c-slate-800)); }
 .recharts-tooltip-cursor { fill: rgb(var(--c-slate-100)); }
+
+/* Shared surface roles: product photos retain their original pixels. */
+.bg-white { background-color: rgb(var(--surface) / var(--tw-bg-opacity, 1)); }
+.frost-card { box-shadow: none; }
+button, a, input, select, textarea { transition-duration: 200ms; }
+:focus-visible { outline: 2px solid rgb(var(--c-indigo-400)); outline-offset: 3px; }
+.drawer-enter { animation: drawer-in 200ms ease-out; }
+@keyframes drawer-in { from { transform: translateX(32px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.theme-switching *, .theme-switching *::before, .theme-switching *::after { transition-property: background-color, border-color, color, box-shadow !important; transition-duration: 200ms !important; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }

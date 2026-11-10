@@ -47,7 +47,7 @@ export const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, pending, onV
           <thead>
             <tr className="border-y border-slate-200 bg-slate-50 text-left">
               {['Mã đơn', 'Khách hàng', 'Tổng tiền', 'Trạng thái', ''].map((h) => (
-                <th key={h} className="frost-label px-5 py-2.5 !text-[10px] font-medium">
+                <th key={h} className={`frost-label px-5 py-2.5 !text-[10px] font-medium ${h === 'Tổng tiền' ? 'text-right' : ''}`}>
                   {h}
                 </th>
               ))}
@@ -68,12 +68,12 @@ export const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, pending, onV
                     <span className="truncate font-medium text-slate-800">{order.customer_name}</span>
                   </span>
                 </td>
-                <td className="whitespace-nowrap px-5 py-3 text-sm font-semibold text-slate-900">{formatPrice(order.total_amount)}</td>
+                <td className="whitespace-nowrap px-5 py-3 text-right tabular-nums text-sm font-semibold text-slate-900">{formatPrice(order.total_amount)}</td>
                 <td className="px-5 py-3">
                   <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${statusBadge(order.status)}`}>{statusLabel(order.status)}</span>
                 </td>
                 <td className="px-5 py-3 text-right">
-                  <span className="rounded-lg border border-slate-200 px-2 py-1 text-[11px] text-slate-600">Chi tiết</span>
+                  <button type="button" onClick={(e) => { e.stopPropagation(); onViewOrder(order.id); }} className="rounded-lg border border-slate-200 px-2 py-1 text-[11px] text-slate-600">Chi tiết</button>
                 </td>
               </tr>
             ))}

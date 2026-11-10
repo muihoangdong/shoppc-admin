@@ -23,7 +23,7 @@
 @layer components {
   /* ── Giao diện "Arctic Frost": thẻ, nhãn dùng chung ── */
   .frost-card {
-    @apply rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgb(15_40_80/0.04),0_8px_24px_-16px_rgb(15_40_80/0.2)];
+    @apply rounded-2xl border border-slate-200 bg-white;
   }
   .frost-label {
     @apply text-[11px] font-medium uppercase tracking-wide text-slate-500;
@@ -63,3 +63,6 @@ model-viewer {
     box-shadow: none !important;
   }
 }
+
+/* Surface role applies after generated utility classes. */
+.bg-white { background-color: rgb(var(--surface) / var(--tw-bg-opacity, 1)); }

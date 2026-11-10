@@ -1,3 +1,6 @@
+import { useListState } from '../hooks/useListView';
+import SideDrawer from '../components/Common/SideDrawer';
+import { formatPrice } from '../utils/formatters';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline';
@@ -76,16 +79,18 @@ const ProductsPage: React.FC = () => {
   const [error, setError] = useState('');
 
   // ?q= từ ô tìm kiếm chung ở thanh trên cùng
-  const [searchInput, setSearchInput] = useState(() => params.get('q') || '');
+  const [searchInput, setSearchInput] = useListState('products.search', params.get('q') || '');
   const urlQuery = params.get('q');
   useEffect(() => {
     if (urlQuery !== null) setSearchInput(urlQuery);
-  }, [urlQuery]);
+  }, [urlQuery, setSearchInput]);
   const search = useDebounce(searchInput, 250);
-  const [categoryFilter, setCategoryFilter] = useState('');
-  const [sort, setSort] = useState<SortKey>('newest');
-  const [page, setPage] = useState(1);
+  const [categoryFilter, setCategoryFilter] = useListState('products.category', '');
+  const [sort, setSort] = useListState<SortKey>('products.sort', 'newest');
+  const [page, setPage] = useListState('products.page', 1);
 
+  const [viewed, setViewed] = useState<Product | null>(null);
+  const closeViewed = useCallback(() => setViewed(null), []);
   const [modalOpen, setModalOpen] = useState(false);
   const [selected, setSelected] = useState<Product | null>(null);
   const [saving, setSaving] = useState(false);
@@ -124,9 +129,9 @@ const ProductsPage: React.FC = () => {
   useRealtime('category:changed', () => { refreshCategories(); refreshProducts(); });
   useRealtime('resync', () => { refreshProducts(); refreshCategories(); });
 
-  useEffect(() => {
-    setPage(1);
-  }, [search, categoryFilter, stockFilter, sort]);
+  const filterKey = JSON.stringify([search, categoryFilter, stockFilter, sort]);
+  const [previousFilter, setPreviousFilter] = useListState('products.filterKey', filterKey);
+  useEffect(() => { if (previousFilter !== filterKey) { setPage(1); setPreviousFilter(filterKey); } }, [filterKey, previousFilter, setPage, setPreviousFilter]);
 
   const categoryOptions = useMemo(() => flattenForSelect(buildTree(categories)), [categories]);
 
@@ -292,7 +297,7 @@ const ProductsPage: React.FC = () => {
         </div>
       ) : (
         <div className="overflow-hidden rounded-lg shadow">
-          <ProductTable
+          <ProductTable onView={setViewed}
             products={visible}
             onEdit={(p) => {
               setSelected(p);
@@ -306,6 +311,12 @@ const ProductsPage: React.FC = () => {
         </div>
       )}
 
+      {viewed && <SideDrawer title="Chi tiết sản phẩm" onClose={closeViewed}>
+        {viewed.image_url && <img src={viewed.image_url} alt={viewed.name} className="mb-6 h-64 w-full rounded-xl bg-slate-50 object-contain p-4" />}
+        <p className="text-xs text-slate-500">{viewed.sku || `#${viewed.id}`} · {viewed.category_name}</p><h3 className="mt-2 text-xl font-semibold">{viewed.name}</h3><p className="my-4 text-2xl font-semibold text-blue-600">{formatPrice(viewed.price)}</p>
+        <dl className="mb-5 grid grid-cols-2 gap-3 rounded-xl bg-slate-50 p-4 text-sm"><dt>Tồn kho</dt><dd className="text-right">{viewed.stock}</dd><dt>Bảo hành</dt><dd className="text-right">{viewed.warranty_months ?? 12} tháng</dd>{Object.entries(viewed.specs || {}).map(([key, value]) => <React.Fragment key={key}><dt className="text-slate-500">{key}</dt><dd className="text-right">{String(value)}</dd></React.Fragment>)}</dl>
+        <p className="whitespace-pre-wrap text-sm leading-7 text-slate-600">{viewed.description}</p><button type="button" className="mt-6 rounded-lg bg-blue-600 px-4 py-2 text-white" onClick={() => { setSelected(viewed); setViewed(null); setModalOpen(true); }}>Chỉnh sửa sản phẩm</button>
+      </SideDrawer>}
       <ProductModal
         isOpen={modalOpen}
         onClose={() => {

@@ -1,3 +1,4 @@
+import TableView from '../Common/TableView';
 import React, { useState } from 'react';
 import { Category } from '../../types';
 import { CategoryNode } from '../../utils/categoryTree';
@@ -80,7 +81,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({ categories, onEdit
   };
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <TableView id="categories" columns={['Tên danh mục', 'Loại', 'Sản phẩm', 'Thao tác']}><div className="bg-white rounded-xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50">
@@ -95,6 +96,6 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({ categories, onEdit
           <tbody className="divide-y divide-gray-200">{categories.map((category) => renderRow(category, 0))}</tbody>
         </table>
       </div>
-    </div>
+    </div></TableView>
   );
 };

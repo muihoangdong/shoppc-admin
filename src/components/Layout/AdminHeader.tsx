@@ -88,7 +88,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
   const iconBtn = 'relative rounded-xl border border-slate-200 bg-white p-2 text-slate-600 transition hover:border-blue-300 hover:text-blue-600';
 
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200 bg-app/90 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-slate-200 bg-app">
       <div className="flex items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <button onClick={onMenuClick} aria-label="Mở/đóng menu" className="rounded-xl p-2 text-slate-600 transition hover:bg-slate-200/60">
           <Bars3Icon className="h-6 w-6" />

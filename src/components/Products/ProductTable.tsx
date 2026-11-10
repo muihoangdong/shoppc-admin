@@ -1,3 +1,4 @@
+import TableView from '../Common/TableView';
 import React, { useState } from 'react';
 import { Product } from '../../types';
 import { formatPrice } from '../../utils/formatters';
@@ -6,6 +7,7 @@ import { CheckIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24
 
 interface ProductTableProps {
   products: Product[];
+  onView?: (product: Product) => void;
   onEdit: (product: Product) => void;
   onDelete: (product: Product) => void;
   /** Lưu tồn kho mới; ném lỗi nếu thất bại (bảng giữ ô nhập để thử lại). */
@@ -22,7 +24,7 @@ const ProductImage: React.FC<{ src?: string; alt: string }> = ({ src, alt }) => 
   return <img src={src} alt={alt} onError={() => setFailed(true)} className="h-10 w-10 shrink-0 rounded object-cover" />;
 };
 
-export const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete, onUpdateStock, canDelete = true }) => {
+export const ProductTable: React.FC<ProductTableProps> = ({ products, onView, onEdit, onDelete, onUpdateStock, canDelete = true }) => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [draft, setDraft] = useState('');
   const [saving, setSaving] = useState(false);
@@ -54,13 +56,13 @@ export const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, on
   };
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <TableView id="products" columns={['Sản phẩm', 'Danh mục', 'Giá', 'Tồn kho', 'Thao tác']}><div className="bg-white rounded-xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
               {['Sản phẩm', 'Danh mục', 'Giá', 'Tồn kho', 'Thao tác'].map((h) => (
-                <th key={h} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase whitespace-nowrap">
+                <th key={h} className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase whitespace-nowrap ${h === 'Giá' ? 'text-right' : 'text-left'}`}>
                   {h}
                 </th>
               ))}
@@ -77,7 +79,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, on
                       <ProductImage src={product.image_url} alt={product.name} />
                       <div className="min-w-0">
                         <p className="flex items-center gap-1.5 text-sm font-medium text-gray-900">
-                          <span className="truncate max-w-[18rem]">{product.name}</span>
+                          <button type="button" onClick={() => (onView || onEdit)(product)} className="truncate max-w-[18rem] text-left hover:text-blue-600 hover:underline">{product.name}</button>
                           {product.model_3d?.glb_url && (
                             <span
                               title={product.model_3d.enabled === false ? 'Có mô hình 3D (đang ẩn)' : 'Có mô hình 3D / AR'}
@@ -92,7 +94,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, on
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{product.category_name || '-'}</td>
-                  <td className="px-6 py-4 text-sm font-medium text-red-600 whitespace-nowrap">{formatPrice(product.price)}</td>
+                  <td className="px-6 py-4 text-right text-sm font-semibold text-slate-900 tabular-nums whitespace-nowrap">{formatPrice(product.price)}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {editing ? (
                       <div className="flex items-center gap-1">
@@ -157,6 +159,6 @@ export const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, on
           </tbody>
         </table>
       </div>
-    </div>
+    </div></TableView>
   );
 };

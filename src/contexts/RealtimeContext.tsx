@@ -26,9 +26,10 @@ const SERVER_EVENTS = [
 interface RealtimeContextType {
   status: RealtimeStatus;
   subscribe: (event: string, handler: Handler) => () => void;
+  refresh: () => void;
 }
 
-const RealtimeContext = createContext<RealtimeContextType>({ status: 'idle', subscribe: () => () => undefined });
+const RealtimeContext = createContext<RealtimeContextType>({ status: 'idle', subscribe: () => () => undefined, refresh: () => undefined });
 
 const MAX_BACKOFF_MS = 30000;
 
@@ -52,6 +53,12 @@ export const RealtimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return () => {
       set.delete(handler);
     };
+  }, []);
+
+  const refresh = useCallback(() => {
+    handlers.current.get('resync')?.forEach((handler) => {
+      try { handler({}); } catch (error) { console.error('[realtime] Không làm mới được giao diện', error); }
+    });
   }, []);
 
   useEffect(() => {
@@ -158,7 +165,7 @@ export const RealtimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
   }, [enabled]);
 
-  return <RealtimeContext.Provider value={{ status, subscribe }}>{children}</RealtimeContext.Provider>;
+  return <RealtimeContext.Provider value={{ status, subscribe, refresh }}>{children}</RealtimeContext.Provider>;
 };
 
 /** Đăng ký nhận một sự kiện realtime trong suốt vòng đời component. `resync` = vừa kết nối lại sau khi mất kết nối. */
@@ -170,3 +177,6 @@ export function useRealtime(event: string, handler: Handler): void {
 }
 
 export const useRealtimeStatus = (): RealtimeStatus => useContext(RealtimeContext).status;
+
+/** Refresh subscribed lists after chatbot writes without losing dialogs or filters. */
+export const useRealtimeRefresh = (): (() => void) => useContext(RealtimeContext).refresh;

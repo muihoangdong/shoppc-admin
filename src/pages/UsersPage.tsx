@@ -1,3 +1,4 @@
+import TableView from '../components/Common/TableView';
 import React, { useEffect, useMemo, useState } from 'react';
 import { PlusIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
@@ -148,7 +149,7 @@ const UsersPage: React.FC = () => {
       </div>
 
       <div className="overflow-hidden rounded-lg bg-white shadow">
-        <div className="overflow-x-auto">
+        <TableView id="UsersPage" columns={['Tài khoản', 'Email', 'Vai trò', 'Trạng thái', 'Đăng nhập gần nhất', 'Thao tác']}><div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
@@ -235,7 +236,7 @@ const UsersPage: React.FC = () => {
               )}
             </tbody>
           </table>
-        </div>
+        </div></TableView>
       </div>
 
       {modalOpen && (

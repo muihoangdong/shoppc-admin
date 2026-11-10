@@ -45,11 +45,23 @@ const suggestionsFor = (pathname: string, search: string): string[] => {
       ? ['Tóm tắt đơn này', 'Đơn này đang ở trạng thái nào?', 'Có bao nhiêu đơn đang chờ xử lý?']
       : ['Đơn nào đang chờ xử lý?', 'Đơn hôm nay có bao nhiêu?', 'Có đơn chuyển khoản nào chưa thanh toán không?'];
   }
-  if (pathname === '/admin/products') return ['Sản phẩm nào sắp hết hàng?', 'Tìm ảnh trên Internet cho sản phẩm chưa có ảnh', 'Tách nền ảnh chính của sản phẩm'];
+  if (pathname === '/admin/products')
+    return [
+      'Sản phẩm nào sắp hết hàng?',
+      'Tìm ảnh trên Internet cho sản phẩm chưa có ảnh',
+      'Tách nền ảnh chính của sản phẩm',
+    ];
   if (pathname === '/admin/categories') return ['Danh mục nào đang trống?', 'Mỗi danh mục có bao nhiêu sản phẩm?'];
-  if (pathname === '/admin/analytics') return ['Doanh thu tháng này so với tháng trước?', 'Sản phẩm bán chạy nhất 30 ngày qua?', 'Tỷ lệ hủy đơn tháng này?'];
+  if (pathname === '/admin/analytics')
+    return [
+      'Doanh thu tháng này so với tháng trước?',
+      'Sản phẩm bán chạy nhất 30 ngày qua?',
+      'Tỷ lệ hủy đơn tháng này?',
+    ];
   if (pathname === '/admin/support') {
-    return q.get('c') ? ['Tóm tắt hội thoại này', 'Khách này đang hỏi gì?'] : ['Hội thoại nào đang cần nhân viên?', 'Có bao nhiêu tin chưa đọc?'];
+    return q.get('c')
+      ? ['Tóm tắt hội thoại này', 'Khách này đang hỏi gì?']
+      : ['Hội thoại nào đang cần nhân viên?', 'Có bao nhiêu tin chưa đọc?'];
   }
   return DEFAULT_SUGGESTIONS;
 };
@@ -92,7 +104,10 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
   // Lưu hội thoại (chỉ văn bản) để không mất khi tải lại trang
   useEffect(() => {
     try {
-      const keep = messages.filter((m) => !m.isError).slice(-MAX_SAVED).map(({ id, role, content }) => ({ id, role, content }));
+      const keep = messages
+        .filter((m) => !m.isError)
+        .slice(-MAX_SAVED)
+        .map(({ id, role, content }) => ({ id, role, content }));
       sessionStorage.setItem(storageKey, JSON.stringify(keep));
     } catch {
       /* bỏ qua */
@@ -107,8 +122,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
     if (open) inputRef.current?.focus();
   }, [open]);
 
-  const addMessage = (msg: Omit<UIMessage, 'id'>) =>
-    setMessages((prev) => [...prev, { ...msg, id: newId() }]);
+  const addMessage = (msg: Omit<UIMessage, 'id'>) => setMessages((prev) => [...prev, { ...msg, id: newId() }]);
 
   const setCardState = (id: string, cardState: CardState) =>
     setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, cardState } : m)));
@@ -134,7 +148,11 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
       const hasActions = res.pending_actions.length > 0;
       addMessage({
         role: 'assistant',
-        content: res.reply || (hasActions ? 'Mình đã chuẩn bị thao tác bên dưới, bạn kiểm tra và xác nhận nhé.' : 'Mình chưa có câu trả lời.'),
+        content:
+          res.reply ||
+          (hasActions
+            ? 'Mình đã chuẩn bị thao tác bên dưới, bạn kiểm tra và xác nhận nhé.'
+            : 'Mình chưa có câu trả lời.'),
         actions: hasActions ? res.pending_actions : undefined,
         cardState: hasActions ? 'waiting' : undefined,
       });
@@ -157,7 +175,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
       addMessage({
         role: 'assistant',
         content: results.map((r) => `${r.ok ? '✅' : '❌'} ${r.message}`).join('\n'),
-        previews: results.flatMap((r) => r.ok && r.preview && safePreview(r.preview.image_url) ? [r.preview] : []),
+        previews: results.flatMap((r) => (r.ok && r.preview && safePreview(r.preview.image_url) ? [r.preview] : [])),
       });
       if (results.some((r) => r.ok)) onDataChanged?.();
     } catch (error: any) {
@@ -174,7 +192,9 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
   };
 
   const clearChat = () => {
-    const waiting = messages.filter((m) => m.cardState === 'waiting' && m.actions).flatMap((m) => m.actions!.map((a) => a.id));
+    const waiting = messages
+      .filter((m) => m.cardState === 'waiting' && m.actions)
+      .flatMap((m) => m.actions!.map((a) => a.id));
     if (waiting.length) void chatService.cancel(waiting);
     setMessages([]);
     try {
@@ -206,7 +226,8 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
               </span>
               <div>
                 <p className="flex items-center gap-1.5 text-sm font-semibold leading-tight">
-                  Admin AI Copilot <span className="rounded bg-white/20 px-1 text-[9px] font-bold tracking-wider">PRO</span>
+                  Admin AI Copilot{' '}
+                  <span className="rounded bg-white/20 px-1 text-[9px] font-bold tracking-wider">PRO</span>
                 </p>
                 <p className="text-[10px] text-blue-100">Hiểu ngữ cảnh trang bạn đang xem</p>
               </div>
@@ -262,12 +283,52 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onDataChanged }) => {
                     onCancel={() => cancel(m)}
                   />
                 )}
-                {m.previews?.map((p) => <div key={p.result_id} className="w-full max-w-72 rounded-xl border border-slate-200 bg-white p-3">
-                  <p className="mb-2 text-sm font-semibold text-slate-800">Ảnh đã tách nền · #{p.product_id}</p>
-                  <a href={p.image_url} target="_blank" rel="noopener noreferrer"><img src={p.image_url} alt="Xem trước PNG đã tách nền" className="max-h-56 w-full rounded-lg object-contain" style={{ backgroundColor: '#eee', backgroundImage: 'conic-gradient(#ccc 25%,transparent 0 50%,#ccc 0 75%,transparent 0)', backgroundSize: '20px 20px' }} /></a>
-                  <p className="my-2 text-xs text-slate-500">Chưa thay đổi sản phẩm. Kiểm tra các cạnh và chi tiết trước khi dùng ảnh.</p>
-                  <button type="button" disabled={loading} onClick={() => void send(`Dùng ảnh đã tách nền có result_id ${p.result_id} cho sản phẩm #${p.product_id}. Chuẩn bị xác nhận cập nhật và giữ các ảnh cũ.`)} className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50">Dùng ảnh này</button>
-                </div>)}
+                {m.previews?.map((p) => (
+                  <div key={p.result_id} className="w-full max-w-full rounded-xl border border-slate-200 bg-white p-3">
+                    <p className="mb-2 text-sm font-semibold text-slate-800">Ảnh đã tách nền · #{p.product_id}</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <p className="mb-1 text-xs text-slate-500">Ảnh gốc</p>
+                        <img
+                          src={p.original_url}
+                          alt="Ảnh sản phẩm trước khi tách nền"
+                          referrerPolicy="no-referrer"
+                          className="h-40 w-full rounded-lg bg-slate-50 object-contain"
+                        />
+                      </div>
+                      <div>
+                        <p className="mb-1 text-xs text-slate-500">Sau khi tách nền</p>
+                        <a href={p.image_url} target="_blank" rel="noopener noreferrer">
+                          <img
+                            src={p.image_url}
+                            alt="Xem trước PNG đã tách nền"
+                            className="h-40 w-full rounded-lg object-contain"
+                            style={{
+                              backgroundColor: '#eee',
+                              backgroundImage: 'conic-gradient(#ccc 25%,transparent 0 50%,#ccc 0 75%,transparent 0)',
+                              backgroundSize: '20px 20px',
+                            }}
+                          />
+                        </a>
+                      </div>
+                    </div>
+                    <p className="my-2 text-xs text-slate-500">
+                      Chưa thay đổi sản phẩm. Kiểm tra các cạnh và chi tiết trước khi dùng ảnh.
+                    </p>
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={() =>
+                        void send(
+                          `Dùng ảnh đã tách nền có result_id ${p.result_id} cho sản phẩm #${p.product_id}. Chuẩn bị xác nhận cập nhật và giữ các ảnh cũ.`,
+                        )
+                      }
+                      className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                    >
+                      Dùng ảnh này
+                    </button>
+                  </div>
+                ))}
               </div>
             ))}
 
@@ -334,21 +395,46 @@ const ActionCard: React.FC<ActionCardProps> = ({ actions, state, onConfirm, onCa
     <div
       className={`w-full max-w-[95%] rounded-xl border p-3 shadow-sm ${
         dangerous ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'
-      } ${finished ? 'opacity-60' : ''}`}
+      } ${finished ? 'border-slate-200' : ''}`}
     >
-      <p className={`mb-2 flex items-center gap-1.5 text-xs font-semibold ${dangerous ? 'text-red-700' : 'text-amber-800'}`}>
+      <p
+        className={`mb-2 flex items-center gap-1.5 text-xs font-semibold ${dangerous ? 'text-red-700' : 'text-amber-800'}`}
+      >
         <ExclamationTriangleIcon className="h-4 w-4" />
         {state === 'done'
           ? 'Đã xử lý'
           : state === 'cancelled'
-          ? 'Đã hủy'
-          : `Cần xác nhận (${actions.length} thao tác)`}
+            ? 'Đã hủy'
+            : state === 'running'
+              ? 'Đang xử lý…'
+              : `Chờ xác nhận (${actions.length} thao tác)`}
       </p>
 
       <ul className="max-h-48 space-y-2 overflow-y-auto">
         {actions.map((a) => (
           <li key={a.id} className="whitespace-pre-line rounded-lg bg-white/70 px-2.5 py-1.5 text-xs text-slate-800">
-            {a.summary}
+            {a.summary.split('\n').map((line, index) => {
+              const change = /^- (.+?): (.+) → (.+)$/.exec(line);
+              return change ? (
+                <div key={index} className="my-2">
+                  <p className="mb-1 font-medium">{change[1]}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="rounded bg-slate-100 p-2">
+                      <span className="block text-[10px] text-slate-500">Trước</span>
+                      <span className="break-words">{change[2]}</span>
+                    </div>
+                    <div className="rounded bg-blue-50 p-2">
+                      <span className="block text-[10px] text-blue-600">Sau</span>
+                      <span className="break-words">{change[3]}</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p key={index} className="break-words">
+                  {line}
+                </p>
+              );
+            })}
           </li>
         ))}
       </ul>
@@ -362,7 +448,13 @@ const ActionCard: React.FC<ActionCardProps> = ({ actions, state, onConfirm, onCa
               dangerous ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'
             }`}
           >
-            {state === 'running' ? 'Đang thực hiện…' : actions.length > 1 ? `Xác nhận tất cả (${actions.length})` : dangerous ? 'Xác nhận xóa' : 'Xác nhận'}
+            {state === 'running'
+              ? 'Đang thực hiện…'
+              : actions.length > 1
+                ? `Xác nhận tất cả (${actions.length})`
+                : dangerous
+                  ? 'Xác nhận xóa'
+                  : 'Xác nhận'}
           </button>
           <button
             onClick={onCancel}
@@ -380,6 +472,13 @@ const ActionCard: React.FC<ActionCardProps> = ({ actions, state, onConfirm, onCa
 export default ChatWidget;
 
 function safePreview(value: string): boolean {
-  try { const url = new URL(value); return url.origin === new URL(API_BASE_URL, window.location.origin).origin && /^\/api\/uploads\/files\/[0-9a-f-]+\.png$/.test(url.pathname); }
-  catch { return false; }
+  try {
+    const url = new URL(value);
+    return (
+      url.origin === new URL(API_BASE_URL, window.location.origin).origin &&
+      /^\/api\/uploads\/files\/[0-9a-f-]+\.png$/.test(url.pathname)
+    );
+  } catch {
+    return false;
+  }
 }

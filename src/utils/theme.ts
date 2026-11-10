@@ -21,8 +21,14 @@ export const currentTheme = (): Theme => stored() ?? systemTheme();
 /** Gắn/bỏ class "dark" trên <html> — toàn bộ màu đổi theo biến CSS trong theme.css. */
 export const applyTheme = (theme: Theme): void => {
   const root = document.documentElement;
+  if (root.classList.contains('dark') !== (theme === 'dark')) {
+    root.classList.add('theme-switching');
+    window.setTimeout(() => root.classList.remove('theme-switching'), 250);
+  }
   root.classList.toggle('dark', theme === 'dark');
   root.style.colorScheme = theme;
+  root.style.backgroundColor = theme === 'dark' ? '#233649' : '#EFF6FC';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#233649' : '#EFF6FC');
 };
 
 export function useTheme() {

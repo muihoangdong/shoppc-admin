@@ -1,3 +1,5 @@
+import { createPortal } from 'react-dom';
+import useDialogFocus from '../../hooks/useDialogFocus';
 import React, { useCallback, useEffect, useState } from 'react';
 import { BanknotesIcon, PrinterIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
@@ -30,6 +32,7 @@ const Row: React.FC<{ label: string; children: React.ReactNode }> = ({ label, ch
 );
 
 export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onClose, onChanged }) => {
+  const dialog = useDialogFocus(true);
   const [order, setOrder] = useState<OrderDetail | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -97,34 +100,62 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onC
 
   const next = order ? NEXT_STEP[order.status] : undefined;
   const address = order
-    ? formatFullAddress(order.customer_address, order.customer_ward ?? undefined, order.customer_district ?? undefined, order.customer_city ?? undefined)
+    ? formatFullAddress(
+        order.customer_address,
+        order.customer_ward ?? undefined,
+        order.customer_district ?? undefined,
+        order.customer_city ?? undefined,
+      )
     : '';
 
   const handlePrint = () => {
-    if (order && !printInvoice(order)) toast.error('Trình duyệt đang chặn cửa sổ in. Hãy cho phép cửa sổ bật lên rồi thử lại.');
+    if (order && !printInvoice(order))
+      toast.error('Trình duyệt đang chặn cửa sổ in. Hãy cho phép cửa sổ bật lên rồi thử lại.');
   };
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black bg-opacity-50 p-4"
+      className="fixed inset-0 z-50 flex items-start justify-end overflow-y-auto bg-black bg-opacity-40"
       onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.target === e.currentTarget && !busy) onClose();
+        if (e.target === e.currentTarget && !busy && !pending) onClose();
       }}
     >
-      <div role="dialog" aria-modal="true" aria-label="Chi tiết đơn hàng" className="my-6 w-full max-w-3xl rounded-lg bg-white shadow-xl">
+      <div
+        ref={dialog}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Chi tiết đơn hàng"
+        className="drawer-enter min-h-full w-full max-w-3xl bg-white shadow-xl"
+      >
         <div className="flex items-center justify-between border-b px-6 py-4">
           <div className="flex min-w-0 items-center gap-3">
-            <h2 className="truncate text-lg font-semibold">{order ? `Đơn hàng ${order.order_code}` : 'Chi tiết đơn hàng'}</h2>
+            <h2 className="truncate text-lg font-semibold">
+              {order ? `Đơn hàng ${order.order_code}` : 'Chi tiết đơn hàng'}
+            </h2>
             {order && <OrderStatusBadge status={order.status} />}
           </div>
-          <button onClick={onClose} aria-label="Đóng" className="rounded p-1 hover:bg-gray-100">
+          <button
+            onClick={onClose}
+            disabled={busy || !!pending}
+            aria-label="Đóng"
+            className="rounded p-1 hover:bg-gray-100"
+          >
             <XMarkIcon className="h-6 w-6" />
           </button>
         </div>
 
         <div className="space-y-6 p-6">
           {loading && <LoadingSpinner />}
-          {!loading && error && !order && <ErrorMessage message={error} onRetry={() => { setLoading(true); void load(); }} />}
+          {!loading && error && !order && (
+            <ErrorMessage
+              message={error}
+              onRetry={() => {
+                setLoading(true);
+                void load();
+              }}
+            />
+          )}
 
           {order && (
             <>
@@ -165,17 +196,33 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onC
                   </table>
                 </div>
                 <dl className="mt-3 ml-auto w-full max-w-xs space-y-1 text-sm">
-                  <div className="flex justify-between"><dt className="text-gray-500">Tạm tính</dt><dd>{formatPrice(Number(order.subtotal ?? order.total_amount))}</dd></div>
+                  <div className="flex justify-between">
+                    <dt className="text-gray-500">Tạm tính</dt>
+                    <dd>{formatPrice(Number(order.subtotal ?? order.total_amount))}</dd>
+                  </div>
                   {Number(order.discount) > 0 && (
-                    <div className="flex justify-between"><dt className="text-gray-500">Giảm giá{order.coupon_code ? ` (mã ${order.coupon_code})` : ''}</dt><dd>-{formatPrice(Number(order.discount))}</dd></div>
+                    <div className="flex justify-between">
+                      <dt className="text-gray-500">Giảm giá{order.coupon_code ? ` (mã ${order.coupon_code})` : ''}</dt>
+                      <dd>-{formatPrice(Number(order.discount))}</dd>
+                    </div>
                   )}
-                  <div className="flex justify-between"><dt className="text-gray-500">Phí vận chuyển</dt><dd>{formatPrice(Number(order.shipping_fee ?? 0))}</dd></div>
-                  <div className="flex justify-between border-t pt-2 text-base font-semibold"><dt>Tổng cộng</dt><dd data-testid="order-total">{formatPrice(Number(order.total_amount))}</dd></div>
+                  <div className="flex justify-between">
+                    <dt className="text-gray-500">Phí vận chuyển</dt>
+                    <dd>{formatPrice(Number(order.shipping_fee ?? 0))}</dd>
+                  </div>
+                  <div className="flex justify-between border-t pt-2 text-base font-semibold">
+                    <dt>Tổng cộng</dt>
+                    <dd data-testid="order-total">{formatPrice(Number(order.total_amount))}</dd>
+                  </div>
                 </dl>
               </section>
 
               {isPaymentClaimed(order) && (
-                <section role="alert" className="rounded-lg border-2 border-green-500 bg-green-50 p-4" data-testid="payment-claim">
+                <section
+                  role="alert"
+                  className="rounded-lg border-2 border-green-500 bg-green-50 p-4"
+                  data-testid="payment-claim"
+                >
                   <p className="flex items-center gap-2 font-semibold text-green-800">
                     <BanknotesIcon className="h-5 w-5 shrink-0" />
                     Khách báo đã chuyển khoản lúc {formatDateTime(order.payment_claimed_at as string)}
@@ -211,7 +258,9 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onC
                   {order.status !== 'cancelled' && (
                     <button
                       disabled={busy}
-                      onClick={() => setPending({ kind: 'payment', to: order.payment_status === 'paid' ? 'pending' : 'paid' })}
+                      onClick={() =>
+                        setPending({ kind: 'payment', to: order.payment_status === 'paid' ? 'pending' : 'paid' })
+                      }
                       className="text-blue-600 hover:underline disabled:opacity-50"
                     >
                       {order.payment_status === 'paid' ? 'Bỏ đánh dấu đã thanh toán' : 'Đánh dấu đã thanh toán'}
@@ -219,7 +268,9 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onC
                   )}
                 </div>
                 {order.payment_method === 'cod' && order.payment_status !== 'paid' && order.status !== 'cancelled' && (
-                  <p className="mt-1 text-xs text-gray-400">Đơn COD sẽ tự được đánh dấu đã thanh toán khi chuyển sang "Đã giao".</p>
+                  <p className="mt-1 text-xs text-gray-400">
+                    Đơn COD sẽ tự được đánh dấu đã thanh toán khi chuyển sang "Đã giao".
+                  </p>
                 )}
               </section>
 
@@ -251,7 +302,10 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onC
 
         {order && (
           <div className="flex flex-wrap items-center justify-between gap-3 border-t bg-gray-50 px-6 py-4">
-            <button onClick={handlePrint} className="flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-sm hover:bg-gray-50">
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-sm hover:bg-gray-50"
+            >
               <PrinterIcon className="h-4 w-4" />
               In hóa đơn
             </button>
@@ -286,11 +340,17 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onC
         confirmText="Hủy đơn"
         cancelText="Giữ đơn"
         loading={busy}
-        onCancel={() => { setPending(null); setReason(''); }}
+        onCancel={() => {
+          setPending(null);
+          setReason('');
+        }}
         onConfirm={() => void changeStatus('cancelled', reason.trim() || undefined)}
         message={
           <div className="space-y-3 text-left">
-            <p className="text-center">Đơn sẽ chuyển sang "Đã hủy" và <strong>tồn kho các sản phẩm trong đơn được hoàn lại</strong>. Không thể khôi phục.</p>
+            <p className="text-center">
+              Đơn sẽ chuyển sang "Đã hủy" và <strong>tồn kho các sản phẩm trong đơn được hoàn lại</strong>. Không thể
+              khôi phục.
+            </p>
             <textarea
               value={reason}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setReason(e.target.value)}
@@ -305,7 +365,9 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onC
       <ConfirmDialog
         isOpen={pending?.kind === 'payment'}
         type="info"
-        title={pending?.kind === 'payment' && pending.to === 'paid' ? 'Xác nhận đã nhận tiền?' : 'Bỏ đánh dấu đã thanh toán?'}
+        title={
+          pending?.kind === 'payment' && pending.to === 'paid' ? 'Xác nhận đã nhận tiền?' : 'Bỏ đánh dấu đã thanh toán?'
+        }
         message={
           pending?.kind === 'payment' && pending.to === 'paid'
             ? 'Đơn sẽ được đánh dấu là ĐÃ THANH TOÁN. Trang đơn của khách tự cập nhật và khách nhận email xác nhận (nếu đã cấu hình email).'
@@ -330,6 +392,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ orderId, onC
         onCancel={() => setPending(null)}
         onConfirm={() => void run(() => orderService.rejectPaymentClaim(orderId), 'Đã báo khách: chưa nhận được tiền')}
       />
-    </div>
+    </div>,
+    document.body,
   );
 };

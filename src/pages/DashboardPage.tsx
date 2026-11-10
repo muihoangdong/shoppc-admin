@@ -1,3 +1,4 @@
+import WorkQueue from '../components/Dashboard/WorkQueue';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -260,6 +261,7 @@ const DashboardPage: React.FC = () => {
         </div>
       )}
 
+<WorkQueue pending={stats.pendingOrders} lowStock={stats.lowStockProducts} refreshKey={updatedAt?.toISOString() || ''} />
       {/* Chỉ số chính */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard

@@ -1,3 +1,4 @@
+import TableView from '../components/Common/TableView';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
@@ -171,12 +172,12 @@ const CouponsPage: React.FC = () => {
               />
             </div>
           </div>
-          <div className="overflow-x-auto">
+          <TableView id="CouponsPage" columns={[...['Mã', 'Mức giảm', 'Đơn tối thiểu', 'Thời hạn', 'Đã dùng', 'Trạng thái'], ...(canManage ? ['Thao tác'] : [])]}><div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  {['Mã', 'Mức giảm', 'Đơn tối thiểu', 'Thời hạn', 'Đã dùng', 'Trạng thái', ...(canManage ? [''] : [])].map((h, i) => (
-                    <th key={i} className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 whitespace-nowrap">{h}</th>
+                  {['Mã', 'Mức giảm', 'Đơn tối thiểu', 'Thời hạn', 'Đã dùng', 'Trạng thái', ...(canManage ? ['Thao tác'] : [])].map((h, i) => (
+                    <th key={i} className={`px-4 py-3 text-xs font-medium uppercase tracking-wider text-gray-500 whitespace-nowrap ${['Mức giảm', 'Đơn tối thiểu'].includes(h) ? 'text-right' : 'text-left'}`}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -190,8 +191,8 @@ const CouponsPage: React.FC = () => {
                         {c.description && <div className="max-w-xs truncate text-xs text-gray-500" title={c.description}>{c.description}</div>}
                         {c.once_per_customer && <div className="text-xs text-gray-500">Mỗi khách 1 lần</div>}
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-900 whitespace-nowrap">{discountText(c)}</td>
-                      <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{c.min_order_value ? formatPrice(c.min_order_value) : '—'}</td>
+                      <td className="px-4 py-3 text-right tabular-nums text-sm text-gray-900 whitespace-nowrap">{discountText(c)}</td>
+                      <td className="px-4 py-3 text-right tabular-nums text-sm text-gray-600 whitespace-nowrap">{c.min_order_value ? formatPrice(c.min_order_value) : '—'}</td>
                       <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{periodText(c)}</td>
                       <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{c.used_count}{c.usage_limit !== null ? ` / ${c.usage_limit}` : ''}</td>
                       <td className="px-4 py-3">
@@ -225,7 +226,7 @@ const CouponsPage: React.FC = () => {
                 )}
               </tbody>
             </table>
-          </div>
+          </div></TableView>
         </div>
       )}
 

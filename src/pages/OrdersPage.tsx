@@ -1,3 +1,5 @@
+import { useListState } from '../hooks/useListView';
+import TableView from '../components/Common/TableView';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
@@ -42,16 +44,16 @@ const OrdersPage: React.FC = () => {
   // ?claimed=1: chỉ đơn khách đã báo "Tôi đã chuyển khoản" mà chưa được xác nhận (từ chuông / thông báo)
   const claimed = params.get('claimed') === '1';
 
-  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus | ''>('');
+  const [paymentStatus, setPaymentStatus] = useListState<PaymentStatus | ''>('orders.payment', '');
   // ?q= từ ô tìm kiếm chung ở thanh trên cùng
-  const [searchInput, setSearchInput] = useState(() => params.get('q') || '');
+  const [searchInput, setSearchInput] = useListState('orders.search', params.get('q') || '');
   const urlQuery = params.get('q');
   useEffect(() => {
     if (urlQuery !== null) setSearchInput(urlQuery);
-  }, [urlQuery]);
+  }, [urlQuery, setSearchInput]);
   const search = useDebounce(searchInput.trim(), 400);
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
+  const [from, setFrom] = useListState('orders.from', '');
+  const [to, setTo] = useListState('orders.to', '');
   const [reloadKey, setReloadKey] = useState(0);
 
   const [data, setData] = useState<OrderPage | null>(null);
@@ -73,7 +75,7 @@ const OrdersPage: React.FC = () => {
   // Số trang gắn với bộ lọc: đổi bộ lọc thì về trang 1 NGAY trong lần render đó
   // (trước đây dùng effect nên gửi thừa một request với số trang cũ rồi mới gửi lại với trang 1)
   const filterKey = JSON.stringify([status, paymentStatus, search, from, to, claimed]);
-  const [pageState, setPageState] = useState({ key: filterKey, page: 1 });
+  const [pageState, setPageState] = useListState('orders.page', { key: filterKey, page: 1 });
   const page = pageState.key === filterKey ? pageState.page : 1;
   const setPage = (p: number) => setPageState({ key: filterKey, page: p });
 
@@ -239,12 +241,12 @@ const OrdersPage: React.FC = () => {
                   </button>
                 </div>
               )}
-              <div className="overflow-x-auto">
+              <TableView id="orders" columns={['Mã đơn', 'Khách hàng', 'Tổng tiền', 'Thanh toán', 'Trạng thái', 'Ngày đặt', 'Thao tác']}><div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gray-50">
                     <tr>
                       {['Mã đơn', 'Khách hàng', 'Tổng tiền', 'Thanh toán', 'Trạng thái', 'Ngày đặt', 'Thao tác'].map((h) => (
-                        <th key={h} className="whitespace-nowrap px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">
+                        <th key={h} className={`whitespace-nowrap px-4 py-3 text-xs font-medium uppercase text-gray-500 ${h === 'Tổng tiền' ? 'text-right' : 'text-left'}`}>
                           {h}
                         </th>
                       ))}
@@ -256,12 +258,12 @@ const OrdersPage: React.FC = () => {
                       const busy = actingId === order.id;
                       return (
                         <tr key={order.id} onClick={() => setParam('open', String(order.id))} className="cursor-pointer hover:bg-gray-50">
-                          <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">{order.order_code}</td>
+                          <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900"><button type="button" className="hover:text-blue-600 hover:underline" onClick={(e) => { e.stopPropagation(); setParam('open', String(order.id)); }}>{order.order_code}</button></td>
                           <td className="px-4 py-3">
                             <p className="text-sm text-gray-900">{order.customer_name}</p>
                             <p className="text-xs text-gray-500">{formatPhone(order.customer_phone)}</p>
                           </td>
-                          <td className="whitespace-nowrap px-4 py-3 text-sm font-semibold text-gray-900">{formatPrice(order.total_amount)}</td>
+                          <td className="whitespace-nowrap px-4 py-3 text-right text-sm font-semibold tabular-nums text-gray-900">{formatPrice(order.total_amount)}</td>
                           <td className="px-4 py-3">
                             <PaymentBadge status={order.payment_status} />
                             <p className="mt-1 text-xs text-gray-400">{order.payment_method === 'cod' ? 'COD' : 'Chuyển khoản'}</p>
@@ -315,7 +317,7 @@ const OrdersPage: React.FC = () => {
                     )}
                   </tbody>
                 </table>
-              </div>
+              </div></TableView>
               {data && <Pagination page={data.meta.page} pages={data.meta.pages} total={data.meta.total} pageSize={data.meta.limit} onChange={setPage} unit="đơn" />}
             </>
           )}

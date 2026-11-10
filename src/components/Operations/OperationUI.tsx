@@ -59,7 +59,7 @@ export const OperationModal: React.FC<{ title: string; busy: boolean; onClose: (
     window.addEventListener('keydown', onKey);
     return () => { document.body.style.overflow = overflow; window.removeEventListener('keydown', onKey); previous?.focus(); };
   }, [busy]);
-  return createPortal(<div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/50 p-3 backdrop-blur-sm" onClick={() => !busy && onClose()}>
+  return createPortal(<div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 p-3 backdrop-blur-sm" onClick={() => !busy && onClose()}>
     <div ref={root} role="dialog" aria-modal="true" aria-label={title} className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
       <div className="flex items-center justify-between border-b border-slate-200 p-5"><h2 className="text-lg font-bold text-slate-900">{title}</h2><button type="button" disabled={busy} aria-label="Đóng" onClick={onClose} className="rounded-lg p-1 text-slate-500 hover:bg-slate-100"><XMarkIcon className="h-5 w-5" /></button></div>
       <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="space-y-4 p-5">

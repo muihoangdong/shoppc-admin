@@ -17,10 +17,11 @@
           if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           if (t === 'dark') document.documentElement.classList.add('dark');
           document.documentElement.style.colorScheme = t;
+          document.documentElement.style.backgroundColor = t === 'dark' ? '#233649' : '#EFF6FC';
         } catch (e) {}
       })();
     </script>
-    <meta name="theme-color" content="#313acd" />
+    <meta name="theme-color" content="#EFF6FC" />
   </head>
   <body>
     <div id="root"></div>

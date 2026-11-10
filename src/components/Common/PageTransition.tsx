@@ -22,9 +22,9 @@ const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) =
         className="pointer-events-none fixed left-0 right-0 top-0 z-[70] h-0.5 origin-left bg-gradient-to-r from-sky-400 via-blue-500 to-blue-700"
         initial={{ scaleX: 0, opacity: 1 }}
         animate={{ scaleX: 1, opacity: 0 }}
-        transition={{ scaleX: { duration: 0.45, ease: EASE }, opacity: { duration: 0.25, delay: 0.4 } }}
+        transition={{ scaleX: { duration: 0.22, ease: EASE }, opacity: { duration: 0.15, delay: 0.15 } }}
       />
-      <motion.div key={pathname} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.32, ease: EASE }}>
+      <motion.div key={pathname} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2, ease: EASE }}>
         {children}
       </motion.div>
     </>
