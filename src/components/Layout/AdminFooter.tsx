@@ -5,7 +5,7 @@ const AdminFooter: React.FC = () => {
     <footer className="mt-auto border-t border-slate-200 py-4">
       <div className="container mx-auto px-6">
         <div className="text-center text-[11px] font-normal text-slate-500">
-          <p>© {new Date().getFullYear()} SHOPPC · Arctic Frost</p>
+          <p>© {new Date().getFullYear()} SHOPPC</p>
         </div>
       </div>
     </footer>

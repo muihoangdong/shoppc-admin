@@ -3,6 +3,7 @@ import { BanknotesIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { apiErrorMessage } from '../../services/api';
 import { PaymentSettings, paymentSettingsService } from '../../services/paymentSettingsService';
+import { ConfirmDialog } from '../Common/ConfirmDialog';
 
 const inputClass = 'w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-blue-500';
 
@@ -23,6 +24,7 @@ const PaymentSettingsCard: React.FC = () => {
   const [data, setData] = useState<PaymentSettings | null>(null);
   const [form, setForm] = useState({ bank_code: 'VCB', account_no: '', account_name: '' });
   const [saving, setSaving] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [loadError, setLoadError] = useState('');
 
   const apply = (d: PaymentSettings) => {
@@ -43,8 +45,10 @@ const PaymentSettingsCard: React.FC = () => {
       const { message, data: d } = await paymentSettingsService.save(values);
       apply(d);
       toast.success(message);
+      return true;
     } catch (error) {
       toast.error(apiErrorMessage(error, 'Không thể lưu'));
+      return false;
     } finally {
       setSaving(false);
     }
@@ -52,10 +56,17 @@ const PaymentSettingsCard: React.FC = () => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (saving || confirmDelete) return;
     const values = { bank_code: form.bank_code, account_no: form.account_no.replace(/\s+/g, ''), account_name: normalizeAccountName(form.account_name) };
     if (!/^[0-9]{6,19}$/.test(values.account_no)) return toast.error('Số tài khoản chỉ gồm 6–19 chữ số');
     if (values.account_name.length < 3) return toast.error('Nhập tên chủ tài khoản');
     void save(values);
+  };
+
+  const deleteAccount = async () => {
+    if (!confirmDelete || saving) return;
+    const deleted = await save({ bank_code: '', account_no: '', account_name: '' });
+    if (deleted) setConfirmDelete(false);
   };
 
   const changed = !!data && (form.bank_code !== (data.bank_code || 'VCB') || form.account_no !== data.account_no || form.account_name !== data.account_name);
@@ -67,13 +78,7 @@ const PaymentSettingsCard: React.FC = () => {
         <div className="rounded-2xl bg-green-100 p-3 text-green-700">
           <BanknotesIcon className="h-5 w-5" />
         </div>
-        <div>
-          <h2 className="text-lg font-semibold text-slate-900">Thanh toán chuyển khoản (VietQR)</h2>
-          <p className="mt-1 text-sm text-slate-500">
-            Tài khoản ngân hàng nhận tiền. Khách đặt đơn chọn “Chuyển khoản” sẽ thấy mã QR có sẵn số tiền và nội dung; chuyển xong bấm “Tôi đã chuyển khoản” thì
-            trang quản trị báo ngay (kèm tiếng ting và email về hộp thư cửa hàng).
-          </p>
-        </div>
+        <h2 className="self-center text-lg font-semibold text-slate-900">Thanh toán chuyển khoản (VietQR)</h2>
       </div>
 
       {loadError && <p role="alert" className="mb-4 rounded-2xl bg-red-50 p-4 text-sm text-red-700">{loadError}</p>}
@@ -120,10 +125,10 @@ const PaymentSettingsCard: React.FC = () => {
                 <button
                   type="button"
                   disabled={saving}
-                  onClick={() => void save({ bank_code: '', account_no: '', account_name: '' })}
+                  onClick={() => setConfirmDelete(true)}
                   className="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50"
                 >
-                  Xóa (dùng tài khoản trong .env)
+                  Xóa tài khoản
                 </button>
               )}
               <button
@@ -144,19 +149,26 @@ const PaymentSettingsCard: React.FC = () => {
                 <p className="mt-2 font-medium text-slate-800">{data.active.bank_name}</p>
                 <p className="text-slate-800">{data.active.account_no}</p>
                 <p className="text-slate-800">{data.active.account_name}</p>
-                <p className="mt-2 text-xs text-slate-500">
-                  {data.active.source === 'settings' ? 'Lấy từ trang này.' : 'Lấy từ file shoppc-be/.env (BANK_...).'} Quét thử bằng app ngân hàng (10.000đ, nội dung SHOPPC TEST) để kiểm tra đúng tên.
-                </p>
               </>
             ) : (
               <p className="py-8 text-amber-700">Chưa có tài khoản nhận tiền — khách chọn chuyển khoản sẽ không thấy mã QR. Nhập số tài khoản bên cạnh rồi bấm Lưu.</p>
             )}
-            <p className="mt-3 border-t pt-3 text-xs text-slate-500">
-              {data.auto_confirm ? '✅ Đã bật SePay: đơn tự xác nhận khi tiền về.' : 'Xác nhận thủ công: khách bấm “Tôi đã chuyển khoản” → bạn kiểm tra app ngân hàng → bấm “Xác nhận đã nhận tiền” trong đơn.'}
-            </p>
+            {data.auto_confirm && <p className="mt-3 border-t pt-3 text-xs text-slate-500">Đã bật SePay. Đơn tự xác nhận khi tiền về.</p>}
           </div>
         </div>
       )}
+      <ConfirmDialog
+        isOpen={confirmDelete}
+        type="danger"
+        title="Xóa tài khoản ngân hàng?"
+        message={data?.env_configured
+          ? 'VietQR sẽ chuyển sang tài khoản ngân hàng dự phòng.'
+          : 'Khách sẽ không thấy mã VietQR cho đến khi bạn lưu tài khoản ngân hàng mới.'}
+        confirmText="Xác nhận xóa"
+        loading={saving}
+        onCancel={() => setConfirmDelete(false)}
+        onConfirm={() => void deleteAccount()}
+      />
     </div>
   );
 };

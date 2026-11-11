@@ -26,8 +26,8 @@ export const Field: React.FC<{ label: string; children: React.ReactNode; hint?: 
   <label className="block min-w-0 space-y-1"><span className="text-xs font-medium text-slate-600">{label}</span>{children}{hint && <span className="block text-xs text-slate-400">{hint}</span>}</label>
 );
 
-export const TextField: React.FC<{ label: string; value: any; onChange: (value: string) => void; required?: boolean; type?: string; min?: number; max?: number; textarea?: boolean; hint?: string }> = ({ label, value, onChange, textarea, hint, ...props }) => (
-  <Field label={label} hint={hint}>{textarea ? <textarea aria-label={label} rows={3} className={inputClass} value={value ?? ''} onChange={(e) => onChange(e.target.value)} required={props.required} />
+export const TextField: React.FC<{ label: string; value: any; onChange: (value: string) => void; required?: boolean; type?: string; min?: number; max?: number; textarea?: boolean; hint?: string; placeholder?: string }> = ({ label, value, onChange, textarea, hint, ...props }) => (
+  <Field label={label} hint={hint}>{textarea ? <textarea aria-label={label} rows={3} className={inputClass} value={value ?? ''} onChange={(e) => onChange(e.target.value)} required={props.required} placeholder={props.placeholder} />
     : <input aria-label={label} className={inputClass} value={value ?? ''} onChange={(e) => onChange(e.target.value)} {...props} />}</Field>
 );
 

@@ -141,7 +141,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuClick, pendingOrders, l
             rel="noreferrer"
             className="hidden items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-[11px] font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600 lg:flex"
           >
-            Xem Storefront <ArrowTopRightOnSquareIcon className="h-3.5 w-3.5" />
+            Xem trang chủ <ArrowTopRightOnSquareIcon className="h-3.5 w-3.5" />
           </a>
 
           {/* Giao diện sáng/tối */}

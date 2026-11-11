@@ -37,50 +37,60 @@ export type OperationKind =
   | 'brands'
   | 'templates'
   | 'audit';
-const meta: Record<OperationKind, { title: string; add?: string; statuses?: string[] }> = {
+const meta: Record<OperationKind, { title: string; searchPlaceholder: string; add?: string; statuses?: string[] }> = {
   suppliers: {
     title: 'Nhà cung cấp',
+    searchPlaceholder: 'Tên, mã nhà cung cấp hoặc số điện thoại…',
     add: 'Thêm nhà cung cấp',
   },
   receipts: {
     title: 'Nhập kho',
+    searchPlaceholder: 'Mã phiếu nhập hoặc tên nhà cung cấp…',
     add: 'Lập phiếu nhập',
     statuses: ['draft', 'received', 'cancelled'],
   },
   movements: {
     title: 'Lịch sử xuất / nhập kho',
+    searchPlaceholder: 'Tên sản phẩm, SKU hoặc lý do…',
     add: 'Điều chỉnh tồn',
   },
   serials: {
     title: 'Serial sản phẩm',
+    searchPlaceholder: 'Serial, tên sản phẩm hoặc mã đơn…',
     add: 'Đăng ký serial',
     statuses: ['in_stock', 'sold', 'returned', 'repair', 'retired'],
   },
   warranties: {
     title: 'Phiếu bảo hành',
+    searchPlaceholder: 'Mã phiếu bảo hành, serial hoặc tên khách…',
     add: 'Tiếp nhận bảo hành',
     statuses: ['active', 'received', 'diagnosing', 'repairing', 'resolved', 'rejected'],
   },
   returns: {
     title: 'Đổi trả & hoàn tiền',
+    searchPlaceholder: 'Mã đổi trả, mã đơn hoặc tên khách…',
     add: 'Tạo yêu cầu đổi trả',
     statuses: ['requested', 'approved', 'received', 'refunded', 'closed', 'rejected', 'cancelled'],
   },
   shipments: {
     title: 'Vận chuyển',
+    searchPlaceholder: 'Mã vận đơn, hãng vận chuyển hoặc mã đơn…',
     add: 'Tạo vận đơn',
     statuses: ['created', 'picked_up', 'in_transit', 'delivered', 'failed', 'returned', 'cancelled'],
   },
   brands: {
     title: 'Thương hiệu',
+    searchPlaceholder: 'Tên thương hiệu…',
     add: 'Thêm thương hiệu',
   },
   templates: {
     title: 'Thông số chuẩn',
+    searchPlaceholder: 'Tên mẫu thông số hoặc tên danh mục…',
     add: 'Thêm mẫu thông số',
   },
   audit: {
     title: 'Nhật ký thao tác',
+    searchPlaceholder: 'Người thao tác, hành động hoặc nội dung…',
   },
 };
 const emptyLookups: OperationLookups = {
@@ -650,7 +660,7 @@ const OperationsPage: React.FC<{ kind: OperationKind }> = ({ kind }) => {
       </div>
       <div className="frost-card flex flex-wrap items-end gap-3 p-4">
         <div className="min-w-[180px] flex-1">
-          <TextField label="Tìm kiếm" value={search} onChange={setSearch} />
+          <TextField label="Tìm kiếm" value={search} onChange={setSearch} placeholder={info.searchPlaceholder} />
         </div>
         {info.statuses && (
           <div className="min-w-[160px]">

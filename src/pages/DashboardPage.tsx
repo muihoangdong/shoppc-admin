@@ -185,12 +185,7 @@ const DashboardPage: React.FC = () => {
       {/* Tiêu đề + bộ chọn kỳ */}
       <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Tổng quan hoạt động kinh doanh</h1>
-            <span className="frost-chip border-blue-200 bg-blue-50 text-blue-700">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-600" /> Arctic Frost
-            </span>
-          </div>
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Tổng quan hoạt động kinh doanh</h1>
           <p className="mt-1 flex items-center gap-1.5 text-sm text-slate-500">
             <ArrowPathIcon className={`h-4 w-4 ${refreshing ? 'animate-spin text-blue-600' : ''}`} />
             {updatedAt ? `Cập nhật lúc ${updatedAt.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}` : 'Đang cập nhật'}
