@@ -66,3 +66,8 @@ model-viewer {
 
 /* Surface role applies after generated utility classes. */
 .bg-white { background-color: rgb(var(--surface) / var(--tw-bg-opacity, 1)); }
+
+/* Chữ xanh trên nền tối dùng xanh nhạt, nút xanh giữ nền đậm với chữ trắng. */
+:where(.dark) :is(.text-blue-600, .text-blue-700) {
+  color: rgb(var(--c-indigo-400));
+}
