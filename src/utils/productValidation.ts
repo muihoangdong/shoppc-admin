@@ -1,4 +1,5 @@
 /** Kiểm tra form sản phẩm ở phía trình duyệt (backend vẫn kiểm tra lại đầy đủ). Hàm thuần, không phụ thuộc React. */
+import type { Model3dConfig } from '../types';
 
 export interface SpecRow {
   key: string;
@@ -34,7 +35,7 @@ export interface ProductPayload {
   part_type?: string | null;
   build_specs?: Record<string, unknown> | null;
   original_price?: number | null;
-  model_3d?: { glb_url: string; usdz_url?: string; poster_url?: string; enabled?: boolean } | null;
+  model_3d?: (Model3dConfig & { glb_url: string }) | null;
 }
 
 export const validateProductForm = (v: ProductFormValues): { errors: ProductFormErrors; payload: ProductPayload | null } => {

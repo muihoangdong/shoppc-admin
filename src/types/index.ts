@@ -41,6 +41,7 @@ export interface Model3dConfig {
   usdz_url?: string;
   poster_url?: string;
   enabled?: boolean;
+  dimensions_cm?: Partial<Record<'length' | 'width' | 'height', number>>;
 }
 
 export interface Category {

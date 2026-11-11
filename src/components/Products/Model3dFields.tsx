@@ -3,20 +3,27 @@ import { CubeIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { storefrontAsset } from '../../utils/storefront';
 import FileUploadButton from './FileUploadButton';
 
+const dimensionFields = [
+  { key: 'length', label: 'Dài' },
+  { key: 'width', label: 'Rộng' },
+  { key: 'height', label: 'Cao' },
+] as const;
+type Dimension = (typeof dimensionFields)[number]['key'];
+
 export interface Model3dValue {
   glb: string;
   usdz: string;
   poster: string;
   enabled: boolean;
+  dimensions: Record<Dimension, string>;
 }
 
-export const EMPTY_MODEL3D: Model3dValue = { glb: '', usdz: '', poster: '', enabled: true };
+export const EMPTY_MODEL3D: Model3dValue = { glb: '', usdz: '', poster: '', enabled: true, dimensions: { length: '', width: '', height: '' } };
 
 const URL_RE = /^(https?:\/\/|\/(?!\/))/i;
 const ext = (url: string) => url.split(/[?#]/)[0].toLowerCase();
 
-/** Kiểm tra giống backend (src/config/product3d.js). Trả về thông báo lỗi hoặc ''. */
-export const validateModel3d = (v: Model3dValue): string => {
+const validateModelLinks = (v: Model3dValue): string => {
   const glb = v.glb.trim();
   const usdz = v.usdz.trim();
   const poster = v.poster.trim();
@@ -28,15 +35,39 @@ export const validateModel3d = (v: Model3dValue): string => {
   return '';
 };
 
-export const toPayload = (v: Model3dValue) =>
-  v.glb.trim()
-    ? {
-        glb_url: v.glb.trim(),
-        ...(v.usdz.trim() ? { usdz_url: v.usdz.trim() } : {}),
-        ...(v.poster.trim() ? { poster_url: v.poster.trim() } : {}),
-        enabled: v.enabled,
-      }
-    : null;
+const parseDimension = (text: string) => {
+  const value = text.trim().replace(',', '.');
+  if (!/^(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(value)) return undefined;
+  const cm = Number(value);
+  return Number.isFinite(cm) && cm > 0 ? cm : undefined;
+};
+
+export const validateModel3d = (v: Model3dValue): string => {
+  const linkError = validateModelLinks(v);
+  if (linkError) return linkError;
+  for (const { key, label } of dimensionFields) {
+    if (!v.dimensions[key].trim()) continue;
+    if (!v.glb.trim()) return 'Cần tải lên hoặc nhập link GLB/GLTF để lưu kích thước 3D';
+    if (parseDimension(v.dimensions[key]) === undefined) return `${label} phải là số lớn hơn 0 (cm)`;
+  }
+  return '';
+};
+
+export const toPayload = (v: Model3dValue) => {
+  if (!v.glb.trim()) return null;
+  const dimensions: Partial<Record<Dimension, number>> = {};
+  for (const { key } of dimensionFields) {
+    const value = parseDimension(v.dimensions[key]);
+    if (value !== undefined) dimensions[key] = value;
+  }
+  return {
+    glb_url: v.glb.trim(),
+    ...(v.usdz.trim() ? { usdz_url: v.usdz.trim() } : {}),
+    ...(v.poster.trim() ? { poster_url: v.poster.trim() } : {}),
+    ...(Object.keys(dimensions).length ? { dimensions_cm: dimensions } : {}),
+    enabled: v.enabled,
+  };
+};
 
 interface Props {
   value: Model3dValue;
@@ -57,7 +88,7 @@ const inputClass = 'w-full rounded-lg border border-slate-300 px-3 py-2 text-sm 
 const Model3dFields: React.FC<Props> = ({ value, onChange, error, imageUrl, disabled, onBusyChange }) => {
   const [preview, setPreview] = useState(false);
   const set = (patch: Partial<Model3dValue>) => onChange({ ...value, ...patch });
-  const hasGlb = !!value.glb.trim() && !validateModel3d(value);
+  const hasGlb = !!value.glb.trim() && !validateModelLinks(value);
 
   useEffect(() => {
     if (!hasGlb) setPreview(false);
@@ -109,6 +140,25 @@ const Model3dFields: React.FC<Props> = ({ value, onChange, error, imageUrl, disa
             <input id="pf-poster" type="text" value={value.poster} onChange={(e) => set({ poster: e.target.value })} placeholder="Trống: dùng ảnh sản phẩm" className={inputClass} />
           </div>
         </div>
+        <fieldset>
+          <legend className="mb-1 text-sm font-medium text-slate-700">Kích thước hiển thị (cm)</legend>
+          <div className="grid grid-cols-3 gap-3">
+            {dimensionFields.map(({ key, label }) => (
+              <label key={key} className="block text-xs font-medium text-slate-600">
+                <span className="mb-1 block">{label}</span>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={value.dimensions[key]}
+                  onChange={(e) => set({ dimensions: { ...value.dimensions, [key]: e.target.value } })}
+                  aria-describedby="pf-dimensions-hint"
+                  className={inputClass}
+                />
+              </label>
+            ))}
+          </div>
+          <p id="pf-dimensions-hint" className="mt-1 text-xs text-slate-500">Ô để trống và chế độ AR dùng kích thước trong file mô hình.</p>
+        </fieldset>
         <label className="flex items-center gap-2 text-sm text-slate-700">
           <input type="checkbox" checked={value.enabled} onChange={(e) => set({ enabled: e.target.checked })} className="h-4 w-4 rounded border-slate-300 text-blue-600" />
           Hiện nút xem 3D trên cửa hàng
@@ -121,16 +171,18 @@ const Model3dFields: React.FC<Props> = ({ value, onChange, error, imageUrl, disa
         </p>
       )}
 
-      {preview && hasGlb && <ModelPreview src={storefrontAsset(value.glb.trim())} poster={value.poster.trim() || imageUrl} />}
+      {preview && hasGlb && (
+        <ModelPreview src={storefrontAsset(value.glb.trim())} poster={value.poster.trim() || imageUrl} dimensions={value.dimensions} />
+      )}
     </fieldset>
   );
 };
 
 /** Xem thử file GLB bằng <model-viewer> (nạp thư viện khi cần) */
-const ModelPreview: React.FC<{ src: string; poster?: string }> = ({ src, poster }) => {
+const ModelPreview: React.FC<{ src: string; poster?: string; dimensions: Model3dValue['dimensions'] }> = ({ src, poster, dimensions }) => {
   const [ready, setReady] = useState(false);
   const [state, setState] = useState<'loading' | 'ok' | 'error'>('loading');
-  const [info, setInfo] = useState('');
+  const [fileDimensions, setFileDimensions] = useState<Record<Dimension, number> | null>(null);
   const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -148,7 +200,7 @@ const ModelPreview: React.FC<{ src: string; poster?: string }> = ({ src, poster 
     const onLoad = () => {
       setState('ok');
       const d = mv.getDimensions?.();
-      if (d) setInfo(`Kích thước trong file: ${(d.x * 100).toFixed(1)} × ${(d.y * 100).toFixed(1)} × ${(d.z * 100).toFixed(1)} cm (rộng × cao × sâu)`);
+      setFileDimensions(d ? { length: d.z * 100, width: d.x * 100, height: d.y * 100 } : null);
     };
     const onError = () => setState('error');
     mv.addEventListener('load', onLoad);
@@ -182,8 +234,16 @@ const ModelPreview: React.FC<{ src: string; poster?: string }> = ({ src, poster 
           </div>
         )}
       </div>
-      <p className="mt-1 text-xs text-slate-500">{state === 'ok' ? info || 'Tải mô hình thành công.' : state === 'loading' ? 'Đang tải mô hình…' : ''}</p>
-      {state === 'ok' && <p className="text-xs text-slate-400">AR dùng kích thước trong file: hãy đảm bảo mô hình được dựng đúng tỉ lệ thật (đơn vị mét).</p>}
+      {state === 'loading' && <p className="mt-1 text-xs text-slate-500">Đang tải mô hình…</p>}
+      {state === 'ok' && fileDimensions && (
+        <p className="mt-1 text-xs text-slate-500">
+          {dimensionFields.map(({ key, label }) => {
+            const manual = parseDimension(dimensions[key]);
+            const cm = manual ?? fileDimensions[key];
+            return `${label} ${cm.toLocaleString('vi-VN', manual === undefined ? { maximumFractionDigits: 1 } : { maximumSignificantDigits: 21 })} cm`;
+          }).join(' · ')}
+        </p>
+      )}
     </div>
   );
 };

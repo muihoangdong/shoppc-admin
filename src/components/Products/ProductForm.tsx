@@ -79,6 +79,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           usdz: initialData.model_3d.usdz_url ?? '',
           poster: initialData.model_3d.poster_url ?? '',
           enabled: initialData.model_3d.enabled !== false,
+          dimensions: {
+            length: String(initialData.model_3d.dimensions_cm?.length ?? ''),
+            width: String(initialData.model_3d.dimensions_cm?.width ?? ''),
+            height: String(initialData.model_3d.dimensions_cm?.height ?? ''),
+          },
         }
       : EMPTY_MODEL3D,
   );
