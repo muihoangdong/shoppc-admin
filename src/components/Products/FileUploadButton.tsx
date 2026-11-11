@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
-import { UploadedFile, uploadFile } from '../../services/uploadService';
+import { GLB_UPLOAD_LIMIT_MB, IMAGE_UPLOAD_LIMIT_MB, MODEL_UPLOAD_LIMIT_MB, UploadedFile, uploadFile } from '../../services/uploadService';
 
 interface Props {
   kind: 'image' | 'model';
@@ -83,7 +83,11 @@ const FileUploadButton: React.FC<Props> = ({ kind, disabled, onUploaded, onBusyC
         {busy ? `Đang tải… ${progress}%` : kind === 'image' ? 'Tải ảnh từ máy tính' : 'Tải mô hình 3D từ máy tính'}
       </button>
       {busy && <progress value={progress} max={100} aria-label="Tiến độ tải file" className="block h-1.5 w-full accent-blue-600" />}
-      <p className="text-xs text-slate-500">{kind === 'image' ? `PNG, JPG, WEBP · tối đa 10 MB/ảnh${maxFiles > 1 ? ' · chọn được nhiều ảnh cùng lúc' : ''}` : 'GLB, GLTF tự chứa texture, USDZ · tối đa 50 MB/file. Có thể chọn GLB và USDZ cùng lúc.'}</p>
+      <p className="text-xs text-slate-500">
+        {kind === 'image'
+          ? `PNG, JPG, WEBP · tối đa ${IMAGE_UPLOAD_LIMIT_MB} MB/ảnh${maxFiles > 1 ? ' · chọn được nhiều ảnh cùng lúc' : ''}`
+          : `GLB tối đa ${GLB_UPLOAD_LIMIT_MB} MB · GLTF tự chứa texture và USDZ tối đa ${MODEL_UPLOAD_LIMIT_MB} MB/file. Có thể chọn GLB và USDZ cùng lúc.`}
+      </p>
       {error && <p role="alert" className="text-xs text-red-600">{error}</p>}
       {message && <p role="status" className="text-xs text-green-600">{message}</p>}
     </div>

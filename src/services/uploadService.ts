@@ -1,5 +1,9 @@
 import api, { API_BASE_URL, apiErrorMessage } from './api';
 
+export const IMAGE_UPLOAD_LIMIT_MB = 10;
+export const MODEL_UPLOAD_LIMIT_MB = 50;
+export const GLB_UPLOAD_LIMIT_MB = 100;
+
 export interface UploadedFile {
   url: string;
   filename: string;
@@ -13,16 +17,17 @@ export const uploadFile = async (
   onProgress: (percent: number) => void,
   signal?: AbortSignal
 ): Promise<UploadedFile> => {
-  const maxMb = kind === 'image' ? 10 : 50;
   const allowed = kind === 'image' ? /\.(png|jpe?g|webp)$/i : /\.(glb|gltf|usdz)$/i;
   if (!allowed.test(file.name)) throw new Error(kind === 'image' ? 'Chọn ảnh PNG, JPG, JPEG hoặc WEBP' : 'Chọn file GLB, GLTF hoặc USDZ');
+  const isGlb = kind === 'model' && /\.glb$/i.test(file.name);
+  const maxMb = kind === 'image' ? IMAGE_UPLOAD_LIMIT_MB : isGlb ? GLB_UPLOAD_LIMIT_MB : MODEL_UPLOAD_LIMIT_MB;
   if (!file.size) throw new Error('File rỗng');
   if (file.size > maxMb * 1024 * 1024) throw new Error(`File tối đa ${maxMb} MB`);
   try {
     const response = await api.post<{ success: boolean; data: UploadedFile }>(`/uploads/${kind}`, file, {
       params: { filename: file.name },
       headers: { 'Content-Type': 'application/octet-stream' },
-      timeout: 180000,
+      timeout: isGlb ? 360000 : 180000,
       signal,
       onUploadProgress: (event) => onProgress(Math.min(100, Math.round((event.loaded / (event.total || file.size)) * 100))),
     });
