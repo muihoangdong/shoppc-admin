@@ -1,17 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 64" role="img" aria-label="Shoppc Admin">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1e293b"/>
-      <stop offset="1" stop-color="#0f172a"/>
-    </linearGradient>
-  </defs>
-  <rect x="1.5" y="1.5" width="61" height="61" rx="13" fill="url(#g)" stroke="#6366f1" stroke-width="3"/>
-  <rect x="12" y="14" width="40" height="27" rx="4" fill="none" stroke="#a5b4fc" stroke-width="3.5"/>
-  <rect x="19" y="28" width="5" height="8" rx="1.5" fill="#818cf8"/>
-  <rect x="29.5" y="22" width="5" height="14" rx="1.5" fill="#6366f1"/>
-  <rect x="40" y="25" width="5" height="11" rx="1.5" fill="#34d399"/>
-  <path d="M32 42v6M23 49.5h18" stroke="#a5b4fc" stroke-width="3.5" stroke-linecap="round"/>
-  <text x="78" y="44" textLength="134" lengthAdjust="spacingAndGlyphs" font-family="Inter, 'Segoe UI', Roboto, Arial, sans-serif" font-size="34" font-weight="800" letter-spacing="1" fill="#0f172a">SHOPPC</text>
-  <rect x="228" y="18" width="78" height="28" rx="7" fill="#4f46e5"/>
-  <text x="267" y="38.5" text-anchor="middle" textLength="60" lengthAdjust="spacingAndGlyphs" font-family="Inter, 'Segoe UI', Roboto, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="2" fill="#fff">ADMIN</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 208" role="img" aria-label="Shoppc Admin">
+  <g fill="#0a0a0a">
+    <path transform="translate(67.2 6) scale(1.9)" d="M32 16 20.8 9.6C15.1 6.3 8 10.4 8 16.9c0 3.8 2.1 6.8 5.6 8.9l16.2 9.4c5.5 3.2 6.3 8.2 2.2 12.8l11.2 6.5C48.9 57.8 56 53.7 56 47.2c0-3.8-2.1-6.8-5.6-8.9l-16.2-9.4c-5.5-3.2-6.3-8.3-2.2-12.9ZM32 16l11.4-6.6C49 6.1 56 10.1 56 16.6s-7 10.5-12.6 7.2L32 17.2l-.9-.6Zm0 32-11.4 6.6C15 57.9 8 53.9 8 47.4s7-10.5 12.6-7.2L32 46.8l.9.6Z"/>
+    <text x="128" y="163" text-anchor="middle" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="43" font-weight="800" letter-spacing="5">SHOPPC</text>
+    <text x="128" y="191" text-anchor="middle" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="5">ADMIN</text>
+  </g>
 </svg>
