@@ -27,7 +27,7 @@ export const applyTheme = (theme: Theme): void => {
   }
   root.classList.toggle('dark', theme === 'dark');
   root.style.colorScheme = theme;
-  const background = theme === 'dark' ? '#101A2B' : '#F8F9FF';
+  const background = theme === 'dark' ? '#101E1B' : '#F4FAF7';
   root.style.backgroundColor = background;
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', background);
 };

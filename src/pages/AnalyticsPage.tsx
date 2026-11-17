@@ -19,6 +19,7 @@ import LoadingSpinner from '../components/Common/LoadingSpinner';
 import ErrorMessage from '../components/Common/ErrorMessage';
 import { StatsCard } from '../components/Dashboard/StatsCard';
 import usePageTitle from '../hooks/usePageTitle';
+import useThemeColors from '../hooks/useThemeColors';
 import { formatNumber, formatPercent, formatPrice, formatShortNumber } from '../utils/formatters';
 import { statusBadge } from '../utils/orderStatus';
 import { BanknotesIcon, ChartBarIcon, ReceiptPercentIcon, XCircleIcon } from '@heroicons/react/24/outline';
@@ -34,7 +35,7 @@ const PERIODS: { value: AnalyticsPeriod; label: string }[] = [
   { value: 'this_year', label: 'Năm nay' },
 ];
 
-const PIE_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#84cc16', '#6b7280'];
+const CATEGORY_COLORS = ['#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#84cc16', '#6b7280'];
 
 /** 2026-10-04 -> 04/10 ; 2026-10 -> 10/2026 */
 const bucketLabel = (b: string) => {
@@ -47,6 +48,8 @@ const PAYMENT_LABELS: Record<string, string> = { cod: 'Thanh toán khi nhận h�
 
 const AnalyticsPage: React.FC = () => {
   usePageTitle('Thống kê');
+  const colors = useThemeColors();
+  const pieColors = [colors.primary, ...CATEGORY_COLORS];
   const [period, setPeriod] = useState<PeriodChoice>('30d');
   const [customFrom, setCustomFrom] = useState('');
   const [customTo, setCustomTo] = useState('');
@@ -168,8 +171,8 @@ const AnalyticsPage: React.FC = () => {
                         formatter={(value: number, name: string) => (name === 'Doanh thu' ? [formatPrice(value), name] : [value, name])}
                       />
                       <Legend />
-                      <Area yAxisId="revenue" type="monotone" dataKey="revenue" name="Doanh thu" stroke="#6366f1" fill="rgba(99, 102, 241, 0.18)" />
-                      <Bar yAxisId="orders" dataKey="orders" name="Số đơn" fill="#10b981" barSize={14} />
+                      <Area yAxisId="revenue" type="monotone" dataKey="revenue" name="Doanh thu" stroke={colors.primary} fill={colors.primary} fillOpacity={0.18} />
+                      <Bar yAxisId="orders" dataKey="orders" name="Số đơn" fill={colors.series[1]} barSize={14} />
                     </ComposedChart>
                   </ResponsiveContainer>
                 </div>
@@ -185,7 +188,7 @@ const AnalyticsPage: React.FC = () => {
                           <PieChart>
                             <Pie data={data.by_category_excluding_cancelled} dataKey="revenue" nameKey="category" innerRadius={45} outerRadius={85}>
                               {data.by_category_excluding_cancelled.map((c, i) => (
-                                <Cell key={c.category} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                                <Cell key={c.category} fill={pieColors[i % pieColors.length]} />
                               ))}
                             </Pie>
                             <Tooltip formatter={(v: number) => formatPrice(v)} />
@@ -195,7 +198,7 @@ const AnalyticsPage: React.FC = () => {
                           {data.by_category_excluding_cancelled.map((c, i) => (
                             <li key={c.category} className="flex items-center justify-between gap-2">
                               <span className="flex min-w-0 items-center gap-2">
-                                <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: PIE_COLORS[i % PIE_COLORS.length] }} />
+                                <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: pieColors[i % pieColors.length] }} />
                                 <span className="truncate">{c.category}</span>
                               </span>
                               <span className="shrink-0 text-gray-500">{formatPrice(c.revenue)}</span>

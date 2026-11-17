@@ -21,14 +21,15 @@ export default function useThemeColors() {
       const raw = css.getPropertyValue(name).trim();
       return raw ? `rgb(${raw.split(/\s+/).join(', ')})` : fallback;
     };
+    const primary = dark ? v('--c-indigo-400-light', '#8bdbca') : v('--c-indigo-600', '#0f766e');
     return {
       dark,
-      primary: v('--c-indigo-600', '#313acd'),
-      primarySoft: v('--c-indigo-400', '#6f7df2'),
-      grid: v('--c-slate-200', '#dee7f4'),
-      muted: v('--c-slate-500', '#5f708a'),
+      primary,
+      primarySoft: v('--c-indigo-400', '#458e80'),
+      grid: v('--c-slate-200', '#d7e7e1'),
+      muted: v('--c-slate-500', '#516a65'),
       surface: v('--surface', '#ffffff'),
-      series: [v('--c-indigo-600', '#313acd'), '#1aa3f5', v('--c-purple-400', '#c084fc'), v('--c-orange-400', '#fb923c'), v('--c-teal-500', '#14b8a6'), v('--c-slate-400', '#8091aa')],
+      series: [primary, '#1aa3f5', v('--c-purple-400', '#c084fc'), v('--c-orange-400', '#fb923c'), v('--c-teal-500', '#14b8a6'), v('--c-slate-400', '#607871')],
     };
   }, [dark]);
 }

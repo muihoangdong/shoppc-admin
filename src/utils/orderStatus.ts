@@ -24,8 +24,8 @@ export const STATUS_LABELS: Record<OrderStatus, string> = {
 // Khai báo đầy đủ tên class (không ghép chuỗi) để Tailwind nhận diện được
 export const STATUS_BADGE: Record<OrderStatus, string> = {
   pending: 'bg-yellow-100 text-yellow-800',
-  processing: 'bg-blue-100 text-blue-800',
-  shipped: 'bg-indigo-100 text-indigo-800',
+  processing: 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-200',
+  shipped: 'bg-purple-100 text-purple-800',
   delivered: 'bg-teal-100 text-teal-800',
   completed: 'bg-green-100 text-green-800',
   cancelled: 'bg-red-100 text-red-800',
