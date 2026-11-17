@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 208" role="img" aria-label="Shoppc Admin">
-  <g fill="#0a0a0a">
+  <g fill="#0f766e">
     <path transform="translate(67.2 6) scale(1.9)" d="M32 16 20.8 9.6C15.1 6.3 8 10.4 8 16.9c0 3.8 2.1 6.8 5.6 8.9l16.2 9.4c5.5 3.2 6.3 8.2 2.2 12.8l11.2 6.5C48.9 57.8 56 53.7 56 47.2c0-3.8-2.1-6.8-5.6-8.9l-16.2-9.4c-5.5-3.2-6.3-8.3-2.2-12.9ZM32 16l11.4-6.6C49 6.1 56 10.1 56 16.6s-7 10.5-12.6 7.2L32 17.2l-.9-.6Zm0 32-11.4 6.6C15 57.9 8 53.9 8 47.4s7-10.5 12.6-7.2L32 46.8l.9.6Z"/>
     <text x="128" y="163" text-anchor="middle" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="43" font-weight="800" letter-spacing="5">SHOPPC</text>
     <text x="128" y="191" text-anchor="middle" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="5">ADMIN</text>

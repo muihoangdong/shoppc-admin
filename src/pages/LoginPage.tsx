@@ -45,7 +45,7 @@ const LoginPage: React.FC = () => {
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
         <div className="text-center mb-8">
           <LogoMark className="mx-auto mb-4 h-16 w-16 drop-shadow-md" />
-          <h1 className="text-2xl font-bold text-gray-800">Shoppc Admin</h1>
+          <h1 className="text-2xl font-bold text-primary-600">Shoppc Admin</h1>
           <p className="text-gray-600 mt-2">Đăng nhập để quản lý cửa hàng</p>
         </div>
 
