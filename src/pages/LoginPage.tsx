@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-blue-900 to-blue-600 flex items-center justify-center p-4">
+    <div className="relative min-h-screen bg-gradient-to-br from-blue-900 to-blue-600 flex items-center justify-center p-4 dark:bg-app dark:bg-none">
       <ThemeToggle variant="onBrand" className="absolute right-4 top-4" />
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
         <div className="text-center mb-8">
