@@ -107,26 +107,26 @@
 
 .dark {
   color-scheme: dark;
-  --app-bg: 16 30 27;
-  --surface: 24 42 37;
-  --sidebar: 19 35 31;
-  --c-slate-50: 28 49 43;
-  --c-slate-100: 35 61 53;
-  --c-slate-200: 52 84 73;
-  --c-slate-300: 74 107 95;
-  --c-slate-400: 150 178 167;
-  --c-slate-500: 176 198 190;
-  --c-slate-600: 192 211 204;
-  --c-slate-700: 202 221 212;
-  --c-slate-800: 216 231 224;
-  --c-slate-900: 231 241 236;
-  --c-slate-950: 242 250 246;
-  --c-indigo-50: 22 53 46;
-  --c-indigo-100: 27 68 58;
-  --c-indigo-200: 43 88 76;
-  --c-indigo-300: 89 171 153;
-  --c-indigo-400: 139 219 202;
-  --c-indigo-500: 87 183 163;
+  --app-bg: 23 37 33;
+  --surface: 30 46 41;
+  --sidebar: 27 42 38;
+  --c-slate-50: 35 52 46;
+  --c-slate-100: 43 62 54;
+  --c-slate-200: 56 75 67;
+  --c-slate-300: 75 99 89;
+  --c-slate-400: 138 160 152;
+  --c-slate-500: 157 177 168;
+  --c-slate-600: 171 189 180;
+  --c-slate-700: 184 202 193;
+  --c-slate-800: 193 208 199;
+  --c-slate-900: 201 215 207;
+  --c-slate-950: 212 224 217;
+  --c-indigo-50: 32 59 51;
+  --c-indigo-100: 41 72 62;
+  --c-indigo-200: 53 87 74;
+  --c-indigo-300: 106 163 148;
+  --c-indigo-400: 120 188 172;
+  --c-indigo-500: 103 169 154;
   --c-indigo-600: 15 118 110;
   --c-indigo-700: 17 95 87;
   --c-indigo-800: 20 83 72;
@@ -212,12 +212,12 @@
 }
 
 :root {
-  --c-indigo-50-light: 243 255 249;
-  --c-indigo-100-light: 213 245 235;
-  --c-indigo-200-light: 179 239 223;
-  --c-indigo-300-light: 152 221 203;
-  --c-indigo-400-light: 139 219 202;
-  --c-indigo-500-light: 87 183 163;
+  --c-indigo-50-light: 211 230 221;
+  --c-indigo-100-light: 191 217 205;
+  --c-indigo-200-light: 173 207 191;
+  --c-indigo-300-light: 150 197 181;
+  --c-indigo-400-light: 120 188 172;
+  --c-indigo-500-light: 103 169 154;
   --c-indigo-600-light: 49 153 138;
   --c-indigo-700-light: 37 126 112;
   --c-indigo-800-light: 31 103 90;

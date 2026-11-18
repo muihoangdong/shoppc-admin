@@ -21,7 +21,7 @@ export default function useThemeColors() {
       const raw = css.getPropertyValue(name).trim();
       return raw ? `rgb(${raw.split(/\s+/).join(', ')})` : fallback;
     };
-    const primary = dark ? v('--c-indigo-400-light', '#8bdbca') : v('--c-indigo-600', '#0f766e');
+    const primary = dark ? v('--c-indigo-400-light', '#78bcac') : v('--c-indigo-600', '#0f766e');
     return {
       dark,
       primary,
