@@ -7,7 +7,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { hasRole, roleLabel } from '../utils/roles';
 import PaymentSettingsCard from '../components/Settings/PaymentSettingsCard';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
-import usePageTitle from '../hooks/usePageTitle';
 import { PASSWORD_MIN, validatePasswordChange, validateProfile } from '../utils/settingsValidation';
 
 const inputClass =
@@ -46,7 +45,6 @@ const Field: React.FC<{ id: string; label: string; error?: string; children: Rea
 );
 
 const SettingsPage: React.FC = () => {
-  usePageTitle('Cài đặt');
   const { user, logout, updateUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [savingProfile, setSavingProfile] = useState(false);

@@ -9,14 +9,12 @@ import { ConfirmDialog } from '../components/Common/ConfirmDialog';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 import ErrorMessage from '../components/Common/ErrorMessage';
 import { useAuth } from '../contexts/AuthContext';
-import usePageTitle from '../hooks/usePageTitle';
 import useDebouncedCallback from '../hooks/useDebouncedCallback';
 import { useRealtime } from '../contexts/RealtimeContext';
 import { canDeleteCatalog } from '../utils/roles';
 import { buildTree } from '../utils/categoryTree';
 
 const CategoriesPage: React.FC = () => {
-  usePageTitle('Danh mục');
   const { user } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);

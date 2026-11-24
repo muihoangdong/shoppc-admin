@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import usePageTitle from '../hooks/usePageTitle';
 import ThemeToggle from '../components/Common/ThemeToggle';
 import { LogoMark } from '../components/Common/Logo';
 
@@ -10,7 +9,6 @@ const inputClass =
   'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent';
 
 const LoginPage: React.FC = () => {
-  usePageTitle('Đăng nhập');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);

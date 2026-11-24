@@ -22,7 +22,6 @@ import { TopProducts } from '../components/Dashboard/TopProducts';
 import { LowStockList } from '../components/Dashboard/LowStockList';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 import ErrorMessage from '../components/Common/ErrorMessage';
-import usePageTitle from '../hooks/usePageTitle';
 import useDebouncedCallback from '../hooks/useDebouncedCallback';
 import { useRealtime } from '../contexts/RealtimeContext';
 import { AiInsights } from '../components/Dashboard/AiInsights';
@@ -68,7 +67,6 @@ function downloadCsv(name: string, rows: (string | number)[][]) {
 }
 
 const DashboardPage: React.FC = () => {
-  usePageTitle('Tổng quan');
   const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [period, setPeriod] = useState<PeriodKey>('this_month');

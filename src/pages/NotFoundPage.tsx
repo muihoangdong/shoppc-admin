@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import usePageTitle from '../hooks/usePageTitle';
 
 const NotFoundPage: React.FC = () => {
-  usePageTitle('Không tìm thấy trang');
   return (
     <div className="flex min-h-[60vh] items-center justify-center p-6">
       <div className="max-w-md text-center">

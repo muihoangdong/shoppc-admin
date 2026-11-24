@@ -15,7 +15,6 @@ import Pagination from '../components/Common/Pagination';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 import ErrorMessage from '../components/Common/ErrorMessage';
 import { useAuth } from '../contexts/AuthContext';
-import usePageTitle from '../hooks/usePageTitle';
 import useDebounce from '../hooks/useDebounce';
 import useDebouncedCallback from '../hooks/useDebouncedCallback';
 import { useRealtime } from '../contexts/RealtimeContext';
@@ -66,7 +65,6 @@ const inputClass =
   'rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500';
 
 const ProductsPage: React.FC = () => {
-  usePageTitle('Sản phẩm');
   const { user } = useAuth();
   const [params, setParams] = useSearchParams();
   const urlStock = params.get('stock');

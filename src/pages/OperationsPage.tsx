@@ -5,7 +5,6 @@ import toast from 'react-hot-toast';
 import { ArrowPathIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../contexts/AuthContext';
 import useDebounce from '../hooks/useDebounce';
-import usePageTitle from '../hooks/usePageTitle';
 import {
   operationsService as api,
   OperationList,
@@ -148,7 +147,6 @@ const OperationsPage: React.FC<{ kind: OperationKind }> = ({ kind }) => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
   const info = meta[kind];
-  usePageTitle(info.title);
   const [data, setData] = useState<OperationList>({ items: [], total: 0, page: 1, limit: 20 });
   const [lookups, setLookups] = useState<OperationLookups>(emptyLookups);
   const [search, setSearch] = useState('');

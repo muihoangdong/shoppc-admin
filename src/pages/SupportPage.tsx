@@ -11,7 +11,6 @@ import { useAuth } from '../contexts/AuthContext';
 import useAiStatus from '../hooks/useAiStatus';
 import useDebounce from '../hooks/useDebounce';
 import useDebouncedCallback from '../hooks/useDebouncedCallback';
-import usePageTitle from '../hooks/usePageTitle';
 
 const PAGE_SIZE = 20;
 const THREAD_PAGE = 100;
@@ -31,7 +30,6 @@ const compare = (a: SupportConversation, b: SupportConversation) =>
   b.id - a.id;
 
 const SupportPage: React.FC = () => {
-  usePageTitle('Hỗ trợ khách hàng');
   const { user } = useAuth();
   const aiEnabled = useAiStatus();
   const [params, setParams] = useSearchParams();

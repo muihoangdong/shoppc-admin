@@ -15,7 +15,6 @@ import ErrorMessage from '../components/Common/ErrorMessage';
 import useDebounce from '../hooks/useDebounce';
 import useDebouncedCallback from '../hooks/useDebouncedCallback';
 import { useRealtime } from '../contexts/RealtimeContext';
-import usePageTitle from '../hooks/usePageTitle';
 import { formatDateTime, formatPhone, formatPrice } from '../utils/formatters';
 import {
   NEXT_STEP,
@@ -34,7 +33,6 @@ const inputClass =
   'rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500';
 
 const OrdersPage: React.FC = () => {
-  usePageTitle('Đơn hàng');
   const [params, setParams] = useSearchParams();
 
   // Trạng thái lọc theo tab và đơn đang mở lấy từ URL: bấm chuông thông báo / thẻ tổng quan sẽ vào đúng bộ lọc

@@ -9,7 +9,6 @@ import { ConfirmDialog } from '../components/Common/ConfirmDialog';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 import ErrorMessage from '../components/Common/ErrorMessage';
 import { useAuth } from '../contexts/AuthContext';
-import usePageTitle from '../hooks/usePageTitle';
 import { canManageCoupons } from '../utils/roles';
 import { formatPrice } from '../utils/formatters';
 
@@ -39,7 +38,6 @@ const periodText = (c: Coupon) => {
 };
 
 const CouponsPage: React.FC = () => {
-  usePageTitle('Mã giảm giá');
   const { user } = useAuth();
   const canManage = canManageCoupons(user?.role);
   const [coupons, setCoupons] = useState<Coupon[]>([]);

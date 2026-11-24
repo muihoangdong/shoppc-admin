@@ -9,7 +9,6 @@ import LoadingSpinner from '../components/Common/LoadingSpinner';
 import ErrorMessage from '../components/Common/ErrorMessage';
 import Pagination from '../components/Common/Pagination';
 import { useAuth } from '../contexts/AuthContext';
-import usePageTitle from '../hooks/usePageTitle';
 import useDebounce from '../hooks/useDebounce';
 import useDebouncedCallback from '../hooks/useDebouncedCallback';
 import { useRealtime } from '../contexts/RealtimeContext';
@@ -31,7 +30,6 @@ const Stars: React.FC<{ value: number }> = ({ value }) => (
 );
 
 const ReviewsPage: React.FC = () => {
-  usePageTitle('Đánh giá');
   const { user } = useAuth();
   const canDelete = canDeleteReviews(user?.role);
   const [items, setItems] = useState<AdminReview[]>([]);

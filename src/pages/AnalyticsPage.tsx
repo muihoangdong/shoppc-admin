@@ -18,7 +18,6 @@ import { analyticsService } from '../services/analyticsService';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 import ErrorMessage from '../components/Common/ErrorMessage';
 import { StatsCard } from '../components/Dashboard/StatsCard';
-import usePageTitle from '../hooks/usePageTitle';
 import useThemeColors from '../hooks/useThemeColors';
 import { formatNumber, formatPercent, formatPrice, formatShortNumber } from '../utils/formatters';
 import { statusBadge } from '../utils/orderStatus';
@@ -47,7 +46,6 @@ const bucketLabel = (b: string) => {
 const PAYMENT_LABELS: Record<string, string> = { cod: 'Thanh toán khi nhận hàng (COD)', banking: 'Chuyển khoản' };
 
 const AnalyticsPage: React.FC = () => {
-  usePageTitle('Thống kê');
   const colors = useThemeColors();
   const pieColors = [colors.primary, ...CATEGORY_COLORS];
   const [period, setPeriod] = useState<PeriodChoice>('30d');

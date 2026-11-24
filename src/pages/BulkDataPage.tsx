@@ -4,12 +4,10 @@ import { ArrowDownTrayIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import { operationsService, OperationRow } from '../services/operationsService';
 import { parseProductCsv, PRODUCT_CSV_TEMPLATE, downloadBlob } from '../utils/productCsv';
 import { buttonClass, primaryClass, inputClass, OperationModal, TextField } from '../components/Operations/OperationUI';
-import usePageTitle from '../hooks/usePageTitle';
 
 interface Preview { valid: boolean; fingerprint: string; items: OperationRow[]; creates: number; updates: number }
 
 const BulkDataPage: React.FC = () => {
-  usePageTitle('Nhập / xuất dữ liệu');
   const [rows, setRows] = useState<Record<string, string>[]>([]);
   const [filename, setFilename] = useState('');
   const [preview, setPreview] = useState<Preview | null>(null);
